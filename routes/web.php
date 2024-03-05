@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,57 +19,26 @@ use App\Http\Controllers\RoleController;
 
 Route::get('/login',[AuthController::class,'login'])->name('login');
 Route::post('/login',[AuthController::class,'checkLogin'])->name('login');
-
-// Add Permission
-// Route::get('/add/permission',[PermissionController::class,'addPermission'])->name('add.permission');
-// Route::post('/add/permission',[PermissionController::class,'storePermission'])->name('store.permission');
-// Route::get('/edit/permission/{id}',[PermissionController::class,'editPermission'])->name('edit.permission');
-// Route::post('/edit/permission/{id}',[PermissionController::class,'updatePermission'])->name('update.permission');
-// Route::get('/delete/permission/{id}',[PermissionController::class,'deletePermission'])->name('delete.permission');
-// Route::get('/view/permission',[PermissionController::class,'viewPermission'])->name('view.permission');
-
-// // Add Role 
-// Route::get('/add/role',[RoleController::class,'addRole'])->name('add.role');
-// Route::post('/add/role',[RoleController::class,'storeRole'])->name('store.role');
-// Route::get('/edit/role/{id}',[RoleController::class,'editRole'])->name('edit.role');
-// Route::post('/edit/role/{id}',[RoleController::class,'updateRole'])->name('update.role');
-// Route::get('/delete/role/{id}',[RoleController::class,'deleteRole'])->name('delete.role');
-// Route::get('/view/role',[RoleController::class,'viewRole'])->name('view.role');
-
-// // Assign Role
-// Route::get('assign/permission',[RoleController::class,'assignPermission'])->name('role.permission');
-// Route::post('assign/permission',[RoleController::class,'storeAssignPermission'])->name('role.storePermission');
-
+Route::get('/forget-password',[AuthController::class,'forgetPassword'])->name('forgetPassword');
+Route::post('/forget-password',[AuthController::class,'postforgetPassword'])->name('forgetPassword');
 
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+    Route::get('/', function () { return view('dashboard'); })->name('dashboard');
     Route::get('/logout',[AuthController::class,'logout'])->name('logout');
+    Route::get('/account-setting',[UserController::class,'accountSetting'])->name('accountSetting');
+    Route::get('/update-password',[UserController::class,'updateUserpassword'])->name('updateUserpassword');
+
+    // Settings Route
+    Route::get('/generalsetting',[SettingsController::class,'loadgeneralsettings'])->name('generalsetting');
+    Route::post('/generalupdate',[SettingsController::class,'updategeneralsetting'])->name('generalupdate');
+    Route::get('/ratings',[SettingsController::class,'loadratings'])->name('ratings');
+    Route::post('/saveratings',[SettingsController::class,'updateratings'])->name('saveratings');
+    Route::get('/emailsetting',[SettingsController::class,'loademailsettings'])->name('emailsetting');
+    Route::get('/accountsetting',[SettingsController::class,'loadaccountsetting'])->name('accountsetting');
+    Route::get('/passwordsetting',[SettingsController::class,'loadpasswordsetting'])->name('passwordsetting');
+    Route::get('/apisetting',[SettingsController::class,'loadapisettting'])->name('apisetting');
+
 });
 
-
-
-
-Route::post('/generalupdate',[SettingsController::class,'generalSettings'])->name('generalupdate');
-Route::get('/generalsetting',function(){
-    return view('settings.generalsetting');
-})->name('generalsetting');
-
-Route::get('/ratings',function(){
-    return view('settings.rating');
-})->name('ratings');
-
-Route::get('/emailsetting',function(){
-    return view('settings.emailsetting');
-})->name('emailsetting');
-
-Route::get('/accountsetting',function(){
-    return view('settings.accountsetting');
-})->name('accountsetting');
-
-Route::get('/passwordsetting',function(){
-    return view('settings.passwordsetting');
-})->name('passwordsetting');
-
-Route::get('/apisetting',function(){
-    return view('settings.apisetting');
-})->name('apisetting');

@@ -20,7 +20,7 @@
 	<!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}" />
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="vh-100">
@@ -42,8 +42,8 @@
                                 <form class="" action="{{route('login')}}" method="POST" id="login-form">
                                     @csrf
                                     <div class="text-center mb-3">
-                                        <h3 class="form-title mb-1">Login</h3>
-                                        <p>Enter your username and your password. </p>
+                                        <h3 class="form-title mb-1">Forget Password</h3>
+                                        <p>Enter your username</p>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-12 mb-3">
@@ -53,25 +53,12 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-12 mb-3">
-                                            <div class="form-group ">
-                                                <label for="password">Password</label>
-                                                <input type="password" name="password" id="password"  class="form-control" placeholder="Type Password" >
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-6 mb-3">
-                                            <div class="form-check  ">
-                                                <input type="checkbox" class="form-check-input" id="check1" value="true" name="remember">
-                                                <label class="form-check-label" for="check1">Remember me</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-6 mb-3">
                                             <div class="text-end">
-                                                <a href="{{route('forgetPassword')}}" class="float-end">Forget Password ?</a>
+                                                <a href="{{route('login')}}" class="float-end">Back to Login ?</a>
                                             </div>
-                                            
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block" id="login">Login</button> 
+                                    <button class="btn btn-primary btn-block" id="login">Submit</button> 
                                 </form>
                             </div>
                                 <div class="card-footer">
@@ -98,7 +85,7 @@
     <script src="{{asset('assets/js/custom.min.js')}}"></script>
     <script src="{{asset('assets/js/deznav-init.js')}}"></script>
 	<script src="{{asset('assets/js/styleSwitcher.js')}}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" integrity="sha512-O03ntXoVqaGUTAeAmvQ2YSzkCvclZEcPQu1eqloPaHfJ5RuNGiS4l+3duaidD801P50J28EHyonCV06CUlTSag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $("#login-form").validate({
@@ -128,7 +115,7 @@
             }
         });
     </script>
-     @include('message')
+    @include('message')
 </body>
 
 </html>

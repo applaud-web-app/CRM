@@ -24,6 +24,7 @@
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/responsive.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -197,7 +198,7 @@
                                             </path>
                                             <polyline points="22,6 12,13 2,6"></polyline>
                                         </svg>
-                                        <span class="ms-2">Inbox </span>
+                                        <span class="ms-2">Update Password </span>
                                     </a>
                                     <a href="login.html" class="dropdown-item ai-icon">
                                         <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
@@ -377,6 +378,8 @@
     <script src="{{asset('assets/js/deznav-init.js')}}"></script>
     <script src="{{asset('assets/js/demo.js')}}"></script>
     <script src="{{asset('assets/js/script.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @include('message')
 </body>
 
 </html>
