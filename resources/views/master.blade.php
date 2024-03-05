@@ -13,19 +13,21 @@
     <title>CRM Lead Management System</title>
     <!-- FAVICONS ICON -->
     <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/chartist/css/chartist.min.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('assets/vendor/chartist/css/chartist.min.css')}}">
     <link href="{{asset('assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/vendor/jqueryui/css/jquery-ui.min.css')}}">
 
     <link href="{{asset('assets/vendor/lightgallery/lightgallery-bundle.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/vendor/select2/css/select2.min.css')}}">
-    <link href="{{asset('assets/vendor/dropzone/dist/dropzone.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/vendor/dropzone/dist/dropzone.css')}}" rel="stylesheet"> --}}
+
+    @stack('style')
+
     <!-- Style css -->
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/responsive.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 </head>
 
 <body>
@@ -358,8 +360,8 @@
     <script src="{{asset('assets/vendor/jqueryui/js/jquery-ui.min.js')}}"></script>
 
     <!-- Datatable -->
-    <script src="{{asset('assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('assets/js/plugins-init/datatables.init.js')}}"></script>
+    {{-- <script src="{{asset('assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('assets/js/plugins-init/datatables.init.js')}}"></script> --}}
     <!-- lightgallery -->
     <script src="{{asset('assets/vendor/lightgallery/lightgallery.min.js')}}"></script>
     <!-- Apex Chart -->
@@ -383,6 +385,7 @@
     integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @include('message')
+    @stack('scripts')
 </body>
 
 </html>
