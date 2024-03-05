@@ -48,3 +48,27 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+Route::post('/generalupdate',[SettingsController::class,'generalSettings'])->name('generalupdate');
+Route::get('/generalsetting',function(){
+    return view('settings.generalsetting');
+})->name('generalsetting');
+
+Route::get('/ratings',function(){
+    return view('settings.rating');
+})->name('ratings');
+
+Route::get('/emailsetting',function(){
+    return view('settings.emailsetting');
+})->name('emailsetting');
+
+Route::get('/accountsetting',function(){
+    return view('settings.accountsetting');
+})->name('accountsetting');
+
+Route::get('/passwordsetting',function(){
+    return view('settings.passwordsetting');
+})->name('passwordsetting');
+
+Route::get('/apisetting',function(){
+    return view('settings.apisetting');
+})->name('apisetting');
