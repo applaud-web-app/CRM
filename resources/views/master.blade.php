@@ -227,11 +227,13 @@
         <div class="deznav">
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li><a class=" ai-icon" href="index.php" aria-expanded="false">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span class="nav-text">Dashboard</span>
-                        </a>
-                    </li>
+                    @role('admin')
+                        <li><a class=" ai-icon" href="index.php" aria-expanded="false">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span class="nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                    @endrole
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-chart-bar"></i>
                             <span class="nav-text">Lead Management</span>
