@@ -35,7 +35,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update-password',[UserController::class,'updateUserpassword'])->name('updateUserpassword');
 
     // EXCEL UPLOADS
-    Route::post('/enquiry/bulk-uploads',[UserController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
 
     // Settings Route
     Route::get('/generalsetting',[SettingsController::class,'loadgeneralsettings'])->name('generalsetting');
@@ -60,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/newenquiry',[EnquiryController::class,'saveenquiry'])->name('newenquiry');
     Route::post('/editenquiry',[EnquiryController::class,'editenquiry'])->name('editenquiry');
     Route::get('/deleteenquiry/{id}',[EnquiryController::class,'deleteenquiry'])->name('deleteenquiry');
+    Route::post('/enquiry/bulk-uploads',[EnquiryController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
 
 });
 

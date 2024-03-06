@@ -52,30 +52,29 @@
     <div class="modal fade " id="bulkUploadModal" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form>
+                <form action="{{route('bulkUploadEnquiry')}}" id="uploadExcel" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Bulk Upload</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal">
                         </button>
                     </div>
                     <div class="modal-body">
-
                         <p class="mb-3 text-dark">To download a demo Excel file, just click the link below and download the
                             provided Excel file. Review any accompanying instructions to ensure proper formatting. Prepare
                             your data accordingly, then follow the platform's upload process, verifying success afterward.
                             <a href="images/Enquiry-Demo-File.xlsx" class="text-primary text-decoration-underline"
                                 download><i class="fas fa-download"></i> Download Demo File(Excel)</a>
                         </p>
-
                         <div class="form-group mb-2">
                             <label class="form-label" for="title">Upload File (.xlsx)</label>
-                            <input type="file" class="form-control form-file" name="title" placeholder="Enter email ">
+                            <input type="file" class="form-control form-file" name="excel_file" id="excel_file" placeholder="Upload File" required>
                         </div>
 
                         <em class="text-dark">Note: Before uploading, make sure your data is formatted correctly.</em>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i>
+                        <button type="submit" class="btn btn-primary" id="addExcel"><i class="far fa-check-square"></i>
                             Submit</button>
                     </div>
                 </form>
@@ -473,6 +472,28 @@
                 },
             ]
         });
+    });
+</script>
+
+<script>
+    $('#uploadExcel').validate({
+        rules: {
+            excel_file: {
+                required: true,
+            },
+        },
+        errorElement: 'div',
+        highlight: function(element, errorClass) {
+            $(element).css({ border: '1px solid #f00' });
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).css({ border: '1px solid #c1c1c1' });
+        },
+        submitHandler: function(form,event) {
+            event.preventDefault();
+            $("#addExcel").attr('disabled','disabled').text('Processing...');
+            document.getElementById("uploadExcel").submit();
+        }
     });
 </script>
 @endpush

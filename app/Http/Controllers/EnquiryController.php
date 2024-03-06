@@ -7,7 +7,9 @@ use App\Models\Enquiry;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Support\Facades\DB;
-// use Yajra\DataTables\Contracts\DataTable;
+use App\Imports\BulkEnquiry;
+use Auth;
+use Excel;
 
 class EnquiryController extends Controller
 {
@@ -129,4 +131,14 @@ class EnquiryController extends Controller
             return redirect()->route("enquiry")->with("error", "Error occured while deleting");
         }
     }
+
+    public function bulkUploadEnquiry(Request $request){
+        $request->validate([
+            'excel_file'=>'required|mimes:xls,xlsx'
+        ]);
+
+       Excel::import(new BulkEnquiry , request()->file('excel_file'));
+       return redirect()->back()->with('success','Excel Uploaded Successfully 📤');
+   }
+
 }
