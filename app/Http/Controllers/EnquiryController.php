@@ -37,8 +37,7 @@ class EnquiryController extends Controller
                        </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
-                       <div class="py-2">
-                       <a class="dropdown-item " href="javascript:void(0);"><i class="far fa-eye"></i> View</a>  
+                       <div class="py-2"> 
                           <a class="dropdown-item edit-enquiry" href="#" data-bs-toggle="modal" data-bs-target="#editenquiry"
                           data-name="'.$row->name.'"
                           data-mobile="'.$row->mobile.'"

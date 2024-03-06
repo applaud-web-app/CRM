@@ -12,7 +12,7 @@ class SettingsController extends Controller
         return view("settings.generalsetting");
     }
 
-    public function savesetting(Request $request)
+    public function updategeneralsetting(Request $request)
     {
         $data = $request->all();
         $check = GeneralSetting::create($data);
