@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Imports\BulkEnquiry;
 use Auth;
+use Excel;
 
 class UserController extends Controller
 {
@@ -69,6 +71,15 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->back()->with('success','Password Updated Successfully!! 😋');
+   }
+
+   public function bulkUploadEnquiry(Request $request){
+        $request->validate([
+            'excel_file'=>'required|mimes:xls,xlsx'
+        ]);
+
+       Excel::import(new BulkEnquiry , request()->file('excel_file'));
+       return redirect()->back()->with('success','Excel Uploaded Successfully 📤');
    }
 
 }

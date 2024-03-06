@@ -167,13 +167,11 @@
                                                 </div>
                                             </li>
                                         </ul>
-
                                     </div>
                                     <a class="all-notification" href="all-notifications.php">See all notifications <i
                                             class="ti-arrow-end"></i></a>
                                 </div>
                             </li>
-
                             <li class="nav-item dropdown  header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button"
                                     data-bs-toggle="dropdown">
@@ -230,7 +228,7 @@
         <div class="deznav">
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
-                    @role('admin')
+                    @role('Admin')
                         <li><a class=" ai-icon" href="index.php" aria-expanded="false">
                                 <i class="fas fa-tachometer-alt"></i>
                                 <span class="nav-text">Dashboard</span>

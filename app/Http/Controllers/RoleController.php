@@ -8,68 +8,23 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function allRole(){
-        $allRole = Role::get();
-        return view('role.view-role',compact('allRole'));
-    }
 
-    public function addRole(){
-        return view('role.add-role');
-    }
-
-    public function storeRole(Request $request){
-        $request->validate([
-            'name'=>'required'
-        ]);
-
-        Role::create(['name' => $request->name, 'guard_name'=>'web']);
-        return redirect()->back()->with('success','Role Added Successfully');
-    }
-
-    public function deleteRole($id){
-        $role = Role::find($id);
-        if($role != NULL){
-            $role->delete();
-            return redirect()->back()->with('success','Role Deleted Successfully');
-        }
-        return redirect()->back()->with('success','Something Went Wrong');
-    }
-
-    public function editRole(Request $request ,$id){
-        $role = Role::find($id);
-        if($role != NULL){
-            return view('role.edit-role', compact('role'));
-        }
-        return redirect()->back()->with('success','Something Went Wrong');
-    }
-
-    public function updateRole(Request $request ,$id){
-        $request->validate([
-            'name'=>'required'
-        ]);
-        $role = Role::find($id);
-        if($role != NULL){
-            $role->name = $request->name;
-            $role->save();
-            return redirect(route('view.role'))->with('success','Role Updated Successfully');
-        }
-        return redirect()->back()->with('success','Something Went Wrong');
-    }
-
-    public function assignPermission(){
+    public function viewRoles(){
         $roles = Role::get();
-        $permission = Permission::get();
-        return view('role.assign',compact('roles','permission'));
+        return view('roles.view',compact('roles'));
     }
-
-    public function storeAssignPermission(Request $request){
+    
+    public function updateRole(Request $request){
         $request->validate([
             'role'=>'required',
-            'permission'=>'required',
+            'target'=>'required',
         ]);
-        $role = $request->role;
-        $permission = $request->permission;
-        $role->syncPermissions($permissions);
-        return redirect()->back()->with('success','Permission Assigned Successfully');
+        $role = Role::find($request->role);
+        if($role != NULL){
+            $role->target = $request->target;
+            $role->save();
+            return redirect(route('viewRoles'))->with('success','Role Updated Successfully');
+        }
+        return redirect()->back()->with('error','Something Went Wrong');
     }
 }

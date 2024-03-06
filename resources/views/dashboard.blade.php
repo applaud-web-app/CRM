@@ -132,6 +132,12 @@
 
             </div>
 
+            <form action="{{url('/enquiry/bulk-uploads')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="excel_file">
+            <button type="submit">Submit</button>
+            </form>
+
         </div>
     </div>
     <!--**********************************

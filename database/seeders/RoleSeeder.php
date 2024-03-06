@@ -20,5 +20,27 @@ class RoleSeeder extends Seeder
             'name' => 'admin',
             'guard_name'=>'web'
         ])->syncPermissions($permissions);
+
+        Role::create([
+            'name' => 'Counsellor',
+            'guard_name'=>'web',
+            'target'=>'10'
+        ]);
+        Role::create([
+            'name' => 'Filler',
+            'guard_name'=>'web',
+            'target'=>'15'
+        ]);
+        Role::create([
+            'name' => 'Manager',
+            'guard_name'=>'web',
+            'target'=>'40'
+        ]);
+        Role::create([
+            'name' => 'Telecaller',
+            'guard_name'=>'web',
+            'target'=>'35'
+        ]);
+
     }
 }

@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EnquiryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +30,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () { return view('dashboard'); })->name('dashboard');
     Route::get('/logout',[AuthController::class,'logout'])->name('logout');
     Route::get('/account-setting',[UserController::class,'accountSetting'])->name('accountSetting');
-    Route::get('/update-password',[UserController::class,'updateUserpassword'])->name('updateUserpassword');
+    Route::post('/account-setting',[UserController::class,'updateAccountSetting'])->name('accountSetting');
+    Route::get('/update-password',[UserController::class,'userpassword'])->name('userpassword');
+    Route::post('/update-password',[UserController::class,'updateUserpassword'])->name('updateUserpassword');
+
+    // EXCEL UPLOADS
+    Route::post('/enquiry/bulk-uploads',[UserController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
 
     // Settings Route
     Route::get('/generalsetting',[SettingsController::class,'loadgeneralsettings'])->name('generalsetting');
@@ -39,6 +46,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/accountsetting',[SettingsController::class,'loadaccountsetting'])->name('accountsetting');
     Route::get('/passwordsetting',[SettingsController::class,'loadpasswordsetting'])->name('passwordsetting');
     Route::get('/apisetting',[SettingsController::class,'loadapisettting'])->name('apisetting');
+
+    // ROLE
+    Route::get('/roles',[RoleController::class,'viewRoles'])->name('viewRoles');
+    Route::post('/roles',[RoleController::class,'updateRole'])->name('updateRole');
+
+    // EMPLOYEE
+    Route::get('/view-employee',[EmployeeController::class,'viewEmployee'])->name('viewEmployee');
+    Route::get('/add-employee',[EmployeeController::class,'addEmployee'])->name('addEmployee');
+
+    // ENQUIRY
+    Route::get('/enquiry',[EnquiryController::class,'loadenquiry'])->name('enquiry');
+    Route::post('/newenquiry',[EnquiryController::class,'saveenquiry'])->name('newenquiry');
+    Route::post('/editenquiry',[EnquiryController::class,'editenquiry'])->name('editenquiry');
+    Route::get('/deleteenquiry/{id}',[EnquiryController::class,'deleteenquiry'])->name('deleteenquiry');
 
 });
 
