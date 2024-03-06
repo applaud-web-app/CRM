@@ -1,7 +1,5 @@
 @extends('master')
-<!--**********************************
-   Content body start
-   ***********************************-->
+@section('main-content')
 <section class="content-body">
     <!-- row -->
     <div class="container-fluid">
@@ -68,6 +66,12 @@
         </div>
     </div>
 </section>
+    
+@endsection
+<!--**********************************
+   Content body start
+   ***********************************-->
+
 <!--**********************************
     Content body end
     ***********************************-->

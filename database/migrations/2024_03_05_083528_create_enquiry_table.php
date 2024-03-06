@@ -19,6 +19,7 @@ return new class extends Migration
             $table->mediumText('interested');
             $table->mediumText('type_of_immigration');
             $table->mediumText('source');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

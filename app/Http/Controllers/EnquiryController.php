@@ -6,7 +6,7 @@ use DataTables;
 use App\Models\Enquiry;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Contracts\DataTable;
-
+use Illuminate\Support\Facades\DB;
 // use Yajra\DataTables\Contracts\DataTable;
 
 class EnquiryController extends Controller
@@ -15,12 +15,15 @@ class EnquiryController extends Controller
     {
 
         if ($request->ajax()) {
-            $enquiries = Enquiry::query();
+            $enquiries = Enquiry::query()->where('status', 1)->get();
             return Datatables::of($enquiries)
                 ->addIndexColumn()
+                ->editColumn('created_at', function ($enquiry) {
+                    return $enquiry->created_at->format('d-M-y'); 
+                })
                 ->addColumn('action', function ($row) {
 
-                    $dropdown = ' <div class="dropdown text-sans-serif">
+                    $dropdown = '<div class="dropdown text-sans-serif">
                     <button class="btn btn-primary light sharp" type="button" id="order-dropdown-0" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
                        <span>
                           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1">
@@ -35,9 +38,17 @@ class EnquiryController extends Controller
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
-                       <a class="dropdown-item" href="javascript:void(0);"><i class="far fa-eye"></i> View</a>  
-                          <a class="dropdown-item" href="javascript:void(0);"><i class="far fa-edit"></i> Edit</a>
-                          <a class="dropdown-item" href="javascript:void(0);"><i class="fas fa-trash-alt"></i> Delete</a>
+                       <a class="dropdown-item " href="javascript:void(0);"><i class="far fa-eye"></i> View</a>  
+                          <a class="dropdown-item edit-enquiry" href="#" data-bs-toggle="modal" data-bs-target="#editenquiry"
+                          data-name="'.$row->name.'"
+                          data-mobile="'.$row->mobile.'"
+                          data-email="'.$row->email.'"
+                          data-select="'.$row->interested.'" 
+                          data-source="'.$row->source.'"
+                          data-immigration="'.$row->type_of_immigration.'"
+                          data-id="'.$row->id.'"
+                          class="btn btn-primary mb-3"><i class="far fa-edit edit-btn "></i> Edit</a>
+                          <a class="dropdown-item" href="'.route('deleteenquiry',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
                          
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item text-secondary" href="convert-to-lead.php"><i class="far fa-check-square"></i> Convert To Lead</a>
@@ -74,6 +85,49 @@ class EnquiryController extends Controller
             return redirect()->route("enquiry")->with("success", "Enquiry Created !");
         } else {
             return redirect()->route("enquiry")->with("error", "Enquiry could not be created !");
+        }
+    }
+
+    public function editenquiry(Request $request)
+    {
+        $data= $request->except("id","_token");
+        $id=$request->id;
+        $type_of_immigration = "";
+        if ($request->interested === "VISA") {
+            $type_of_immigration = $request->type_of_visa;
+            unset($data['type_of_visa']);
+            unset($data['type_of_pte']);
+            unset($data['type_of_iets']);
+        } elseif ($request->interested === "IETS") {
+            $type_of_immigration = $request->type_of_iets;
+            unset($data['type_of_visa']);
+            unset($data['type_of_pte']);
+            unset($data['type_of_iets']);
+        } elseif ($request->interested === "PTE") {
+            $type_of_immigration = $request->type_of_pte;
+            unset($data['type_of_visa']);
+            unset($data['type_of_iets']);
+            unset($data['type_of_pte']);
+        }
+        $data['type_of_immigration'] = $type_of_immigration;
+        $check=Enquiry::where('id', $id)->update($data);
+        if( $check ) {  
+            return redirect()->route('enquiry')->with('success','Enquiry Updated');
+        }
+        else
+        {
+            return redirect()->route('enquiry')->with('error','Error Occured');
+        }
+        
+    }
+
+    public function deleteenquiry(Request $request, $id)
+    {
+        $check=Enquiry::where("id", $id)->update(["status"=> 0]);
+        if( $check ) {
+            return redirect()->route("enquiry")->with("success","Enquiry Deleted");
+        } else {
+            return redirect()->route("enquiry")->with("error", "Error occured while deleting");
         }
     }
 }
