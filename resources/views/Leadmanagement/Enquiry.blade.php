@@ -103,7 +103,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="mobile">Mobile Number</label>
-                                    <input type="tel" class="form-control" name="mobile"
+                                    <input type="number" class="form-control" name="mobile"
                                         placeholder="Enter Mobile Number ">
                                 </div>
                             </div>
@@ -217,7 +217,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="mobile">Mobile Number</label>
-                                    <input type="tel" class="form-control" name="mobile"
+                                    <input type="number" class="form-control" name="mobile"
                                         placeholder="Enter Mobile Number ">
                                 </div>
                             </div>
@@ -437,6 +437,7 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('enquiry') }}",
+            deferRender: false,
             columns: [{
                         data: 'DT_RowIndex', 
                         name: 'DT_RowIndex' ,
@@ -470,7 +471,8 @@
                     name: 'action',
                     orderable: true
                 },
-            ]
+            ],
+            // "pagingType": "full_numbers",
         });
     });
 </script>

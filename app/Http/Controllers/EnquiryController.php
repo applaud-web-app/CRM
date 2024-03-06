@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Imports\BulkEnquiry;
 use Auth;
 use Excel;
+use Yajra\DataTables\Html\Options\Languages\Paginate;
 
 class EnquiryController extends Controller
 {
@@ -17,7 +18,7 @@ class EnquiryController extends Controller
     {
 
         if ($request->ajax()) {
-            $enquiries = Enquiry::query()->where('status', 1)->get();
+            $enquiries = Enquiry::where('status', 1)->get();     
             return Datatables::of($enquiries)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($enquiry) {
@@ -52,13 +53,13 @@ class EnquiryController extends Controller
                           <a class="dropdown-item" href="'.route('deleteenquiry',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
                          
                           <div class="dropdown-divider"></div>
-                          <a class="dropdown-item text-secondary" href="convert-to-lead.php"><i class="far fa-check-square"></i> Convert To Lead</a>
+                          <a class="dropdown-item text-secondary" href="'.route('convertenquiry',$row->id).'"><i class="far fa-check-square"></i> Convert To Lead</a>
                        </div>
                     </div>';
                     return $dropdown;
                 })
                 ->rawColumns(['action'])
-                ->make(true);
+                ->toJson();
         }
         return view('Leadmanagement.Enquiry');
     }
@@ -141,4 +142,16 @@ class EnquiryController extends Controller
        return redirect()->back()->with('success','Excel Uploaded Successfully 📤');
    }
 
+
+    public function covertToLead(Request $request,$id)
+    {    
+        $data=Enquiry::find($id);
+        return view('Leadmanagement.ConvertEnquiry',compact('data'));
+    }
+
+    public function leadGenerate(Request $request,$id)
+    {
+        $data=$request->all();
+        print_r($data);
+    }
 }

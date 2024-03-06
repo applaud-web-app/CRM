@@ -1,7 +1,8 @@
 @extends('master')<!--**********************************
     Content body start
     ***********************************-->
-<section class="content-body">
+    @section('main-content')
+        <section class="content-body">
     <!-- row -->
     <div class="container-fluid">
         <div class=" d-flex flex-wrap align-items-center text-head">
@@ -22,8 +23,6 @@
                                         <th>Rating Name</th>
                                         <th>Percentage</th>
                                         <th>Action</th>
-
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,7 +55,6 @@
         </div>
     </div>
 </section>
-
 <div class="modal fade" id="ratingModel" tabindex="-1" aria-labelledby="ratingModelLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -73,11 +71,11 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label" for="minimum">Minimum </label>
-                        <input type="text" class="form-control" name="minimum" placeholder="Enter Minimum">
+                        <input type="number" class="form-control" name="minimum" placeholder="Enter Minimum">
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label" for="maximum">Maximum </label>
-                        <input type="text" class="form-control" name="maximum" placeholder="Enter Maximum">
+                        <input type="number" class="form-control" name="maximum" placeholder="Enter Maximum">
                     </div>
 
                 </div>
@@ -89,6 +87,10 @@
         </div>
     </div>
 </div>
+    @endsection
+
+
+
 <!--**********************************
     Content body end
     ***********************************-->

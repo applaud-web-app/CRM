@@ -60,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/editenquiry',[EnquiryController::class,'editenquiry'])->name('editenquiry');
     Route::get('/deleteenquiry/{id}',[EnquiryController::class,'deleteenquiry'])->name('deleteenquiry');
     Route::post('/enquiry/bulk-uploads',[EnquiryController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
+    Route::get('/convertenquiry/{id}',[EnquiryController::class,'covertToLead'])->name('convertenquiry');
+    route::post('/leadgenerate/{id}',[EnquiryController::class,'leadGenerate'])->name('leadgenerate');
 
 });
 

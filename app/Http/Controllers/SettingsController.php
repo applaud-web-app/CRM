@@ -8,14 +8,15 @@ class SettingsController extends Controller
 {
     
     public function loadgeneralsettings()
-    {
-        return view("settings.generalsetting");
+    {   
+        $data=GeneralSetting::find(1);    
+        return view("settings.generalsetting",compact("data")); 
     }
 
     public function updategeneralsetting(Request $request)
     {
-        $data = $request->all();
-        $check = GeneralSetting::create($data);
+        $data = $request->except('_token');
+        $check = GeneralSetting::where('id',1)->update($data);
         if ($check) {
             return redirect("/generalsetting")->with("success", "Settings updated successfully ");
         } else {
