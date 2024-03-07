@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-body p-3">
                             <div class="table-responsive ">
-                                <table class="table display data-table" id="example5">
+                                <table class="table display data-table">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -436,12 +436,17 @@
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
+            ordering: false,
+            pageLength:10,
+            language: {
+                paginate: {
+                previous: '<i class="fas fa-angle-double-left"></i>',
+                next: '<i class="fas fa-angle-double-right"></i>'
+                }
+            },
             ajax: "{{ route('enquiry') }}",
-            deferRender: false,
-            columns: [{
-                        data: 'DT_RowIndex', 
-                        name: 'DT_RowIndex' ,
-                },
+            deferRender: true,
+            columns: [{ data: 'DT_RowIndex', name: 'id', orderable: false, searchable: false },
                 {
                     data: 'name',
                     name: 'name'

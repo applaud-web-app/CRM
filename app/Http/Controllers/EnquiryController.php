@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use DataTables;
 use App\Models\Enquiry;
+use App\Models\Leads;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Contracts\DataTable;
-use Illuminate\Support\Facades\DB;
 use App\Imports\BulkEnquiry;
+use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\DB;
 use Excel;
-use Yajra\DataTables\Html\Options\Languages\Paginate;
 
 class EnquiryController extends Controller
 {
@@ -18,7 +18,10 @@ class EnquiryController extends Controller
     {
 
         if ($request->ajax()) {
-            $enquiries = Enquiry::where('status', 1)->get();     
+            $start = ($request->start) ? $request->start : 0;
+            $pageSize = ($request->length) ? $request->length : 50;
+            $enquiries = Enquiry::where('status', 1)->skip($start)->take($pageSize);     
+            $count_total= Enquiry::where('status', 1)->count();     
             return Datatables::of($enquiries)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($enquiry) {
@@ -59,7 +62,8 @@ class EnquiryController extends Controller
                     return $dropdown;
                 })
                 ->rawColumns(['action'])
-                ->toJson();
+                ->setTotalRecords($count_total)
+                ->make(true);
         }
         return view('Leadmanagement.Enquiry');
     }
@@ -146,12 +150,29 @@ class EnquiryController extends Controller
     public function covertToLead(Request $request,$id)
     {    
         $data=Enquiry::find($id);
-        return view('Leadmanagement.ConvertEnquiry',compact('data'));
+        $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
+        return view('Leadmanagement.ConvertEnquiry',compact('data','users'));
     }
 
     public function leadGenerate(Request $request,$id)
     {
-        $data=$request->all();
-        print_r($data);
+        $data=$request->except("_token","source");
+        $id= \Auth::id();
+        $data["lead_mode"]="converted";
+        $data["assigned_by"]=$id;
+        $check=Leads::create($data);
+        if( $check ) {
+            return redirect()->route("/leads")->with("success","");
+        } else {
+            return redirect()->back()->with("error","Failed to convert to lead");
+        }
+
+    }
+
+    public function loadLeads(Request $request)
+    {
+        $leads=Leads::with('employee')->get();
+        // dd($leads);
+        return view('Leadmanagement.Leads',compact('leads'));    
     }
 }

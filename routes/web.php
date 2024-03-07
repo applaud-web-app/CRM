@@ -41,11 +41,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/generalupdate',[SettingsController::class,'updategeneralsetting'])->name('generalupdate');
     Route::get('/ratings',[SettingsController::class,'loadratings'])->name('ratings');
     Route::post('/saveratings',[SettingsController::class,'updateratings'])->name('saveratings');
-    Route::get('/emailsetting',[SettingsController::class,'loademailsettings'])->name('emailsetting');
-    Route::get('/accountsetting',[SettingsController::class,'loadaccountsetting'])->name('accountsetting');
-    Route::get('/passwordsetting',[SettingsController::class,'loadpasswordsetting'])->name('passwordsetting');
-    Route::get('/apisetting',[SettingsController::class,'loadapisettting'])->name('apisetting');
-
+    Route::get('/emailsetting',[SettingsController::class,'loadEmailSettings'])->name('emailsetting');
+    Route::get('/accountsetting',[SettingsController::class,'loadAccountSetting'])->name('accountsetting');
+    Route::get('/passwordsetting',[SettingsController::class,'loadPasswordSetting'])->name('passwordsetting');
+    Route::get('/apisetting',[SettingsController::class,'loadApiSettting'])->name('apisetting');
+    Route::post('/update_email_setting',[SettingsController::class,'updateEmailSetting'])->name('update_email_setting');
+    Route::post('/updategoogleapi',[SettingsController::class,'updateGoogleApi'])->name('updategoogleapi');
+    Route::post('/updatefbapi',[SettingsController::class,'updateFbApi'])->name('updatefbapi');
+    Route::post('/updatejustdialapi',[SettingsController::class,'updateJdApi'])->name('updatejustdialapi');
+    Route::post('/updateinstagramapi',[SettingsController::class,'updateInstagramApi'])->name('updateinstagramapi');
     // ROLE
     Route::get('/roles',[RoleController::class,'viewRoles'])->name('viewRoles');
     Route::post('/roles',[RoleController::class,'updateRole'])->name('updateRole');
@@ -62,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/enquiry/bulk-uploads',[EnquiryController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
     Route::get('/convertenquiry/{id}',[EnquiryController::class,'covertToLead'])->name('convertenquiry');
     route::post('/leadgenerate/{id}',[EnquiryController::class,'leadGenerate'])->name('leadgenerate');
+    Route::get('/leads',[EnquiryController::class,'loadLeads'])->name('leads');
 
 });
 

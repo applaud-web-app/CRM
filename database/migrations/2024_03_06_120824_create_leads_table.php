@@ -16,9 +16,9 @@ return new class extends Migration
             $table->mediumText('name');
             $table->string('mobile');
             $table->mediumText('email');
-            $table->string('lcode')->nullable();
+            $table->string('code')->nullable();
             $table->string('age')->nullable();
-            $table->string('lvalue')->nullable();
+            $table->string('price')->nullable();
             $table->dateTime('dob');
             $table->string('marital_status');
             $table->string('description');

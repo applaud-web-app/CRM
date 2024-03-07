@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('general_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('site_name');
-            $table->mediumText('site_title');
-            $table->mediumText('company');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('address');
+            $table->string('site_name')->nullable();
+            $table->mediumText('site_title')->nullable();
+            $table->mediumText('company')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('smtp_host',50)->nullable();
+            $table->string('smtp_port',50)->nullable();
+            $table->string('smtp_security',20)->nullable();
+            $table->string('username',50)->nullable();
+            $table->string('smtppassword')->nullable();
             $table->timestamps();
         });
     }

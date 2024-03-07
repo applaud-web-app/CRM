@@ -26,7 +26,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="lcode">Code</label>
-                                        <input type="text" class="form-control" value="" name="lcode"
+                                        <input type="text" class="form-control" value="" name="code"
                                             placeholder="Enter Lead Code">
                                     </div>
                                 </div>
@@ -40,7 +40,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="Leadvalue">Lead Value(₹)</label>
-                                        <input type="text" class="form-control" name="Leadvalue"
+                                        <input type="text" class="form-control" name="price"
                                             placeholder="Enter Value">
                                     </div>
                                 </div>
@@ -48,7 +48,7 @@
                                     <div class="form-group">
                                         <label for="emailaddress">Email Address</label>
                                         <input type="email" class="form-control" value="{{ $data->email }}"
-                                            name="emailaddress" placeholder="Enter Email Address">
+                                            name="email" placeholder="Enter Email Address">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
@@ -68,10 +68,10 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="marital">Martial Status</label>
-                                        <select name="marital" class="form-control">
+                                        <select name="marital_status" class="form-control">
                                             <option value="" selected>--Choose Option--</option>
-                                            <option value="">Married</option>
-                                            <option value="">Unmarried</option>
+                                            <option value="Married">Married</option>
+                                            <option value="Unmarried">Unmarried</option>
 
                                         </select>
                                     </div>
@@ -185,108 +185,6 @@
                             </div>
                         </div>
 
-
-
-                        {{-- <div class="card h-auto">
-                            <div class="card-header">
-                                <h4 class="card-title">Address Information</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="address">Address</label>
-                                            <input type="text" class="form-control" name="address"
-                                                placeholder="Enter Address">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="country">Country</label>
-                                            <select name="country" id="" class="form-control">
-                                                <option value="" selected>--Choose Option--</option>
-                                                <option value="Afghanistan">Afghanistan</option>
-                                                <option value="Åland Islands">Åland Islands</option>
-                                                <option value="Albania">Albania</option>
-                                                <option value="Algeria">Algeria</option>
-                                                <option value="American Samoa">American Samoa</option>
-                                                <option value="Andorra">Andorra</option>
-                                                <option value="Angola">Angola</option>
-                                                <option value="Anguilla">Anguilla</option>
-                                                <option value="Antarctica">Antarctica</option>
-                                                <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="state">State</label>
-                                            <select name="state" id="" class="form-control">
-                                                <option value="" selected>--Choose Option--</option>
-
-                                                <option value="AP">Andhra Pradesh</option>
-                                                <option value="AR">Arunachal Pradesh</option>
-                                                <option value="AS">Assam</option>
-                                                <option value="BR">Bihar</option>
-                                                <option value="CT">Chhattisgarh</option>
-                                                <option value="GA">Gujarat</option>
-                                                <option value="HR">Haryana</option>
-                                                <option value="HP">Himachal Pradesh</option>
-                                                <option value="JK">Jammu and Kashmir</option>
-                                                <option value="GA">Goa</option>
-                                                <option value="JH">Jharkhand</option>
-                                                <option value="KA">Karnataka</option>
-                                                <option value="KL">Kerala</option>
-                                                <option value="MP">Madhya Pradesh</option>
-                                                <option value="MH">Maharashtra</option>
-                                                <option value="MN">Manipur</option>
-                                                <option value="ML">Meghalaya</option>
-                                                <option value="MZ">Mizoram</option>
-                                                <option value="NL">Nagaland</option>
-                                                <option value="OR">Odisha</option>
-                                                <option value="PB">Punjab</option>
-                                                <option value="RJ">Rajasthan</option>
-                                                <option value="SK">Sikkim</option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="">City</label>
-                                            <select name="" class="form-control">
-                                                <option value="" selected>--Choose Option--</option>
-                                                <option value="Alipur">Alipur</option>
-                                                <option value="Bawana">Bawana</option>
-                                                <option value="Central Delhi">Central Delhi</option>
-                                                <option value="Delhi">Delhi</option>
-                                                <option value="Deoli">Deoli</option>
-                                                <option value="East Delhi">East Delhi</option>
-                                                <option value="Karol Bagh">Karol Bagh</option>
-                                                <option value="Najafgarh">Najafgarh</option>
-                                                <option value="Nangloi Jat">Nangloi Jat</option>
-                                                <option value="Narela">Narela</option>
-                                                <option value="New Delhi">New Delhi</option>
-                                                <option value="North Delhi">North Delhi</option>
-                                                <option value="North East Delhi">North East Delhi</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="zip">Zip Code</label>
-                                            <input type="text" class="form-control" name="zip"
-                                                placeholder="Enter Zip">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-
-
                         <div class="card h-auto">
                             <div class="card-header">
                                 <h4 class="card-title">Source Information</h4>
@@ -296,7 +194,7 @@
                                     <div class="col-lg-4 col-md-6 col-12 mb-3">
                                         <div class="form-group">
                                             <label for="type">Type</label>
-                                            <select name="type" class="form-control">
+                                            <select name="lead_type" class="form-control">
                                                 <option value="">Hot leads</option>
                                                 <option value="">Cold leads</option>
                                                 <option value="">Warm leads</option>
@@ -336,16 +234,19 @@
                                     <div class="col-lg-4 col-md-6 col-12 mb-3">
                                         <div class="form-group">
                                             <label for="assignedto">Assigned To</label>
-                                            <select name="leadassign" class="form-control">
-                                                <option value="Sunil singh Rawat">Sunil singh Rawat</option>
-                                                <option value="Himanshu Verma">Himanshu Verma</option>
+                                            <select name="assigned_to" class="form-control">
+                                               @isset($users)
+                                               @foreach ($users as $user)
+                                               <option value="{{$user->id}}">{{$user->username}}</option>
+                                               @endforeach
+                                               @endisset
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-md-6 col-12 mb-3">
                                         <div class="form-group">
-                                            <label for="c_date">Contacted Date</label>
+                                            <label for="contacted_date">Contacted Date</label>
                                             <input type="datetime-local" class="form-control" name="c_date"
                                                 placeholder="Enter date">
                                         </div>
@@ -407,10 +308,10 @@
              source: {
                  required: true
              },
-             leadassign:{
+             assigned_to:{
                 required:true
              },
-             lcode:{
+             code:{
                 required:true
              },
              address:{

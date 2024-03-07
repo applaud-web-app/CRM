@@ -3,13 +3,13 @@ namespace App\Http\Controllers;
 use App\Models\Ratings;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class SettingsController extends Controller
 {
     
     public function loadgeneralsettings()
     {   
-        $data=GeneralSetting::find(1);    
+        $data=GeneralSetting::orderby('id','desc')->first();    
         return view("settings.generalsetting",compact("data")); 
     }
 
@@ -44,14 +44,15 @@ class SettingsController extends Controller
         }
 
     }
-    public function loadaccountsetting()
+    public function loadAccountSetting()
     {
         return view("settings.accountsetting");
     }
 
-    public function loademailsettings()
+    public function loadEmailSettings()
     {
-        return view("settings.emailsetting");
+        $data=DB::table("general_settings")->select("smtp_host","smtp_port","smtp_security","username","smtppassword")->orderBy("id","desc")->first();
+        return view("settings.emailsetting",compact("data"));   
     }
 
     public function loadpasswordsetting()
@@ -59,9 +60,92 @@ class SettingsController extends Controller
         return view("settings.passwordsetting");
     }
 
-    public function loadapisettting()
+    public function loadApiSettting()
     {
-        return view("settings.apisetting");
+        $data=DB::table("general_settings")->select("google_api_key","google_api_secret","fb_api_key","fb_api_secret","instagram_api_key","instagram_api_secret","justdial_api_key","justdial_api_secret")->orderBy("id","desc")->first();
+        return view("settings.apisetting",compact("data"));
     }
     
+    public function updateEmailSetting(Request $request)
+    {
+        $data=$request->except("_token");
+        try
+        {
+            $check= DB::table("general_settings")->where("id",1)->update($data);
+            return redirect("/emailsetting")->with("success","Details updated");
+             
+        }
+        catch(\Exception $e)
+        {
+            return redirect("/emailsetting")->with("error","Details not updated");
+        }
+    }
+
+    public function updateGoogleApi(Request $request)
+    {
+        $data=$request->except("_token");
+        try
+        {
+            $check= DB::table("general_settings")->where("id",1)->update([
+                "google_api_key"=> $data["api_key"],
+                "google_api_secret"=> $data["api_secret"],
+            ]);
+            return redirect("/apisetting")->with("success","Details updated");
+        }
+        catch(\Exception $e)
+        {
+            return redirect("/apisetting")->with("error","Not updated");
+        }
+    }
+
+    public function updateFbApi(Request $request )
+    {
+        $data=$request->except("_token");
+        try
+        {
+            $check= DB::table("general_settings")->where("id",1)->update([
+                "fb_api_key"=> $data["api_key"],
+                "fb_api_secret"=> $data["api_secret"],
+            ]);
+            return redirect("/apisetting")->with("success","Details updated");
+        }
+        catch(\Exception $e)
+        {
+            return redirect("/apisetting")->with("error","Not updated");
+        }
+    }
+
+    public function updateInstagramApi(Request $request )
+    {
+        $data=$request->except("_token");
+        try
+        {
+            $check= DB::table("general_settings")->where("id",1)->update([
+                "instagram_api_key"=> $data["api_key"],
+                "instagram_api_secret"=> $data["api_secret"],
+            ]);
+            return redirect("/apisetting")->with("success","Details updated");
+        }
+        catch(\Exception $e)
+        {
+            return redirect("/apisetting")->with("error","Not updated");
+        }
+    }
+
+    public function updateJdApi(Request $request )
+    {
+        $data=$request->except("_token");
+        try
+        {
+            $check= DB::table("general_settings")->where("id",1)->update([
+                "justdial_api_key"=> $data["api_key"],
+                "justdial_api_secret"=> $data["api_secret"],
+            ]);
+            return redirect("/apisetting")->with("success","Details updated");
+        }
+        catch(\Exception $e)
+        {
+            return redirect("/apisetting")->with("error","Not updated");
+        }
+    }
 }
