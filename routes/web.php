@@ -64,9 +64,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/editenquiry',[EnquiryController::class,'editenquiry'])->name('editenquiry');
     Route::get('/deleteenquiry/{id}',[EnquiryController::class,'deleteenquiry'])->name('deleteenquiry');
     Route::post('/enquiry/bulk-uploads',[EnquiryController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
-    Route::get('/convertenquiry/{id}',[EnquiryController::class,'covertToLead'])->name('convertenquiry');
+    Route::get('/convertenquiry/{id}',[EnquiryController::class,'convertToLead'])->name('convertenquiry');
     route::post('/leadgenerate/{id}',[EnquiryController::class,'leadGenerate'])->name('leadgenerate');
     Route::get('/leads',[EnquiryController::class,'loadLeads'])->name('leads');
-
+    Route::get('/leaddelete/{id}',[EnquiryController::class,'leadDelete'])->name('leaddelete');
+    Route::get('/createlead',[EnquiryController::class,'loadCreateLead'])->name('createlead');
+    Route::post('/updateleadtype/{id}',[EnquiryController::class,'updateLeadType'])->name('updateleadtype');
+    Route::post('/updatestatustype/{id}',[EnquiryController::class,'updateStatusType'])->name('updatestatustype');
+    Route::post('/newleadcreate',[EnquiryController::class,'createNewLead'])->name('newleadcreate');
+    Route::get('/editaddedlead/{id}',[EnquiryController::class,'editNewAddedLead'])->name('editaddedlead');
+    Route::post('/updatelead/{id}',[EnquiryController::class,'updateLeadData'])->name('updatelead');
 });
 

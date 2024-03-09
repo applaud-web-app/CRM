@@ -147,7 +147,7 @@ class EnquiryController extends Controller
    }
 
 
-    public function covertToLead(Request $request,$id)
+    public function convertToLead(Request $request,$id)
     {    
         $data=Enquiry::find($id);
         $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
@@ -162,17 +162,152 @@ class EnquiryController extends Controller
         $data["assigned_by"]=$id;
         $check=Leads::create($data);
         if( $check ) {
-            return redirect()->route("/leads")->with("success","");
+            return redirect()->route("leads")->with("success","");
         } else {
             return redirect()->back()->with("error","Failed to convert to lead");
         }
 
     }
 
+    // public function loadLeads(Request $request)
+    // {
+    //     $leads=Leads::where("is_deleted",1)->with('employee')->get();
+    //     // dd($leads);
+    //     return view('Leadmanagement.Leads',compact('leads'));    
+    // }
+
     public function loadLeads(Request $request)
     {
-        $leads=Leads::with('employee')->get();
-        // dd($leads);
-        return view('Leadmanagement.Leads',compact('leads'));    
+        if ($request->ajax()) {
+            $start = ($request->start) ? $request->start : 0;
+            $pageSize = ($request->length) ? $request->length : 50;
+            $leads = Leads::where("is_deleted",1)->with('employee')->skip($start)->take($pageSize);     
+            $count_total= Leads::where('is_deleted', 1)->count();     
+            return Datatables::of($leads)
+                ->addIndexColumn()
+                ->editColumn('contacted_at', function ($enquiry) {
+                    return $enquiry->created_at->format('d-M-y'); 
+                })
+                ->addColumn('action', function ($row) {
+
+                    $dropdown = '<div class="dropdown text-sans-serif">
+                    <button class="btn btn-primary light sharp" type="button" id="order-dropdown-0" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                       <span>
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1">
+                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"></rect>
+                                <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                                <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                                <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                             </g>
+                          </svg>
+                       </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
+                       <div class="py-2">
+                          <a class="dropdown-item" href="'.route('editaddedlead',$row->id).'"><i class="far fa-edit"></i> Edit</a>
+                          <a class="dropdown-item" href="'.route('leaddelete',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
+                       
+                       
+                          <div class="dropdown-divider"></div>
+                             <a class="dropdown-item text-success" href="javascript:void(0);"><i class="fas fa-paper-plane"></i> Send For Approval</a>
+                             <a class="dropdown-item text-warning" href="javascript:void(0);"><i class="fas fa-hourglass-start"></i> Approval Pending</a>
+                      
+                       </div>
+                    </div>';
+                    return $dropdown;
+                })
+                ->addColumn('lead_type', function ($lead) {
+                    return $lead->lead_type;
+                })
+                ->addColumn('status',function($status)
+                {
+                    return $status->status;
+                })
+                ->rawColumns(['action'])
+                ->setTotalRecords($count_total)
+                ->make(true);
+        }
+        return view('Leadmanagement.Leads');   
+    }
+
+    public function leadDelete($id)
+    {
+        $check=Leads::where("id", $id)->update(["is_deleted"=> 0]);
+        if( $check ) {
+            return redirect()->route("leads")->with("success","Lead Deleted");
+        } else {
+            return redirect()->route("leads")->with("error", "Lead could not be deleted");
+        }
+    }
+
+    public function updateLeadType(Request $request,$id)
+    {
+        $check=Leads::where("id", $id)->update([
+                                "lead_type"=> $request->leadtype,]);
+        if( $check ) {
+            return "success";
+        }
+        else
+        {
+            return "failure";
+        }
+    }
+
+    
+    public function updateStatusType(Request $request,$id)
+    {
+        $check=Leads::where("id", $id)->update([
+                                "status"=> $request->status,]);
+        if( $check ) {
+            return "success";
+        }
+        else
+        {
+            return "failure";
+        }
+    }
+
+
+
+    public function loadCreateLead(Request $request)
+    {   
+        $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
+        return view('Leadmanagement.Createlead',compact('users'));
+    }
+
+    public function createNewLead(Request $request)
+    {   
+        $data= $request->except("_token");
+        $id= \Auth::id();
+        $data["lead_mode"]="added";
+        $data["assigned_by"]=$id;
+        $check=Leads::create($data);
+        if( $check ) {
+            return redirect()->route("leads")->with("success","New Lead created");   
+        }else 
+        {
+            return redirect()->back("leads")->with("error","Some Error occured");
+        }
+    }
+
+    public function editNewAddedLead($id)
+    {
+        $data=Leads::find($id);
+        $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
+        return view('Leadmanagement.Editlead',compact('data','users'));
+    }
+
+    public function updateLeadData(Request $request, $id)   
+    {
+        $data= $request->except('_token');
+        $check=Leads::where('id',$id)->update($data);
+        if( $check )
+        {
+            return redirect()->route('leads')->with('success','Lead updated successfully');
+        }
+        else{
+            return redirect()->back()->with('error','Lead not updated');
+        }
     }
 }

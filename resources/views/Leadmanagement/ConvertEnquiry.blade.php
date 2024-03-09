@@ -195,9 +195,9 @@
                                         <div class="form-group">
                                             <label for="type">Type</label>
                                             <select name="lead_type" class="form-control">
-                                                <option value="">Hot leads</option>
-                                                <option value="">Cold leads</option>
-                                                <option value="">Warm leads</option>
+                                                <option value="Hot leads">Hot leads</option>
+                                                <option value="Cold leads">Cold leads</option>
+                                                <option value="Warm leads">Warm leads</option>
 
                                             </select>
                                         </div>
@@ -271,6 +271,8 @@
             </form>
         </div>
     </section>
+
+    
 @endsection
 @push("scripts")
 <script>
