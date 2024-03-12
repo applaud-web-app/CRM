@@ -118,74 +118,28 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="country">Country</label>
-                                    <select name="country" id="" class="form-control">
-                                        <option value="" selected>--Choose Option--</option>
-
-                                        <option value="Afghanistan">Afghanistan</option>
-                                        <option value="Åland Islands">Åland Islands</option>
-                                        <option value="Albania">Albania</option>
-                                        <option value="Algeria">Algeria</option>
-                                        <option value="American Samoa">American Samoa</option>
-                                        <option value="Andorra">Andorra</option>
-                                        <option value="Angola">Angola</option>
-                                        <option value="Anguilla">Anguilla</option>
-                                        <option value="Antarctica">Antarctica</option>
-                                        <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-                                    </select>
+                                    <select name="country" onchange="getstates(this)" class="form-control">
+                                                @foreach ($countries as $country)
+                                                <option value="{{$country->id}}">{{$country->name}}</option>
+                                                @endforeach
+                                            </select>
                                 </div>
                             </div>
 
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="state">State</label>
-                                    <select name="state" id="" class="form-control">
-                                        <option value="" selected>--Choose Option--</option>
-                                        <option value="AP">Andhra Pradesh</option>
-                                        <option value="AR">Arunachal Pradesh</option>
-                                        <option value="AS">Assam</option>
-                                        <option value="BR">Bihar</option>
-                                        <option value="CT">Chhattisgarh</option>
-                                        <option value="GA">Gujarat</option>
-                                        <option value="HR">Haryana</option>
-                                        <option value="HP">Himachal Pradesh</option>
-                                        <option value="JK">Jammu and Kashmir</option>
-                                        <option value="GA">Goa</option>
-                                        <option value="JH">Jharkhand</option>
-                                        <option value="KA">Karnataka</option>
-                                        <option value="KL">Kerala</option>
-                                        <option value="MP">Madhya Pradesh</option>
-                                        <option value="MH">Maharashtra</option>
-                                        <option value="MN">Manipur</option>
-                                        <option value="ML">Meghalaya</option>
-                                        <option value="MZ">Mizoram</option>
-                                        <option value="NL">Nagaland</option>
-                                        <option value="OR">Odisha</option>
-                                        <option value="PB">Punjab</option>
-                                        <option value="RJ">Rajasthan</option>
-                                        <option value="SK">Sikkim</option>
-
-                                    </select>
+                                    <select name="state" onchange="getcities(this)" id="states" class="form-control">
+                                                <option value="" selected>--Choose Option--</option>
+                                            </select>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="">City</label>
-                                    <select name="city" class="form-control">
-                                        <option value="" selected>--Choose Option--</option>
-                                        <option value="Alipur">Alipur</option>
-                                        <option value="Bawana">Bawana</option>
-                                        <option value="Central Delhi">Central Delhi</option>
-                                        <option value="Delhi">Delhi</option>
-                                        <option value="Deoli">Deoli</option>
-                                        <option value="East Delhi">East Delhi</option>
-                                        <option value="Karol Bagh">Karol Bagh</option>
-                                        <option value="Najafgarh">Najafgarh</option>
-                                        <option value="Nangloi Jat">Nangloi Jat</option>
-                                        <option value="Narela">Narela</option>
-                                        <option value="New Delhi">New Delhi</option>
-                                        <option value="North Delhi">North Delhi</option>
-                                        <option value="North East Delhi">North East Delhi</option>
-                                    </select>
+                                    <select name="city" id="cities" class="form-control">
+                                                <option value="" selected>--Choose Option--</option>
+                                            </select>
                                 </div>
                             </div>
 
@@ -220,12 +174,13 @@
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select name="status" class="form-control">
-                                        <option value="Started">Started</option>
-                                        <option value="Processing">Processing</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Hold">Hold</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Rejected">Rejected</option>
+                                        <option value="Generated">Generated</option>
+                                        <option value="Qualified">Qualified</option>
+                                        <option value="Initial">Initial Contact</option>
+                                        <option value="Schedule Appointemnt">Schedule Appointemnt</option>
+                                        <option value="Proposal Sent">Proposal Sent</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                             </div>
@@ -352,5 +307,56 @@
          },
      });
     })
+ </script>
+ <script>
+    function getstates(selectElement)
+    {
+        var countryId = selectElement.value;
+        $.ajax({
+            url:"{{ route('loadstates') }}",
+            type:"POST",
+            data:{
+                id: countryId,
+                _token:"{{csrf_token() }}",
+            },
+            datatype:JSON,
+            success:function(response)
+            {
+                var statesSelect = document.getElementById('states');
+                statesSelect.innerHTML = ''; 
+                response.forEach(state => {
+                    var option = document.createElement('option');
+                    option.value = state.id;
+                    option.textContent = state.name;
+                    statesSelect.appendChild(option);
+                });
+                }
+        });
+    }
+
+    function getcities(selectElement)
+    {
+        var stateid = selectElement.value;
+        $.ajax({
+            url:"{{ route('loadcities') }}",
+            type:"POST",
+            data:{
+                id: stateid,
+                _token:"{{csrf_token() }}",
+            },
+            datatype:JSON,
+            success:function(response)
+            {
+                var citySelect = document.getElementById('cities');
+                citySelect.innerHTML = ''; 
+                response.forEach(city => {
+                    var option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.name;
+                    citySelect.appendChild(option);
+                });
+                }
+        });
+    }
  </script>
 @endpush

@@ -8,9 +8,14 @@ use App\Models\Leads;
 use Illuminate\Http\Request;
 use App\Imports\BulkEnquiry;
 use App\Models\User;
-use Auth;
+use App\Models\Activity;
+use App\Models\Documents;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Excel;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+
 
 class EnquiryController extends Controller
 {
@@ -20,7 +25,7 @@ class EnquiryController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $enquiries = Enquiry::where('status', 1)->skip($start)->take($pageSize);     
+            $enquiries = Enquiry::where('status', 1)->orderBy('id','DESC')->skip($start)->take($pageSize);     
             $count_total= Enquiry::where('status', 1)->count();     
             return Datatables::of($enquiries)
                 ->addIndexColumn()
@@ -87,6 +92,7 @@ class EnquiryController extends Controller
         }
         $data['type_of_immigration'] = $type_of_immigration;
         $enquiry = Enquiry::create($data);
+
         if ($enquiry) {
             return redirect()->route("enquiry")->with("success", "Enquiry Created !");
         } else {
@@ -150,18 +156,28 @@ class EnquiryController extends Controller
     public function convertToLead(Request $request,$id)
     {    
         $data=Enquiry::find($id);
-        $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
-        return view('Leadmanagement.ConvertEnquiry',compact('data','users'));
+        $countries=DB::table('countries')->get();
+        $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
+        return view('Leadmanagement.ConvertEnquiry',compact('data','users','countries'));
     }
 
     public function leadGenerate(Request $request,$id)
     {
-        $data=$request->except("_token","source");
-        $id= \Auth::id();
+        $data=$request->except("_token");
+        $userid= Auth::id();
+        $username= Auth::user()->username;
         $data["lead_mode"]="converted";
-        $data["assigned_by"]=$id;
+        $data["assigned_by"]=$userid;
         $check=Leads::create($data);
+        Activity::create([
+            "sender_id"=>$userid,
+            "receiver_id"=>$data['assigned_to'],
+            "activity"=>"Lead converted from enquiry",
+            "done_by"=>$username,
+            "date" => date('y-m-d')
+        ]);
         if( $check ) {
+            Enquiry::where('id',$id)->update(['status'=> 0]);
             return redirect()->route("leads")->with("success","");
         } else {
             return redirect()->back()->with("error","Failed to convert to lead");
@@ -169,24 +185,18 @@ class EnquiryController extends Controller
 
     }
 
-    // public function loadLeads(Request $request)
-    // {
-    //     $leads=Leads::where("is_deleted",1)->with('employee')->get();
-    //     // dd($leads);
-    //     return view('Leadmanagement.Leads',compact('leads'));    
-    // }
 
     public function loadLeads(Request $request)
     {
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $leads = Leads::where("is_deleted",1)->with('employee')->skip($start)->take($pageSize);     
+            $leads = Leads::where("is_deleted",1)->where('proccess_status',1)->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);     
             $count_total= Leads::where('is_deleted', 1)->count();     
             return Datatables::of($leads)
                 ->addIndexColumn()
-                ->editColumn('contacted_at', function ($enquiry) {
-                    return $enquiry->created_at->format('d-M-y'); 
+                ->editColumn('contacted_date', function ($dateformat) {
+                    return $dateformat->contacted_date ? $dateformat->contacted_date->format('d-M-y') : ''; 
                 })
                 ->addColumn('action', function ($row) {
 
@@ -205,14 +215,13 @@ class EnquiryController extends Controller
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
-                          <a class="dropdown-item" href="'.route('editaddedlead',$row->id).'"><i class="far fa-edit"></i> Edit</a>
-                          <a class="dropdown-item" href="'.route('leaddelete',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a class="dropdown-item" href="'.route('viewLeaddata',$row->id).'"><i class="far fa-eye"></i> View</a> 
+                            <a class="dropdown-item" href="'.route('editaddedlead',$row->id).'"><i class="far fa-edit"></i> Edit</a>
+                            <a class="dropdown-item" href="'.route('leaddelete',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
                        
                        
                           <div class="dropdown-divider"></div>
-                             <a class="dropdown-item text-success" href="javascript:void(0);"><i class="fas fa-paper-plane"></i> Send For Approval</a>
-                             <a class="dropdown-item text-warning" href="javascript:void(0);"><i class="fas fa-hourglass-start"></i> Approval Pending</a>
-                      
+                             <a class="dropdown-item text-success" href="'.route('applyapproval',$row->id).'"><i class="fas fa-paper-plane"></i> Send For Approval</a>
                        </div>
                     </div>';
                     return $dropdown;
@@ -272,18 +281,27 @@ class EnquiryController extends Controller
 
     public function loadCreateLead(Request $request)
     {   
-        $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
-        return view('Leadmanagement.Createlead',compact('users'));
+        $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
+        $countries=DB::table('countries')->get();
+        return view('Leadmanagement.Createlead',compact('users','countries'));
     }
 
     public function createNewLead(Request $request)
     {   
         $data= $request->except("_token");
-        $id= \Auth::id();
+        $id= Auth::id();
+        $username=Auth::user()->username;
         $data["lead_mode"]="added";
         $data["assigned_by"]=$id;
         $check=Leads::create($data);
         if( $check ) {
+            Activity::create([
+                "sender_id"=>$id,
+                "receiver_id"=>$data['assigned_to'],
+                "activity"=>"New Lead added Manually",
+                "done_by"=>$username,
+                "date" => date('y-m-d')
+            ]);
             return redirect()->route("leads")->with("success","New Lead created");   
         }else 
         {
@@ -294,8 +312,11 @@ class EnquiryController extends Controller
     public function editNewAddedLead($id)
     {
         $data=Leads::find($id);
-        $users = User::withoutRole('Admin')->orderBy('id','DESC')->where('status',1)->get();
-        return view('Leadmanagement.Editlead',compact('data','users'));
+        $countries=DB::table('countries')->get();
+        $states=DB::table('states')->where('country_id',$data->country)->get();
+        $cities=DB::table('cities')->where('state_id',$data->state)->get();
+        $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
+        return view('Leadmanagement.Editlead',compact('data','users','countries','states','cities'));
     }
 
     public function updateLeadData(Request $request, $id)   
@@ -308,6 +329,82 @@ class EnquiryController extends Controller
         }
         else{
             return redirect()->back()->with('error','Lead not updated');
+        }
+    }
+
+    public function loadStateData(Request $request)
+    {
+        $cid=$request->id;
+        $data=DB::table('states')->where('country_id',$cid)->get();
+        return $data;
+    }
+
+    public function loadCities(Request $request)
+    {
+        $sid= $request->id;
+        $data=DB::table('cities')->where('state_id', $sid)->get();
+        return $data;
+    }
+
+    public function applyApproval(Request $request,$id)
+    {
+        try
+        {  
+            Leads::where('id',$id)->update(['proccess_status'=> 0]);
+            return redirect()->route("leads")->with("success","Lead sent for approval.");
+        }
+        catch(Exception $e)
+        {
+            return redirect()->route("leads")->with("error", "Some error occured");
+        }
+    }
+
+    public function viewLeadData(Request $request,$id)
+    {
+        // $data=Leads::where("id",$id)->first(); 
+
+        $data = Leads::select('leads.*', 'countries.name as country_name', 'states.name as state_name', 'cities.name as city_name')
+            ->leftJoin('countries', 'leads.country', '=', 'countries.id')
+            ->leftJoin('states', 'leads.state', '=', 'states.id')
+            ->leftJoin('cities', 'leads.city', '=', 'cities.id')
+            ->where('leads.id', $id)
+            ->first();
+        return view("Leadmanagement.Viewleaddata",compact("data"));
+    }
+
+    public function addLeadDocument(Request $request,$id)
+    {
+        $data = Leads::select('enquiry.interested as visa_type','document_category.id as document_id','document_category.name as document_name')
+        ->leftJoin('enquiry','leads.enquiry_id','=','enquiry.id')
+        ->leftJoin('document_category', function($join) {
+            $join->on('enquiry.interested', '=', 'document_category.type');
+        })
+        ->where('leads.id', $id)->get();
+        $documents=Documents::where('leads_id', $id)->pluck('document_id')->toArray();
+        
+        return view("Leadmanagement.Leaddocument",compact("id","data",'documents'));
+    }
+
+
+    public function postAddDocuments(Request $request,$id)
+    {
+        $data = $request->except('_token');
+        $data['user_id'] = Auth::id();
+        $data['leads_id'] = $id;
+        $data['status'] = '1';
+        $file = $request->document;
+        // dd($data);
+        $check= Documents::create( $data );
+        if($check)
+        {
+           
+            $fileName = $file->getClientOriginalName();
+            $file->move(public_path('documents'), $fileName);
+            return redirect()->back()->with('success','Files uploaded successfuly');
+        }
+        else
+        {
+            return redirect()->back()->with('error','Files not uploaded');
         }
     }
 }

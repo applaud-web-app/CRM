@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ApplicantsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
@@ -42,7 +44,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ratings',[SettingsController::class,'loadratings'])->name('ratings');
     Route::post('/saveratings',[SettingsController::class,'updateratings'])->name('saveratings');
     Route::get('/emailsetting',[SettingsController::class,'loadEmailSettings'])->name('emailsetting');
-    Route::get('/accountsetting',[SettingsController::class,'loadAccountSetting'])->name('accountsetting');
     Route::get('/passwordsetting',[SettingsController::class,'loadPasswordSetting'])->name('passwordsetting');
     Route::get('/apisetting',[SettingsController::class,'loadApiSettting'])->name('apisetting');
     Route::post('/update_email_setting',[SettingsController::class,'updateEmailSetting'])->name('update_email_setting');
@@ -50,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/updatefbapi',[SettingsController::class,'updateFbApi'])->name('updatefbapi');
     Route::post('/updatejustdialapi',[SettingsController::class,'updateJdApi'])->name('updatejustdialapi');
     Route::post('/updateinstagramapi',[SettingsController::class,'updateInstagramApi'])->name('updateinstagramapi');
+    Route::get('/documents',[SettingsController::class,'DocumentSetting'])->name('documents');
+    Route::post('/adddocuments',[SettingsController::class,'addDocuments'])->name('adddocuments');
     // ROLE
     Route::get('/roles',[RoleController::class,'viewRoles'])->name('viewRoles');
     Route::post('/roles',[RoleController::class,'updateRole'])->name('updateRole');
@@ -57,6 +60,11 @@ Route::middleware(['auth'])->group(function () {
     // EMPLOYEE
     Route::get('/view-employee',[EmployeeController::class,'viewEmployee'])->name('viewEmployee');
     Route::get('/add-employee',[EmployeeController::class,'addEmployee'])->name('addEmployee');
+    Route::post('/postaddemployee',[EmployeeController::class,'postAddEmployee'])->name('postaddemployee');
+    Route::get('editemployees/{id}',[EmployeeController::class,'editEmployees'])->name('editemployees' );
+    Route::get('deleteemployees/{id}',[EmployeeController::class,'deleteEployees'])->name('deleteemployees');
+    Route::post('/posteditemployee/{id}',[EmployeeController::class,'updateEmployeeData'])->name('posteditemployee');
+        
 
     // ENQUIRY
     Route::get('/enquiry',[EnquiryController::class,'loadenquiry'])->name('enquiry');
@@ -65,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/deleteenquiry/{id}',[EnquiryController::class,'deleteenquiry'])->name('deleteenquiry');
     Route::post('/enquiry/bulk-uploads',[EnquiryController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
     Route::get('/convertenquiry/{id}',[EnquiryController::class,'convertToLead'])->name('convertenquiry');
-    route::post('/leadgenerate/{id}',[EnquiryController::class,'leadGenerate'])->name('leadgenerate');
+    Route::post('/leadgenerate/{id}',[EnquiryController::class,'leadGenerate'])->name('leadgenerate');
     Route::get('/leads',[EnquiryController::class,'loadLeads'])->name('leads');
     Route::get('/leaddelete/{id}',[EnquiryController::class,'leadDelete'])->name('leaddelete');
     Route::get('/createlead',[EnquiryController::class,'loadCreateLead'])->name('createlead');
@@ -74,5 +82,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/newleadcreate',[EnquiryController::class,'createNewLead'])->name('newleadcreate');
     Route::get('/editaddedlead/{id}',[EnquiryController::class,'editNewAddedLead'])->name('editaddedlead');
     Route::post('/updatelead/{id}',[EnquiryController::class,'updateLeadData'])->name('updatelead');
+    Route::post('/loadstates',[EnquiryController::class,'loadStateData'])->name('loadstates');
+    Route::post('/loadcities',[EnquiryController::class,'loadCities'])->name('loadcities');
+    Route::get('/applyapproval/{id}',[EnquiryController::class,'applyApproval'])->name('applyapproval');
+    Route::get('/viewLeaddata/{id}',[EnquiryController::class,'viewLeadData'])->name('viewLeaddata');
+    Route::get('/addleaddocument/{id}',[EnquiryController::class,'addLeadDocument'])->name('addleaddocument');
+    Route::post('/postadddocuments/{id}',[EnquiryController::class,'postAddDocuments'])->name('postadddocuments');
+    
+    //Activities
+    Route::get('/activities',[ActivityController::class,'getActivities'])->name('activities');
+
+    //Applicants
+    Route::get( '/allapplicants',[ApplicantsController::class,'allApplicants'])->name('allapplicants');
+    Route::get('/viewapplicant/{id}',[ApplicantsController::class,'viewApplicantData'])->name('viewapplicant');
 });
 

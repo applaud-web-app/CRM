@@ -10,12 +10,15 @@ class Leads extends Model
 {
     use HasFactory;
     protected $table="leads";
+    protected $casts = [
+        'contacted_date' => 'datetime',
+    ];
     protected $fillable = [
         "name","mobile","email","code","age","price","dob",
         "marital_status","description","address","country",
         "state","city","zipcode","lead_type","assigned_to",
         "status","assigned_by","contacted_date","close_date",
-        "lead_mode"
+        "lead_mode","source","proccess_status"
     ];
 
     public function employee(){

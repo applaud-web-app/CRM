@@ -178,7 +178,7 @@
                                     <img src="{{asset('assets/images/user.jpg')}}" width="56" alt="" />
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="app-profile.html" class="dropdown-item ai-icon">
+                                    <a href="{{route('accountSetting')}}" class="dropdown-item ai-icon">
                                         <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary"
                                             width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -188,7 +188,7 @@
                                         </svg>
                                         <span class="ms-2">Profile </span>
                                     </a>
-                                    <a href="email-inbox.html" class="dropdown-item ai-icon">
+                                    <a href="{{route('userpassword')}}" class="dropdown-item ai-icon">
                                         <svg id="icon-inbox" xmlns="http://www.w3.org/2000/svg" class="text-success"
                                             width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -200,7 +200,7 @@
                                         </svg>
                                         <span class="ms-2">Update Password </span>
                                     </a>
-                                    <a href="login.html" class="dropdown-item ai-icon">
+                                    <a href="{{route('logout')}}" class="dropdown-item ai-icon">
                                         <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
                                             width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -242,8 +242,8 @@
                         <ul aria-expanded="false">
                             <!-- <li><a href="all-leads.php">All Leads</a></li> -->
                             <!-- <li><a href="create-lead.php">Create Leads</a></li> -->
-                            <li><a href="enquiry.php">Enquiry</a></li>
-                            <li><a href="all-leads.php">Leads</a></li>
+                            <li><a href="{{route('enquiry')}}">Enquiry</a></li>
+                            <li><a href="{{route('leads')}}">Leads</a></li>
 
                         </ul>
                     </li>
@@ -256,7 +256,7 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="pending-applicants.php">Pending Applicants</a></li>
+                            <li><a href="{{route('allapplicants')}}">Pending Applicants</a></li>
                             <li><a href="applicants.php">Applicants</a></li>
 
                         </ul>
@@ -271,14 +271,14 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="roles.php">Roles</a></li>
+                            <li><a href="{{route('viewRoles')}}">Roles</a></li>
 
-                            <li><a href="employees.php">Employees</a></li>
+                            <li><a href="{{route('viewEmployee')}}">Employees</a></li>
 
                         </ul>
                     </li>
                     <li>
-                        <a href="activities.php" class="ai-icon" aria-expanded="false">
+                        <a href="{{route('activities')}}" class="ai-icon" aria-expanded="false">
                             <i class="flaticon-013-checkmark"></i>
                             <span class="nav-text">Activities</span>
                         </a>
@@ -309,13 +309,13 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="general-settings.php">General Settings</a></li>
-                            <li><a href="email-settings.php">Email Settings</a></li>
-                            <li><a href="rating-settings.php">Rating Settings</a></li>
-
-                            <li><a href="account-settings.php">Account Settings</a></li>
-                            <li><a href="password-settings.php">Password Settings</a></li>
-                            <li><a href="api-key-settings.php">API Key Settings</a></li>
+                            <li><a href="{{route('generalsetting')}}">General Settings</a></li>
+                            <li><a href="{{route('emailsetting')}}">Email Settings</a></li>
+                            <li><a href="{{route('ratings')}}">Rating Settings</a></li>
+                            <li><a href="{{route('documents')}}">Documents Settings</a></li>
+                            <li><a href="{{route('accountSetting')}}">Account Settings</a></li>
+                            <li><a href="{{route('userpassword')}}">Password Settings</a></li>
+                            <li><a href="{{route('apisetting')}}">API Key Settings</a></li>
 
                         </ul>
                     </li>

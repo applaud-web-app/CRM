@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('lead_type',50);
             $table->bigInteger('assigned_to');
             $table->string('status',50);
+            $table->tinyInteger('proccess_status')->nullable();
             $table->bigInteger('assigned_by');
             $table->dateTime('contacted_date')->nullable();
             $table->dateTime('close_date')->nullable();

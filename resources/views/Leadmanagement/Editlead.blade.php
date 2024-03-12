@@ -49,7 +49,7 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="Leadvalue">Lead Value(₹)</label>
-                                    <input type="text" class="form-control" name="price" 
+                                    <input type="number" class="form-control" name="price" 
                                     @isset($data->price)
                                     value="{{$data->price}}"
                                     @endisset
@@ -69,7 +69,7 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="emailaddress">Mobile number</label>
-                                    <input type="tel" class="form-control" name="mobile"
+                                    <input type="number" class="form-control" name="mobile"
                                     @isset($data->mobile)
                                     value="{{$data->mobile}}"
                                     @endisset  
@@ -97,8 +97,8 @@
                                     <label for="marital">Martial Status</label>
                                     <select name="marital_status" class="form-control">
                                         <option value="">--Choose Option--</option>
-                                        <option value="Married" @if($data->marital_status) selected @endif>Married</option>
-                                        <option value="Unmarried"  @if($data->marital_status) selected @endif>Unmarried</option>
+                                        <option value="Married" @if($data->marital_status =="Married") selected @endif>Married</option>
+                                        <option value="Unmarried"  @if($data->marital_status =="Unmarried") selected @endif>Unmarried</option>
 
                                     </select>
                                 </div>
@@ -141,27 +141,14 @@
                                 </div>
                             </div>
 
-
-
-
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="country">Country</label>
-                                    <select name="country" id="" class="form-control">
-                                        <option value="" selected>--Choose Option--</option>
-                                        @isset($data->country)
-                                        <option value="{{$data->country}}" selected>{{$data->country}}</option>
-                                        @endisset
-                                        <option value="Afghanistan">Afghanistan</option>
-                                        <option value="Åland Islands">Åland Islands</option>
-                                        <option value="Albania">Albania</option>
-                                        <option value="Algeria">Algeria</option>
-                                        <option value="American Samoa">American Samoa</option>
-                                        <option value="Andorra">Andorra</option>
-                                        <option value="Angola">Angola</option>
-                                        <option value="Anguilla">Anguilla</option>
-                                        <option value="Antarctica">Antarctica</option>
-                                        <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                                    <select name="country" onchange="getstates(this)" id="" class="form-control">
+                                                @foreach ($countries as $country)
+                                                <option value="{{$country->id}}"  @isset($data->country)
+                                                    {{$data->country == $country->id ? "selected": ''}} @endisset>{{$country->name}}</option>
+                                                @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -169,59 +156,22 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="state">State</label>
-                                    <select name="state" id="" class="form-control">
-                                        <option value="" selected>--Choose Option--</option>
-                                        @isset($data->state)
-                                        <option value="{{$data->state}}" selected>{{$data->state}}</option>
-                                        @endisset
-                                        <option value="AP">Andhra Pradesh</option>
-                                        <option value="AR">Arunachal Pradesh</option>
-                                        <option value="AS">Assam</option>
-                                        <option value="Bihar">Bihar</option>
-                                        <option value="CT">Chhattisgarh</option>
-                                        <option value="GA">Gujarat</option>
-                                        <option value="HR">Haryana</option>
-                                        <option value="HP">Himachal Pradesh</option>
-                                        <option value="JK">Jammu and Kashmir</option>
-                                        <option value="GA">Goa</option>
-                                        <option value="JH">Jharkhand</option>
-                                        <option value="KA">Karnataka</option>
-                                        <option value="KL">Kerala</option>
-                                        <option value="MP">Madhya Pradesh</option>
-                                        <option value="MH">Maharashtra</option>
-                                        <option value="MN">Manipur</option>
-                                        <option value="ML">Meghalaya</option>
-                                        <option value="MZ">Mizoram</option>
-                                        <option value="NL">Nagaland</option>
-                                        <option value="OR">Odisha</option>
-                                        <option value="PB">Punjab</option>
-                                        <option value="RJ">Rajasthan</option>
-                                        <option value="SK">Sikkim</option>
-
+                                    <select name="state" onchange="getcities(this)" id="states" class="form-control">
+                                        @foreach ($states as $state)
+                                        <option value="{{$state->id}}"  @isset($data->state)
+                                            {{$data->state == $state->id ? "selected": ''}} @endisset>{{$state->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="">City</label>
-                                    <select name="city" class="form-control">
-                                        <option value="" selected>--Choose Option--</option>
-                                        @isset($data->city)
-                                        <option value="{{$data->city}}" selected>{{$data->city}}</option>
-                                        @endisset
-                                        <option value="Alipur">Alipur</option>
-                                        <option value="Bawana">Bawana</option>
-                                        <option value="Central Delhi">Central Delhi</option>
-                                        <option value="Delhi">Delhi</option>
-                                        <option value="Deoli">Deoli</option>
-                                        <option value="East Delhi">East Delhi</option>
-                                        <option value="Karol Bagh">Karol Bagh</option>
-                                        <option value="Najafgarh">Najafgarh</option>
-                                        <option value="Nangloi Jat">Nangloi Jat</option>
-                                        <option value="Narela">Narela</option>
-                                        <option value="New Delhi">New Delhi</option>
-                                        <option value="North Delhi">North Delhi</option>
-                                        <option value="North East Delhi">North East Delhi</option>
+                                    <select name="city" id="cities" class="form-control">
+                                        @foreach ($cities as $city)
+                                        <option value="{{$city->id}}"  @isset($data->city)
+                                            {{$data->city == $city->id ? "selected": ''}} @endisset>{{$city->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -260,12 +210,13 @@
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select name="status" class="form-control">
-                                        <option value="Started" @if($data->status == 'Started') selected @endif>Started</option>
-                                        <option value="Processing" @if($data->status == 'Processing') selected @endif>Processing</option>
-                                        <option value="Pending" @if($data->status == 'Pending') selected @endif>Pending</option>
-                                        <option value="Hold" @if($data->status == 'Hold') selected @endif>Hold</option>
-                                        <option value="Completed" @if($data->status == 'Completed') selected @endif>Completed</option>
-                                        <option value="Rejected" @if($data->status == 'Rejected') selected @endif>Rejected</option>
+                                        <option value="Generated" @if($data->status == 'Generated') selected @endif>Generated</option>
+                                        <option value="Qualified" @if($data->status == 'Qualified') selected @endif>Qualified</option>
+                                        <option value="Initial Contact" @if($data->status == 'Pending') selected @endif>Pending</option>
+                                        <option value="Schedule Appointemnt" @if($data->status == 'Schedule Appointemnt') selected @endif>Schedule Appointemnt</option>
+                                        <option value="Proposal Sent" @if($data->status == 'Proposal Sent') selected @endif>Proposal Sent</option>
+                                        <option value="Open" @if($data->status == 'Open') selected @endif>Open</option>
+                                        <option value="Close" @if($data->status == 'Close') selected @endif>Close</option>
                                     </select>
                                 </div>
                             </div>
@@ -300,12 +251,12 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="contacted_date">Contacted Date</label>
-                                    <input type="datetime-local" class="form-control" name="contacted_date"
-                                    @isset($data->contacted_date)
+                                    <input type="date" class="form-control" name="contacted_date"
+                                    @isset($data->dob)
                                     value="{{ \Carbon\Carbon::parse($data->contacted_date)->format('Y-m-d') }}"
                                     @else
-                                    value="{{ date('d-m-y') }}" 
-                                    @endisset
+                                        value="{{ date('Y-m-d') }}" 
+                                    @endisset 
                                         placeholder="Enter date">
                                 </div>
                             </div>
@@ -316,7 +267,7 @@
                                     @isset($data->close_date)
                                     value="{{ \Carbon\Carbon::parse($data->close_date)->format('Y-m-d') }}"
                                     @else
-                                    value="{{ date('d-m-y') }}" 
+                                    value="{{ date('d-M-y') }}" 
                                     @endisset
                                     placeholder="Enter date">
                                 </div>
@@ -404,5 +355,56 @@
          },
      });
     })
+ </script>
+ <script>
+    function getstates(selectElement)
+    {
+        var countryId = selectElement.value;
+        $.ajax({
+            url:"{{ route('loadstates') }}",
+            type:"POST",
+            data:{
+                id: countryId,
+                _token:"{{csrf_token() }}",
+            },
+            datatype:JSON,
+            success:function(response)
+            {
+                var statesSelect = document.getElementById('states');
+                statesSelect.innerHTML = ''; 
+                response.forEach(state => {
+                    var option = document.createElement('option');
+                    option.value = state.id;
+                    option.textContent = state.name;
+                    statesSelect.appendChild(option);
+                });
+                }
+        });
+    }
+
+    function getcities(selectElement)
+    {
+        var stateid = selectElement.value;
+        $.ajax({
+            url:"{{ route('loadcities') }}",
+            type:"POST",
+            data:{
+                id: stateid,
+                _token:"{{csrf_token() }}",
+            },
+            datatype:JSON,
+            success:function(response)
+            {
+                var citySelect = document.getElementById('cities');
+                citySelect.innerHTML = ''; 
+                response.forEach(city => {
+                    var option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.name;
+                    citySelect.appendChild(option);
+                });
+                }
+        });
+    }
  </script>
 @endpush

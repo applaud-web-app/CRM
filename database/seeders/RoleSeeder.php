@@ -16,10 +16,10 @@ class RoleSeeder extends Seeder
     {
 
         $permissions = Permission::get();
-        Role::create([
-            'name' => 'admin',
-            'guard_name'=>'web'
-        ])->syncPermissions($permissions);
+        // Role::create([
+        //     'name' => 'admin',
+        //     'guard_name'=>'web'
+        // ])->syncPermissions($permissions);
 
         Role::create([
             'name' => 'Counsellor',

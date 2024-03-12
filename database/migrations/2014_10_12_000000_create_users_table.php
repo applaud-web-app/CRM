@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('profile_img');
+            $table->string('emp_code',50)->nullable();
             $table->string('username');
             $table->string('first_name');
             $table->string('last_name')->nullable();
@@ -23,7 +24,12 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('phone')->nullable();
             $table->enum('gender',['M','F','O'])->nullable();
+            $table->string("blood_group",10)->nullable();
+            $table->dateTime('dob')->nullable();
+            $table->string('department',50)->nullable();
             $table->tinyInteger('status');
+            $table->dateTime("joining_date")->nullable();
+            $table->string("address",100)->nullable();
             $table->timestamps();
         });
     }

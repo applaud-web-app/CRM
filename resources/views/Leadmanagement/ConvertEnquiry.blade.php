@@ -7,7 +7,7 @@
                 <h2 class="mb-3 me-auto">Lead Name (#4553545)</h2>
 
             </div>
-            <form class="row" method="POST" action="{{route('leadgenerate',$data->id)}}">@csrf
+            <form class="row" method="POST" action="{{ route('leadgenerate', $data->id) }}">@csrf
                 <div class="col-lg-12">
 
                     <div class="card h-auto">
@@ -40,8 +40,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="Leadvalue">Lead Value(₹)</label>
-                                        <input type="text" class="form-control" name="price"
-                                            placeholder="Enter Value">
+                                        <input type="number" class="form-control" name="price" placeholder="Enter Value">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
@@ -85,258 +84,267 @@
                             </div>
                         </div>
 
-                        <div class="card h-auto">
-                            <div class="card-header">
-                                <h4 class="card-title">Address Information</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
+                    </div>
 
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="address">Address</label>
-                                            <input type="text" class="form-control" name="address"
-                                                placeholder="Enter Address">
-                                        </div>
-                                    </div>
+                    <div class="card h-auto">
+                        <div class="card-header">
+                            <h4 class="card-title">Address Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
 
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="country">Country</label>
-                                            <select name="country" id="" class="form-control">
-                                                <option value="" selected>--Choose Option--</option>
-
-                                                <option value="Afghanistan">Afghanistan</option>
-                                                <option value="Åland Islands">Åland Islands</option>
-                                                <option value="Albania">Albania</option>
-                                                <option value="Algeria">Algeria</option>
-                                                <option value="American Samoa">American Samoa</option>
-                                                <option value="Andorra">Andorra</option>
-                                                <option value="Angola">Angola</option>
-                                                <option value="Anguilla">Anguilla</option>
-                                                <option value="Antarctica">Antarctica</option>
-                                                <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="state">State</label>
-                                            <select name="state" id="" class="form-control">
-                                                <option value="" selected>--Choose Option--</option>
-
-                                                <option value="AP">Andhra Pradesh</option>
-                                                <option value="AR">Arunachal Pradesh</option>
-                                                <option value="AS">Assam</option>
-                                                <option value="BR">Bihar</option>
-                                                <option value="CT">Chhattisgarh</option>
-                                                <option value="GA">Gujarat</option>
-                                                <option value="HR">Haryana</option>
-                                                <option value="HP">Himachal Pradesh</option>
-                                                <option value="JK">Jammu and Kashmir</option>
-                                                <option value="GA">Goa</option>
-                                                <option value="JH">Jharkhand</option>
-                                                <option value="KA">Karnataka</option>
-                                                <option value="KL">Kerala</option>
-                                                <option value="MP">Madhya Pradesh</option>
-                                                <option value="MH">Maharashtra</option>
-                                                <option value="MN">Manipur</option>
-                                                <option value="ML">Meghalaya</option>
-                                                <option value="MZ">Mizoram</option>
-                                                <option value="NL">Nagaland</option>
-                                                <option value="OR">Odisha</option>
-                                                <option value="PB">Punjab</option>
-                                                <option value="RJ">Rajasthan</option>
-                                                <option value="SK">Sikkim</option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="">City</label>
-                                            <select name="" class="form-control">
-                                                <option value="" selected>--Choose Option--</option>
-                                                <option value="Alipur">Alipur</option>
-                                                <option value="Bawana">Bawana</option>
-                                                <option value="Central Delhi">Central Delhi</option>
-                                                <option value="Delhi">Delhi</option>
-                                                <option value="Deoli">Deoli</option>
-                                                <option value="East Delhi">East Delhi</option>
-                                                <option value="Karol Bagh">Karol Bagh</option>
-                                                <option value="Najafgarh">Najafgarh</option>
-                                                <option value="Nangloi Jat">Nangloi Jat</option>
-                                                <option value="Narela">Narela</option>
-                                                <option value="New Delhi">New Delhi</option>
-                                                <option value="North Delhi">North Delhi</option>
-                                                <option value="North East Delhi">North East Delhi</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="zip">Zip Code</label>
-                                            <input type="text" class="form-control" name="zip"
-                                                placeholder="Enter Zip">
-                                        </div>
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" class="form-control" name="address"
+                                            placeholder="Enter Address">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card h-auto">
-                            <div class="card-header">
-                                <h4 class="card-title">Source Information</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="type">Type</label>
-                                            <select name="lead_type" class="form-control">
-                                                <option value="Hot leads">Hot leads</option>
-                                                <option value="Cold leads">Cold leads</option>
-                                                <option value="Warm leads">Warm leads</option>
 
-                                            </select>
-                                        </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="country">Country</label>
+                                        <select name="country" onchange="getstates(this)" class="form-control">
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+                                </div>
 
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="status">Status</label>
-                                            <select name="status" class="form-control">
-                                                <option value="">Started</option>
-                                                <option value="">Processing</option>
-                                                <option value="">Pending</option>
-                                                <option value="">Hold</option>
-                                                <option value="">Completed</option>
-                                                <option value="">Rejected</option>
-                                            </select>
-                                        </div>
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="state">State</label>
+                                        <select name="state" onchange="getcities(this)" id="states"
+                                            class="form-control">
+                                            <option value="" selected>--Choose Option--</option>
+                                        </select>
                                     </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="source">Sources</label>
-                                            <select name="source" class="form-control">
-                                                <option value="Google" @if($data->source == 'Google') selected @endif>Google</option>
-                                                <option value="Facebook" @if($data->source == 'Facebook') selected @endif>Facebook</option>
-                                                <option value="Instagram" @if($data->source == 'Instagram') selected @endif>Instagram</option>
-                                                <option value="Offline" @if($data->source == 'Offline') selected @endif>Offline</option>
-                                                <option value="Justdial" @if($data->source == 'Justdial') selected @endif>Justdial</option>
-                                                <option value="Others">Others</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+                                        <select name="city" id="cities" class="form-control">
+                                            <option value="" selected>--Choose Option--</option>
+                                        </select>
                                     </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="assignedto">Assigned To</label>
-                                            <select name="assigned_to" class="form-control">
-                                               @isset($users)
-                                               @foreach ($users as $user)
-                                               <option value="{{$user->id}}">{{$user->username}}</option>
-                                               @endforeach
-                                               @endisset
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="contacted_date">Contacted Date</label>
-                                            <input type="datetime-local" class="form-control" name="c_date"
-                                                placeholder="Enter date">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                        <div class="form-group">
-                                            <label for="close_date">Close Date</label>
-                                            <input type="date" class="form-control" name="close_date"
-                                                placeholder="Enter date">
-                                        </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="zip">Zip Code</label>
+                                        <input type="text" class="form-control" name="zipcode"
+                                            placeholder="Enter Zip">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 ">
-                        <button type="submit" class="btn btn-primary  mb-2"><i
-                                class="far fa-check-square pe-2"></i>Submit</button>
-                        <button type="button" class="btn btn-dark  mb-2"><i class="far fa-window-close pe-2"></i>Cancel
-                        </button>
+
+                    <div class="card h-auto">
+                        <div class="card-header">
+                            <h4 class="card-title">Source Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="type">Type</label>
+                                        <select name="lead_type" class="form-control">
+                                            <option value="Hot leads">Hot leads</option>
+                                            <option value="Cold leads">Cold leads</option>
+                                            <option value="Warm leads">Warm leads</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select name="status" class="form-control">
+                                            <option value="Generated">Generated</option>
+                                            <option value="Qualified">Qualified</option>
+                                            <option value="Initial">Initial Contact</option>
+                                            <option value="Schedule Appointemnt">Schedule Appointemnt</option>
+                                            <option value="Proposal Sent">Proposal Sent</option>
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="source">Sources</label>
+                                        <select name="source" class="form-control">
+                                            <option value="Google" @if ($data->source == 'Google') selected @endif>Google
+                                            </option>
+                                            <option value="Facebook" @if ($data->source == 'Facebook') selected @endif>
+                                                Facebook</option>
+                                            <option value="Instagram" @if ($data->source == 'Instagram') selected @endif>
+                                                Instagram</option>
+                                            <option value="Offline" @if ($data->source == 'Offline') selected @endif>
+                                                Offline</option>
+                                            <option value="Justdial" @if ($data->source == 'Justdial') selected @endif>
+                                                Justdial</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="assignedto">Assigned To</label>
+                                        <select name="assigned_to" class="form-control">
+                                            @isset($users)
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Contacted Date</label>
+                                        <input type="date" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="close_date">Close Date</label>
+                                        <input type="date" class="form-control" name="close_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="col-lg-12 ">
+                    <button type="submit" class="btn btn-primary  mb-2"><i
+                            class="far fa-check-square pe-2"></i>Submit</button>
+                    <button type="button" class="btn btn-dark  mb-2"><i class="far fa-window-close pe-2"></i>Cancel
+                    </button>
+                </div>
             </form>
         </div>
     </section>
-
-    
 @endsection
-@push("scripts")
-<script>
-    $("form").each(function(){
-     $($(this)).validate({
-         rules: {
-             name: {
-                 required: true
-             },
-             age:{
-                required:true,
-             },
-             Leadvalue:{
-                required:true,
-             },
-             dob:{
-                required:true
-             },
-             mobile: {
-                 required: true,
-                 number: true,
-                 maxlength: 10,
-                 minlength: 10
-             },
-             email: {
-                 required: true,
-                 email: true,
-             },
-             interested: {
-                 required: true
-             },
-             type_of_visa: {
-                 required: true,
-             },
-             source: {
-                 required: true
-             },
-             assigned_to:{
-                required:true
-             },
-             code:{
-                required:true
-             },
-             address:{
-                required:true
-             }
-         },
-         messages: {
-             name: "Please enter your name.",
-             mobile: {
-                 required: "Please enter your mobile number.",
-                 number: "Please enter a valid mobile number.",
-                 minlength: "Mobile number must be at least 10 digits.",
-                 maxlength: "Mobile number can be max of 10 digits."
-             },
-             email: {
-                 required: "Please enter your email address.",
-                 email: "Please enter a valid email address."
-             },
-             interested: "Please specify your interest.",
-             type_of_visa: "Please select the type of visa.",
-             source: "Please specify your source."
-         },
-     });
-    })
- </script>
+@push('scripts')
+    <script>
+        $("form").each(function() {
+            $($(this)).validate({
+                rules: {
+                    name: {
+                        required: true
+                    },
+                    age: {
+                        required: true,
+                    },
+                    Leadvalue: {
+                        required: true,
+                    },
+                    dob: {
+                        required: true
+                    },
+                    mobile: {
+                        required: true,
+                        number: true,
+                        maxlength: 10,
+                        minlength: 10
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    interested: {
+                        required: true
+                    },
+                    type_of_visa: {
+                        required: true,
+                    },
+                    source: {
+                        required: true
+                    },
+                    assigned_to: {
+                        required: true
+                    },
+                    code: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    }
+                },
+                messages: {
+                    name: "Please enter your name.",
+                    mobile: {
+                        required: "Please enter your mobile number.",
+                        number: "Please enter a valid mobile number.",
+                        minlength: "Mobile number must be at least 10 digits.",
+                        maxlength: "Mobile number can be max of 10 digits."
+                    },
+                    email: {
+                        required: "Please enter your email address.",
+                        email: "Please enter a valid email address."
+                    },
+                    interested: "Please specify your interest.",
+                    type_of_visa: "Please select the type of visa.",
+                    source: "Please specify your source."
+                },
+            });
+        })
+    </script>
+    <script>
+        function getstates(selectElement) {
+            var countryId = selectElement.value;
+            $.ajax({
+                url: "{{ route('loadstates') }}",
+                type: "POST",
+                data: {
+                    id: countryId,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    var statesSelect = document.getElementById('states');
+                    statesSelect.innerHTML = '';
+                    response.forEach(state => {
+                        var option = document.createElement('option');
+                        option.value = state.id;
+                        option.textContent = state.name;
+                        statesSelect.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        function getcities(selectElement) {
+            var stateid = selectElement.value;
+            $.ajax({
+                url: "{{ route('loadcities') }}",
+                type: "POST",
+                data: {
+                    id: stateid,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    var citySelect = document.getElementById('cities');
+                    citySelect.innerHTML = '';
+                    response.forEach(city => {
+                        var option = document.createElement('option');
+                        option.value = city.id;
+                        option.textContent = city.name;
+                        citySelect.appendChild(option);
+                    });
+                }
+            });
+        }
+    </script>
 @endpush

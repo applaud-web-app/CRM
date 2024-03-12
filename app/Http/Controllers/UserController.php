@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Imports\BulkEnquiry;
 use Auth;
-use Excel;
 
 class UserController extends Controller
 {

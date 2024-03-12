@@ -1,19 +1,24 @@
 @extends('master')
 @section('main-content')
+    @push('style')
+        <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}">
+    @endpush
     <section class="content-body">
         <!-- row -->
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center text-head">
                 <h2 class="mb-3 me-auto">All Leads</h2>
-                <div>
-                    <a href="{{ route('createlead') }}" class="btn btn-primary  mb-sm-0 mb-2"><i
-                            class="fas fa-plus pe-2"></i>Add New</a>
+                <div class="">
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#bulkUploadModal" class="btn btn-secondary mb-3"><i class="fas fa-upload pe-2"></i>Bulk Upload</a>
+                    <a href="{{ route('createlead') }}" class="btn btn-primary  mb-3"><i class="fas fa-plus pe-2"></i>Add New</a>
                 </div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
 
             </div>
+
+
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
@@ -26,12 +31,10 @@
                                                 #
                                             </th>
                                             <th>Name</th>
-
                                             <th>Contact Info</th>
                                             <th>Value</th>
                                             <th>Assigned</th>
                                             <th>Source</th>
-
                                             <th>Created</th>
                                             <th>Type</th>
                                             <th>Status</th>
@@ -51,15 +54,14 @@
         </div>
     </section>
 @endsection
+
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script>
         function leaddata(e, leadid) {
 
             var selectedIndex = e.target.selectedIndex;
             var lead = e.target.options[selectedIndex].value;
-            alert(lead);
             var url = "{{ route('updateleadtype', ':id') }}";
             url = url.replace(':id', leadid);
             $.ajax({
@@ -116,97 +118,98 @@
             });
         }
     </script>
-    <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-        <script type="text/javascript">
-      
-      //    $(function() {
-      //       var table = $('.data-table').DataTable({
-      //           processing: true,
-      //           serverSide: true,
-      //           pageLength: 10,
-      //           language: {
-      //               paginate: {
-      //                   previous: '<i class="fas fa-angle-double-left"></i>',
-      //                   next: '<i class="fas fa-angle-double-right"></i>'
-      //               }
-      //           },
-      //           ajax: {
-      //               url: "{{ route('leads') }}",
-      //           },
-      //           deferRender: true,
-      //           columns: [{
-      //                   data: 'DT_RowIndex',
-      //                   name: 'id',
-      //                   orderable: false,
-      //                   searchable: false
-      //               },
-      //               {
-      //                   data: 'name',
-      //                   name: 'name'
-      //               },
-      //               {
-      //                   data: 'mobile',
-      //                   name: 'mobile'
-      //               },
-      //               {
-      //                   data: 'price',
-      //                   name: 'price'
-      //               },
-      //               {
-      //                   data: 'employee.first_name',
-      //                   name: 'employee.first_name'
-      //               },
-      //               {
-      //                   data: 'source',
-      //                   name: 'source'
-      //               },
-      //               {
-      //                   data: 'contacted_at',
-      //                   name: 'contacted_at'
-      //               },
-      //               {
-      //                   data: 'lead_type',
-      //                   name: 'lead_type'
-      //               },
-      //               {
-      //                   data: 'status',
-      //                   name: 'status'
-      //               },
-      //               {
-      //                   data: 'action',
-      //                   name: 'action',
-      //                   orderable: true
-      //               }
-      //           ],
-      //           createdRow: function(row, data, dataIndex) {
-      //               var leadTypeSelect = '<select name="lead_type" onchange="leaddata(event,' + data
-      //                   .id + ')" class="form-select" id="leads">' +
-      //                   '<option value="Hot leads" ' + (data.lead_type === "Hot leads" ? "selected" :
-      //                       "") + '>Hot Lead</option>' +
-      //                   '<option value="Warm leads" ' + (data.lead_type === "Warm leads" ? "selected" :
-      //                       "") + '>Warm Lead</option>' +
-      //                   '<option value="Cold leads" ' + (data.lead_type === "Cold leads" ? "selected" :
-      //                       "") + '>Cold Lead</option>' +
-      //                   '</select>';
-      //               var statusSelect = '<select name="status" onchange="statuschange(event,' + data.id +
-      //                   ')" class="form-select" id="status_type">' +
-      //                   '<option value="Started" ' + (data.status === "Started" ? "selected" : "") +
-      //                   '>Started</option>' +
-      //                   '<option value="Processing" ' + (data.status === "Processing" ? "selected" :
-      //                   "") + '>Processing</option>' +
-      //                   '<option value="Pending" ' + (data.status === "Pending" ? "selected" : "") +
-      //                   '>Pending</option>' +
-      //                   '<option value="Hold" ' + (data.status === "Hold" ? "selected" : "") +
-      //                   '>Hold</option>' +
-      //                   '<option value="Completed" ' + (data.status === "Completed" ? "selected" : "") +
-      //                   '>Completed</option>' +
-      //                   '<option value="Rejected" ' + (data.status === "Rejected" ? "selected" : "") +
-      //                   '>Rejected</option>' +
-      //                   '</select>';
-      //               $('td:eq(7)', row).html(leadTypeSelect);
-      //               $('td:eq(8)', row).html(statusSelect);
-      //           },
-      //       });
-      //   });
+
+    <script type="text/javascript">
+        $(function() {
+            var table = $('.data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                pageLength: 10,
+                language: {
+                    paginate: {
+                        previous: '<i class="fas fa-angle-double-left"></i>',
+                        next: '<i class="fas fa-angle-double-right"></i>'
+                    }
+                },
+                ajax: {
+                    url: "{{ route('leads') }}",
+                },
+                deferRender: true,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'mobile',
+                        name: 'mobile'
+                    },
+                    {
+                        data: 'price',
+                        name: 'price'
+                    },
+                    {
+                        data: 'employee.first_name',
+                        name: 'employee.first_name'
+                    },
+                    {
+                        data: 'source',
+                        name: 'source'
+                    },
+                    {
+                        data: 'contacted_date',
+                        name: 'contacted_date'
+                    },
+                    {
+                        data: 'lead_type',
+                        name: 'lead_type'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true
+                    }
+                ],
+                createdRow: function(row, data, dataIndex) {
+                    var leadTypeSelect = '<select name="lead_type" onchange="leaddata(event,' + data
+                        .id + ')" class="form-select" id="leads">' +
+                        '<option value="Hot leads" ' + (data.lead_type === "Hot leads" ? "selected" :
+                            "") + '>Hot Lead</option>' +
+                        '<option value="Warm leads" ' + (data.lead_type === "Warm leads" ? "selected" :
+                            "") + '>Warm Lead</option>' +
+                        '<option value="Cold leads" ' + (data.lead_type === "Cold leads" ? "selected" :
+                            "") + '>Cold Lead</option>' +
+                        '</select>';
+                    var statusSelect = '<select name="status" onchange="statuschange(event,' + data.id +
+                        ')" class="form-select" id="status_type">' +
+                        '<option value="Generated" ' + (data.status === "Generated" ? "selected" : "") +
+                        '>Generated</option>' +
+                        '<option value="Qualified" ' + (data.status === "Qualified" ? "selected" :
+                            "") + '>Qualified</option>' +
+                        '<option value="Initial Contact" ' + (data.status === "Initial Contact" ? "selected" : "") +
+                        '>Initial Contact</option>' +
+                        '<option value="Schedule Appointemnt" ' + (data.status === "Schedule Appointemnt" ? "selected" : "") +
+                        '>Schedule Appointemnt</option>' +
+                        '<option value="Proposal Sent" ' + (data.status === "Proposal Sent" ? "selected" : "") +
+                        '>Proposal Sent</option>' +
+                        '<option value="Open" ' + (data.status === "Open" ? "selected" : "") +
+                        '>Open</option>' +
+                        '<option value="Close" ' + (data.status === "Close" ? "selected" : "") +
+                        '>Close</option>' +
+                        '</select>';
+                    $('td:eq(7)', row).html(leadTypeSelect);
+                    $('td:eq(8)', row).html(statusSelect);
+                },
+            });
+        });
     </script>
 @endpush

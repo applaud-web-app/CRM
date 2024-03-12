@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -39,7 +40,15 @@ class AuthController extends Controller
     public function logout(){
         Auth::logout();
         session()->flush();
-        return redirect(route('login'))->with('success','Logout Successfully!! 😀');
+        // Cache::flush();
+        $response =  redirect(route('login'))->with('success','Logout Successfully!! 😀');
+        
+        $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+        
     }
 
     public function forgetPassword(){

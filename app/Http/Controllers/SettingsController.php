@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\Documents;
 use App\Models\Ratings;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
@@ -43,10 +45,6 @@ class SettingsController extends Controller
             return redirect('/ratings')->with('error','Ratings not updated !');
         }
 
-    }
-    public function loadAccountSetting()
-    {
-        return view("settings.accountsetting");
     }
 
     public function loadEmailSettings()
@@ -147,5 +145,26 @@ class SettingsController extends Controller
         {
             return redirect("/apisetting")->with("error","Not updated");
         }
+    }
+
+    public function DocumentSetting()
+    {
+        $documents=DB::table('document_category')->orderBy('type','ASC')->get();
+        return view("settings.Documents",compact("documents"));
+    }
+
+    public function addDocuments(Request $request)
+    {
+        $check= DB::table("document_category")->insert([
+            "name"=> $request->name,
+            "type"=>$request->type,
+            "status"=> 1,
+        ]);
+        if($check){
+            return redirect("/documents")->with("success","New Dcoument Type Added Successfully");
+        }else{  
+            return redirect("/documents")->with("error","Some Error Occured");
+        }
+        // dd($data);
     }
 }
