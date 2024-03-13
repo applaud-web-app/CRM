@@ -47,7 +47,7 @@ class ApplicantsController extends Controller
                           <a class="dropdown-item" href="'.route('viewapplicant',$row->id).'"><i class="far fa-eye"></i> View Lead</a>  
                     
                           <a class="dropdown-item" href="javascript:void(0);"><i class="fas fa-check"></i> Accept Lead</a>
-                          <a class="dropdown-item" href="javascript:void(0);"><i class="fas fa-trash-alt"></i> Reject Lead</a>
+                          <a class="dropdown-item" href="'.route('rejectapproval',$row->id).'"><i class="fas fa-trash-alt"></i> Reject Lead</a>
                        
                        
                        </div>
@@ -77,6 +77,11 @@ class ApplicantsController extends Controller
         // dd($data);
         return view("applicants.Viewdata",compact("data"));
         
+    }
+
+    public function rejectApproval($id)
+    {
+        dd($id);
     }
 
 }

@@ -88,6 +88,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/viewLeaddata/{id}',[EnquiryController::class,'viewLeadData'])->name('viewLeaddata');
     Route::get('/addleaddocument/{id}',[EnquiryController::class,'addLeadDocument'])->name('addleaddocument');
     Route::post('/postadddocuments/{id}',[EnquiryController::class,'postAddDocuments'])->name('postadddocuments');
+    Route::get('/deletedocs/{id}/{id2}',[EnquiryController::class,'deleteDocs'])->name('deletedocs');
+    Route::get('/followup/{id}',[EnquiryController::class,'followUp'])->name('followup');
+    Route::post('/createfollowup/{id}',[EnquiryController::class,'createFollowUp'])->name('createfollowup');
+    Route::get('/deletefollowup/{id}',[EnquiryController::class,'deleteFollowUp'])->name('deletefollowup');
+    Route::post('/editfollowup',[EnquiryController::class,'editFollowUp'])->name('editfollowup');
     
     //Activities
     Route::get('/activities',[ActivityController::class,'getActivities'])->name('activities');
@@ -95,5 +100,6 @@ Route::middleware(['auth'])->group(function () {
     //Applicants
     Route::get( '/allapplicants',[ApplicantsController::class,'allApplicants'])->name('allapplicants');
     Route::get('/viewapplicant/{id}',[ApplicantsController::class,'viewApplicantData'])->name('viewapplicant');
+    Route::get('/rejectapproval/{id}',[ApplicantsController::class,'rejectapproval'])->name('rejectapproval');
 });
 

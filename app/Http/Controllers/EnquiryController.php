@@ -10,12 +10,13 @@ use App\Imports\BulkEnquiry;
 use App\Models\User;
 use App\Models\Activity;
 use App\Models\Documents;
-use Carbon\Carbon;
+use App\Models\Followup;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Excel;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 
 class EnquiryController extends Controller
 {
@@ -156,18 +157,40 @@ class EnquiryController extends Controller
     public function convertToLead(Request $request,$id)
     {    
         $data=Enquiry::find($id);
+        // dd($data);
         $countries=DB::table('countries')->get();
         $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
         return view('Leadmanagement.ConvertEnquiry',compact('data','users','countries'));
+        
     }
 
     public function leadGenerate(Request $request,$id)
     {
         $data=$request->except("_token");
+        $type_of_immigration = "";
+        if ($request->interested === "VISA") {
+            $type_of_immigration = $request->type_of_visa;
+            unset($data['type_of_iets']);
+            unset($data['type_of_pte']);
+            unset($data['type_of_visa']);
+        } elseif ($request->interested === "IETS") {
+            $type_of_immigration = $request->type_of_iets;
+            unset($data['type_of_visa']);
+            unset($data['type_of_pte']);
+            unset($data['type_of_iets']);
+        } elseif ($request->interested === "PTE") {
+            $type_of_immigration = $request->type_of_pte;
+            unset($data['type_of_visa']);
+            unset($data['type_of_iets']);
+            unset($data['type_of_pte']);
+        }
+        $data['type_of_immigration'] = $type_of_immigration;
+
         $userid= Auth::id();
         $username= Auth::user()->username;
         $data["lead_mode"]="converted";
         $data["assigned_by"]=$userid;
+        $data["enquiry_id"]=$id;
         $check=Leads::create($data);
         Activity::create([
             "sender_id"=>$userid,
@@ -289,6 +312,24 @@ class EnquiryController extends Controller
     public function createNewLead(Request $request)
     {   
         $data= $request->except("_token");
+        $type_of_immigration = "";
+        if ($request->interested === "VISA") {
+            $type_of_immigration = $request->type_of_visa;
+            unset($data['type_of_iets']);
+            unset($data['type_of_pte']);
+            unset($data['type_of_visa']);
+        } elseif ($request->interested === "IETS") {
+            $type_of_immigration = $request->type_of_iets;
+            unset($data['type_of_visa']);
+            unset($data['type_of_pte']);
+            unset($data['type_of_iets']);
+        } elseif ($request->interested === "PTE") {
+            $type_of_immigration = $request->type_of_pte;
+            unset($data['type_of_visa']);
+            unset($data['type_of_iets']);
+            unset($data['type_of_pte']);
+        }
+        $data['type_of_immigration'] = $type_of_immigration;
         $id= Auth::id();
         $username=Auth::user()->username;
         $data["lead_mode"]="added";
@@ -316,6 +357,7 @@ class EnquiryController extends Controller
         $states=DB::table('states')->where('country_id',$data->country)->get();
         $cities=DB::table('cities')->where('state_id',$data->state)->get();
         $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
+        // dd(json_encode($data));
         return view('Leadmanagement.Editlead',compact('data','users','countries','states','cities'));
     }
 
@@ -348,15 +390,27 @@ class EnquiryController extends Controller
 
     public function applyApproval(Request $request,$id)
     {
-        try
-        {  
-            Leads::where('id',$id)->update(['proccess_status'=> 0]);
-            return redirect()->route("leads")->with("success","Lead sent for approval.");
+        $lead = Leads::with('documents')->where('id',$id)->first();
+        if ($lead) {
+            $leadDocumentname = $lead->documents->pluck('name')->toArray();
+            $allDocumentname = Documents::where('leads_id',$id)->pluck('document_name')->toArray();
+           
+            if(count($allDocumentname)==count($leadDocumentname))
+            {
+                $check=Leads::where('id',$id)->update(['proccess_status'=> 0]);
+                if ($check)
+                {
+                    return redirect()->back()->with("success","Lead sent for approval.");
+                }  
+                else
+                    return redirect()->back()->with("error","Something went wrong!");   
+            }
+            else
+                return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
         }
-        catch(Exception $e)
-        {
-            return redirect()->route("leads")->with("error", "Some error occured");
-        }
+    
+    
+    
     }
 
     public function viewLeadData(Request $request,$id)
@@ -374,15 +428,20 @@ class EnquiryController extends Controller
 
     public function addLeadDocument(Request $request,$id)
     {
-        $data = Leads::select('enquiry.interested as visa_type','document_category.id as document_id','document_category.name as document_name')
-        ->leftJoin('enquiry','leads.enquiry_id','=','enquiry.id')
-        ->leftJoin('document_category', function($join) {
-            $join->on('enquiry.interested', '=', 'document_category.type');
-        })
-        ->where('leads.id', $id)->get();
-        $documents=Documents::where('leads_id', $id)->pluck('document_id')->toArray();
-        
-        return view("Leadmanagement.Leaddocument",compact("id","data",'documents'));
+        $data = Leads::with('documents')->where('id',$id)->first();
+        $uplodedDocs = Documents::where('leads_id',$id)->pluck('document','document_id')->toArray();
+        // $uplodedDocs = Documents::where('leads_id',$id)->select('document','id','document_id')->get()->toArray();
+        // dd($uplodedDocs,$data);
+        // $data = Leads::select('leads.interested as visa_type','document_category.id as document_id','document_category.name as document_name')
+        // ->leftJoin('document_category', function($join) {
+        //     $join->on('leads.interested', '=', 'document_category.type');
+        // })
+        // ->where('leads.id', $id)->get();
+
+        // dd($data);
+        // $documents = Documents::where('leads_id', $id)->pluck('document_id','document')->toArray();
+        // dd($documents);
+        return view("Leadmanagement.Leaddocument",compact("id","data","uplodedDocs"));
     }
 
 
@@ -392,19 +451,98 @@ class EnquiryController extends Controller
         $data['user_id'] = Auth::id();
         $data['leads_id'] = $id;
         $data['status'] = '1';
-        $file = $request->document;
-        // dd($data);
-        $check= Documents::create( $data );
+        
+        $file = $request->document->getClientOriginalName();
+
+        $fileExtension = $request->document->getClientOriginalExtension();
+        $randomstr=Str::random();
+
+        $data['document_name']=$request->document_name_hidden;
+        $data['document']="Document_".$randomstr.".".$fileExtension;
+        $file=$data["document"];
+        $destinationPath = public_path('uploads/docs/');
+        $filePath = $destinationPath . '/' . $file;
+        $leaddata=Documents::where('leads_id',$id)->where('document_id',$data['document_id'])
+        ->where("document_type",$request->document_type)->first();
+        if($leaddata){  
+            return redirect()->back()->with("error","Document already uploaded");
+            }
+        $check = Documents::create($data);
         if($check)
-        {
-           
-            $fileName = $file->getClientOriginalName();
-            $file->move(public_path('documents'), $fileName);
-            return redirect()->back()->with('success','Files uploaded successfuly');
+            {
+                if (!file_exists($filePath)) {
+                    $fileName = $file;
+                    $request->document->move($destinationPath, $fileName);
+                }
+                return redirect()->back()->with('success','Files uploaded successfuly');
+            }
+            else
+            {
+                return redirect()->back()->with('error','Files not uploaded');
+            }    
+    }
+
+    public function deleteDocs($leadid,$id) 
+    { 
+        $filename=Documents::where('leads_id',$leadid)->where('document_id',$id)->first();
+        // dd(json_encode($filename->document));
+        if($filename != NULL){
+            $filePath = public_path('uploads/docs/' . $filename->document);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            $filename->delete();
+            return redirect()->back()->with('success','Deleted Successfully');  
+        }
+        return redirect()->back()->with('error','Something Went Wrong');  
+    }
+
+    public function followUp($id)
+    {   
+        $data=Followup::where('lead_id',$id)->get();
+        return view('Leadmanagement.Followup',compact('id','data'));    
+    }
+
+    public function createFollowUp(Request $request,$id)
+    {
+        $data=$request->except("_token");
+        $username=Auth::user()->username;
+        $data["lead_id"]=$id;   
+        $data["added_by"]= $username;
+        $serial= random_int(1,10000);
+        $data["serial_id"]="SI".$serial;
+        $check=Followup::create($data); 
+        if($check){
+            return redirect()->route('followup', ['id' => $id])->with("success", "Followup Created");
         }
         else
         {
-            return redirect()->back()->with('error','Files not uploaded');
+            return redirect()->back()->with("error","Follow up Not Created");
+        }   
+    }
+
+    public function deleteFollowUp($id)
+    {
+        $check=Followup::where("id",$id)->delete();
+        if($check){
+            return redirect()->back()->with("success","Follow-up Deleted");
+        }
+        else
+        {
+            return redirect()->back()->with("error","Something went Wrong");
+        }
+    }
+
+    public function editfollowup(Request $request)  
+    {
+        $data=$request->only("id","next_followup","notes");
+        $check=Followup::where("id",$data['id'])->update($data);
+        if($check){
+            return redirect()->back()->with("success","Follow up details changed");
+        }
+        else
+        {
+            return redirect()->back()->with("error","Some Error occured");
         }
     }
 }

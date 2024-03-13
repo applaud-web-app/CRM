@@ -18,7 +18,7 @@
                                 <a href="javascript:void(0)" class="nav-link "><i class="la la-user me-2"></i> Documents</a>
                             </li>
                             <li class="nav-item">
-                                <a href="lead-follow-up.php" class="nav-link"><i class="la la-phone me-2"></i> Follow Up</a>
+                                <a href="{{route('followup',$id)}}" class="nav-link"><i class="la la-phone me-2"></i> Follow Up</a>
                             </li>
 
                         </ul>
@@ -40,52 +40,53 @@
                                             <th width="100">#</th>
                                             <th>Name</th>
                                             <th>Type</th>
-                                            <th>Documents</th>
+                                            <th>Status</th>
                                             <th colspan="2">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php $i=1; @endphp
-                                        @foreach ($data as $item)
+                                        @foreach ($data->documents as $item)
                                             <tr>
-                                                <td>{{ $i }}</td>
-                                                <td>{{ $item->document_name }}</td>
-                                                <td>{{ $item->visa_type }}</td>
+                                                <td>{{++$loop->index}}</td>
+                                                <td>{{ucfirst($item->name)}}</td>
+                                                <td>{{$item->type}}</td>
                                                 <td>
-
-                                                    @if (in_array($item->document_id,$documents))
-                                                        {{"Uploaded"}}{{$item->document}}
+                                                    @if (in_array($item->id,array_keys($uplodedDocs)))
+                                                    <span class="badge badge-success">Uploaded</span>
                                                     @else
-                                                    {{"NOT UPLOADED"}}
+                                                    <span class="badge badge-danger">Pending</span>
                                                     @endif
                                                 </td>
                                                 <td>
+                                                    @if (in_array($item->id,array_keys($uplodedDocs)))
+                                                        <a href="{{ asset('uploads/docs/'.$uplodedDocs[$item->id]) }}" target="_blank" class="btn btn-secondary btn-sm">View</a>
+                                                        <a href="{{route('deletedocs',[$data->id,$item->id])}}" class="btn btn-danger btn-sm">Delete</a>
+                                                    @endif
+
                                                     
-                                                    <a href="{{ asset('documents/'.$item->document) }}" onclick="openImageInNewTab(event)" class="btn btn-secondary btn-sm">View</a>
-                                                    <a href="" class="btn btn-danger btn-sm">Delete</a>
-                                                    @if (!in_array($item->document_id,$documents))
+                                                    
+                                                    @if (!in_array($item->id,array_keys($uplodedDocs)))
                                                         <a href="javascript:void(0)" data-bs-toggle="modal"
                                                         data-bs-target="#documentModal"
                                                         class="btn btn-primary btn-sm upload-files"
-                                                        data-name="{{ $item->document_name }}"
-                                                        data-type="{{ $item->visa_type }}"
-                                                        data-doc_id="{{$item->document_id}}"><i
+                                                        data-name="{{ $item->name }}"
+                                                        data-type="{{ $item->type }}"
+                                                        data-doc_id="{{$item->id}}"><i
                                                             class="fas fa-plus"></i>Upload</a>
-                                                    @endif                                                    
+                                                    @endif  
                                                 </td>
                                             </tr>
-                                            @php $i++; @endphp
+                                            
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div class="card-footer text-end">
-                            <div>
-                                <a href="javascript:void(0);" class="btn btn-secondary  "><i
-                                        class="far fa-check-circle me-2"></i>Send For Approval</a>
-
-                            </div>
+                            <div class="card-footer text-end">
+                                <div>
+                                   <a href="{{route('applyapproval',$data->id)}}" class="btn btn-secondary  "><i class="far fa-check-circle me-2"></i>Send For Approval</a>
+                                </div>
+                             </div>
                         </div>
 
                     </div>
@@ -108,8 +109,9 @@
 
                             <div class="form-group mb-3">
                                 <label class="form-label" for="document" >Document Name</label>
-                                <input type="text" class="form-control" id="document_name_input" name="document_name"
+                                <input type="text" class="form-control" disabled id="document_name_input" name="document_name"
                                     placeholder="Enter name ">
+                                    <input type="hidden" id="document_name_hidden" name="document_name_hidden">
                             </div>
                             <input type="text" hidden name="document_type">
                             <input type="text" name="document_id" hidden>
@@ -156,7 +158,26 @@
         });
     </script>
 
-
+    <script>
+            var allUploaded = true;
+            $("tbody tr").each(function() {
+                var status = $(this).find("td:nth-child(4) span").text().trim();
+                if (status === "Pending") {
+                    allUploaded = false;
+                    return false;
+                }
+            });
+            var $approvalButton = $("#sendForApprovalButton");
+            if (allUploaded) {
+                console.log('not allow');
+                $approvalButton.addClass("disabled");
+            } else {
+                console.log('allow');
+                $approvalButton.removeClass("disabled");
+            }
+            console.log('check');
+        
+    </script>
     <script>
         $(document).on('click', '.upload-files', function() {
             console.log("success");
@@ -164,19 +185,9 @@
             var document_type = $(this).data('type');
             var document_id = $(this).data('doc_id');
             $('#uploadmodal input[name="document_name"]').val(document_name);
+            $('#uploadmodal input[name="document_name_hidden"]').val(document_name);
             $('#uploadmodal input[name="document_type"]').val(document_type);
             $('#uploadmodal input[name="document_id"]').val(document_id);
         });
     </script>
-    <!-- Your anchor tag -->
-
-
-<script>
-function openImageInNewTab(event) {
-    event.preventDefault();
-    var imageUrl = event.target.href; // Get the URL of the image from the anchor tag's href attribute
-    window.open(imageUrl, '_blank'); // Open the image URL in a new tab
-}
-</script>
-
 @endpush

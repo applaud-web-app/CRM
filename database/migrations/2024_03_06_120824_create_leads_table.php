@@ -36,6 +36,9 @@ return new class extends Migration
             $table->dateTime('close_date')->nullable();
             $table->tinyInteger('is_deleted')->default(1);
             $table->mediumText('lead_mode');
+            $table->tinyInteger('enquiry_id');
+            $table->string('interested',30)->nullable();
+            $table->string('type_of_immigration',30)->nullable();
             $table->timestamps();
         });
     }

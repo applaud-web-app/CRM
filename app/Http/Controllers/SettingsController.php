@@ -149,6 +149,7 @@ class SettingsController extends Controller
 
     public function DocumentSetting()
     {
+        // dd('klk');
         $documents=DB::table('document_category')->orderBy('type','ASC')->get();
         return view("settings.Documents",compact("documents"));
     }

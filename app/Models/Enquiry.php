@@ -9,5 +9,5 @@ class Enquiry extends Model
 {
     use HasFactory;
     protected $table = "enquiry";
-    protected $fillable = ['name','mobile','email','interested','type_of_immigration','source'];
+    protected $fillable = ['name','mobile','email','interested','type_of_immigration','source','status'];
 }
