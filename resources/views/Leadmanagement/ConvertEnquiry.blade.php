@@ -231,71 +231,32 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                     <div class="form-group">
                                         <label class="form-label" for="interested">Interested</label>
-                                        <select name="interested" id="interested" class="form-control">
-                                            <option value="">Select</option>
-                                            <option value="VISA" @if ($data->interested == 'VISA') selected @endif>VISA</option>
-                                            <option value="IETS" @if ($data->interested == 'IETS') selected @endif>IETS</option>
-                                            <option value="PTE" @if ($data->interested == 'PTE') selected @endif>PTE</option>
+                                        @php
+                                        $getInterestType = array_keys(\Common::immigration());
+                                        @endphp
+                                        <select name="interested" id="interested" onchange="getImmigrationLists(this,'{{ $data->interested }}')" class="form-control">
+                                            @foreach ($getInterestType as $item)
+                                                <option value="{{strtoupper($item)}}" @if ($data->interested == strtoupper($item)) selected @endif>{{strtoupper($item)}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
-    
-                                <!-- if Visa then show -->
-                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3" id="visa-options" style="display: {{ $data->interested == 'VISA' ? 'block' : 'none' }};" >
-                                    <div class="form-group">
-                                        <label class="form-label" for="type_of_visa">Type of Visa</label>
-                                        <select name="type_of_visa" onchange="createFields(this.value)" id="type_of_visa" class="form-control">
-                                            <option value="">Select Type of Visa</option>
-                                            <option value="Transit Visa" @if($data->type_of_immigration =="Transit Visa") selected @endif>Transit Visa</option>
-                                            <option value="Tourist Visa" @if($data->type_of_immigration =="Tourist Visa") selected @endif>Tourist Visa</option>
-                                            <option value="X Visa" @if($data->type_of_immigration =="X Visa") selected @endif>X Visa</option>
-                                            <option value="Business Visa" @if($data->type_of_immigration =="Business Visa") selected @endif>Business Visa</option>
-                                            <option value="Employment Visa" @if($data->type_of_immigration =="Employment Visa") selected @endif>Employment Visa</option>
-                                            <option value="Student Visa" @if($data->type_of_immigration =="Student Visa") selected @endif>Student Visa</option>
-                                        </select>
-                                    </div>
-                                </div>
-    
-                                <!-- if IETS then show -->
-                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3" id="iets-options" style="display: {{ $data->interested == 'IETS' ? 'block' : 'none' }};">
-                                    <div class="form-group">
-                                        <label class="form-label" for="type_of_iets">Type of IETS</label>
-                                        <select name="type_of_iets" onchange="createFields(this.value)" id="type_of_iets" class="form-control">
-                                            <option value="">Select Type of IETS</option>
-                                            <option value="Option 1">Option 1</option>
-                                            <option value="Option 2">Option 2</option>
-                                            <option value="Option 3">Option 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-    
-                                <!-- if PTE then show -->
-                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3" id="pte-options" style="display: {{ $data->interested == 'PTE' ? 'block' : 'none' }};">
-                                    <div class="form-group">
-                                        <label class="form-label" for="type_of_pte">Type of PTE</label>
-                                        <select name="type_of_pte" onchange="createFields(this.value)" id="type_of_pte" class="form-control">
-                                            <option value="">Select Type of PTE</option>
-                                            <option value="Option 1">Option 1</option>
-                                            <option value="Option 2">Option 2</option>
-                                            <option value="Option 3">Option 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                                
+                                
 
-                            <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                <div class="form-group" id="fields">
-                                    
+                                <div class="col-lg-4 col-md-4 col-sm-4 mb-3" >
+                                    <div class="form-group" id="interestType">
+                                        
+                                    </div>
                                 </div>
-                            </div>
+
+                                <div class="row" id="fields"></div>
                         </div>
 
-                        
 
-                       
                     </div>
 
                     
@@ -422,69 +383,66 @@
                 }
             });
         }
+
+        $(document).ready(function() {
+            // Trigger the change event for the interested select element
+            $('#interested').trigger('change');
+        });
+        // get immigration lists
+        function getImmigrationLists(selectElement,preselectedValue)
+        {
+            var immigration_type=selectElement.value;
+            $.ajax({
+                url: "{{ route('loadimmigrationtype') }}",
+                type: "POST",
+                data: {
+                    list_type: immigration_type,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    console.log(immigration_type);
+                    let html = `<label class="form-label" for="">Interested</label>
+                    <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="interest_type" class="form-control">
+                        <option value="">Select</option>`;
+                    response.forEach(function(ele) {
+                        html += `<option value="${ele.toUpperCase()}" ${ele.toUpperCase() === '{{ $data->type_of_immigration }}' ? 'selected' : ''}>${ele.toUpperCase()}</option>`;
+                    });
+                    html += `</select>`
+                    console.log(html);
+                    $('#interestType').html(html);
+                    $('#type_of_immigration').trigger('change');
+                }
+            });
+        }
+
+        // get immigration->list->fields
+        function getfieldcount(selectElement,immigrationType){
+            var fieldlist=selectElement.value;
+            console.log(immigrationType);
+            $.ajax({
+                url: "{{ route('loadimmigrationtype') }}",
+                type: "POST",
+                data: {
+                    fields: fieldlist,
+                    field_type:immigrationType,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    let html=``;
+                    response.forEach(function(ele) {
+                        html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
+                                        <input type="text" class="form-control mb-2" name="${ele}"
+                                            placeholder="Enter Zip"></div></div>`;
+                    });
+                    console.log(html);
+                    $('#fields').html(html);
+                }
+            });
+        }
     </script>
 
-<script>
-    $(document).ready(function() {
-        $('#interested').change(function() {
-            var selectedOption = $(this).val();
-            $('#visa-options, #iets-options', '#type_of_pte').hide();
-            if (selectedOption === 'VISA') {
-                $('#visa-options').show();
-                $('#iets-options').hide();
-                $('#pte-options').hide();
 
-            } else if (selectedOption === 'IETS') {
-                $('#iets-options').show();
-                $('#visa-options').hide();
-                $('#pte-options').hide();
-            } else if (selectedOption === 'PTE') {
-                $('#pte-options').show();
-                $('#iets-options').hide();
-                $('#visa-options').hide();
-            }
-        });
-    });
-</script>
-
-<script>
-    function createFields(selectedValue) {
-        var container = document.getElementById('fields');
-
-        container.innerHTML = '';
-
-        if (selectedValue === 'Transit Visa' || selectedValue === 'Tourist Visa') {
-            // Create and append input fields for transit visa or tourist visa
-            for (var i = 0; i < 2; i++) {
-                var numberOfDaysInput = document.createElement('input');
-                numberOfDaysInput.type = 'number';
-                numberOfDaysInput.name = 'number_of_days';
-                numberOfDaysInput.placeholder = 'Number of days';
-                container.appendChild(numberOfDaysInput);
-            }
-        } else if (selectedValue === 'X Visa' || selectedValue === 'Business Visa' || selectedValue === 'Employment Visa' || selectedValue === 'Student Visa') {
-            // Create and append input fields for other types of visas
-            var passportNumberInput = document.createElement('input');
-            passportNumberInput.type = 'text';
-            passportNumberInput.name = 'passport_number';
-            passportNumberInput.placeholder = 'Passport Number';
-            container.appendChild(passportNumberInput);
-        } else if (selectedValue === 'Option 1' || selectedValue === 'Option 2' || selectedValue === 'Option 3') {
-            // Handle IETS or PTE options
-            // You can add similar logic here to create fields for IETS or PTE
-            // For now, let's just show a message
-            var message = document.createElement('p');
-            message.textContent = 'Fields for ' + selectedValue + ' will be added here';
-            container.appendChild(message);
-        }else if(selectedValue === 'PTE1' || selectedValue === 'PTE2' || selectedValue === 'PTE3')
-            {
-                var pte = document.createElement('input');
-                pte.type = 'text';
-                pte.name = 'pte_name';
-                pte.placeholder = 'Passport Number';
-                container.appendChild(pte);
-            }
-
-        }
-</script>
+    </script>
 @endpush

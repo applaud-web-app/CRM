@@ -1,8 +1,8 @@
 @extends('master')
 @section('main-content')
     <!--**********************************
-                Content body start
-    ***********************************-->
+                    Content body start
+        ***********************************-->
     @push('style')
         <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}">
     @endpush
@@ -18,7 +18,7 @@
 
                 </div>
             </div>
-      
+
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
@@ -52,7 +52,8 @@
     <div class="modal fade " id="bulkUploadModal" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form action="{{route('bulkUploadEnquiry')}}" id="uploadExcel" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ route('bulkUploadEnquiry') }}" id="uploadExcel" method="POST" autocomplete="off"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Bulk Upload</h4>
@@ -68,7 +69,8 @@
                         </p>
                         <div class="form-group mb-2">
                             <label class="form-label" for="title">Upload File (.xlsx)</label>
-                            <input type="file" class="form-control form-file" name="excel_file" id="excel_file" placeholder="Upload File" required>
+                            <input type="file" class="form-control form-file" name="excel_file" id="excel_file"
+                                placeholder="Upload File" required>
                         </div>
 
                         <em class="text-dark">Note: Before uploading, make sure your data is formatted correctly.</em>
@@ -110,83 +112,51 @@
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="title">Email Address</label>
-                                    <input type="email" class="form-control" name="email"
-                                        placeholder="Enter email ">
+                                    <input type="email" class="form-control" name="email" placeholder="Enter email ">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="interested">Interested</label>
+                                    @php
+                                        $getInterestType = array_keys(\Common::immigration());
+                                    @endphp
+                                    <select name="interested" id="interested" onchange="getImmigrationLists(this)"
+                                        class="form-control">
+                                        <option value="">Select Option</option>
+                                        @foreach ($getInterestType as $item)
+                                            <option value="{{ strtoupper($item) }}">{{ strtoupper($item) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-4 mb-3">
+                                <div class="form-group" id="interestType">
+
                                 </div>
                             </div>
 
                             <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="interested">Interested</label>
-                                    <select name="interested" id="interested" class="form-control">
-                                        <option value="">Select</option>
-                                        <option value="VISA">VISA</option>
-                                        <option value="IETS">IETS</option>
-                                        <option value="PTE">PTE</option>
+                                    <label class="form-label" for="date">Sources</label>
+                                    <select name="source" id="" class="form-control">
+                                        <option value="Google">Google</option>
+                                        <option value="Facebook">Facebook</option>
+                                        <option value="Instagram">Instagram</option>
+                                        <option value="Justdial">Justdial</option>
+                                        <option value="Offline">Offline</option>
                                     </select>
-                                </div>
-                            </div>
-
-                            <!-- if Visa then show -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3" id="visa-options" style="display: none;">
-                                <div class="form-group">
-                                    <label class="form-label" for="type_of_visa">Type of Visa</label>
-                                    <select name="type_of_visa" id="type_of_visa" class="form-control">
-                                        <option value="">Select Type of Visa</option>
-                                        <option value="Transit Visa">Transit Visa</option>
-                                        <option value="Tourist Visa">Tourist Visa</option>
-                                        <option value="X Visa">X Visa</option>
-                                        <option value="Business Visa">Business Visa</option>
-                                        <option value="Employment Visa">Employment Visa</option>
-                                        <option value="Student Visa">Student Visa</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- if IETS then show -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3" id="iets-options" style="display: none;">
-                                <div class="form-group">
-                                    <label class="form-label" for="type_of_iets">Type of IETS</label>
-                                    <select name="type_of_iets" id="type_of_iets" class="form-control">
-                                        <option value="">Select Type of IETS</option>
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                        <option value="Option 3">Option 3</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- if PTE then show -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3" id="pte-options" style="display: none;">
-                                <div class="form-group">
-                                    <label class="form-label" for="type_of_pte">Type of PTE</label>
-                                    <select name="type_of_pte" id="type_of_pte" class="form-control">
-                                        <option value="">Select Type of PTE</option>
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                        <option value="Option 3">Option 3</option>
-                                    </select>
-                                </div>
-                            </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
-                                    <div class="form-group">
-                                        <label class="form-label" for="date">Sources</label>
-                                        <select name="source" id="" class="form-control">
-                                            <option value="Google">Google</option>
-                                            <option value="Facebook">Facebook</option>
-                                            <option value="Instagram">Instagram</option>
-                                            <option value="Justdial">Justdial</option>
-                                            <option value="Offline">Offline</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                    </div>
+                    <div class="modal-footer">
 
-                            <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i>
-                                Submit</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i>
+                            Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -198,7 +168,7 @@
     <div class="modal fade " id="editenquiry" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form id="editenquiryform" class=".enquiryform" method="POST" action="{{route('editenquiry')}}">
+                <form id="editenquiryform" class=".enquiryform" method="POST" action="{{ route('editenquiry') }}">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title">Edit Enquiry</h4>
@@ -229,278 +199,262 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="editinterested">Interested</label>
-                                    <select name="interested" id="editinterested" class="form-control">
-                                        <option value="">Select</option>
-                                        <option value="VISA" class=".visa-options">VISA</option>
-                                        <option value="IETS" class=".iets-options">IETS</option>
-                                        <option value="PTE" class=".pte-options">PTE</option>
+                                    @php
+                                        $getInterestType = array_keys(\Common::immigration());
+                                    @endphp
+                                    <select name="interested" data-type="" id="editinterested" onchange="geteditImmigrationLists(this)"
+                                        class="form-control">
+                                        <option value="">Select Option</option>
+                                        @foreach ($getInterestType as $item)
+                                            <option value="{{ strtoupper($item) }}">{{ strtoupper($item) }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- if Visa then show -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3 visa-options" id="edit-visa-options" style="display: none;">
-                                <div class="form-group">
-                                    <label class="form-label" for="type_of_visa">Type of Visa</label>
-                                    <select name="type_of_visa" id="type_of_visa" class="form-control">
-                                        <option value="">Select Type of Visa</option>
-                                        <option value="Transit Visa">Transit Visa</option>
-                                        <option value="Tourist Visa">Tourist Visa</option>
-                                        <option value="X Visa">X Visa</option>
-                                        <option value="Business Visa">Business Visa</option>
-                                        <option value="Employment Visa">Employment Visa</option>
-                                        <option value="Student Visa">Student Visa</option>
-                                    </select>
-                                </div>
-                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-4 mb-3">
+                                <div class="form-group" id="editinterestType">
 
-                            <!-- if IETS then show -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3 iets-options" id="edit-iets-options" style="display: none;">
-                                <div class="form-group">
-                                    <label class="form-label" for="type_of_iets">Type of IETS</label>
-                                    <select name="type_of_iets" id="type_of_iets" class="form-control">
-                                        <option value="">Select Type of IETS</option>
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                        <option value="Option 3">Option 3</option>
-                                    </select>
                                 </div>
                             </div>
-
-                            <!-- if PTE then show -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3 pte-options" id="edit-pte-options" style="display: none;">
+                            
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="type_of_pte">Type of PTE</label>
-                                    <select name="type_of_pte" id="type_of_pte" class="form-control">
-                                        <option value="">Select Type of PTE</option>
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                        <option value="Option 3">Option 3</option>
+                                    <label class="form-label" for="date">Sources</label>
+                                    <select name="source" id="" class="form-control">
+                                        <option value="Google">Google</option>
+                                        <option value="Facebook">Facebook</option>
+                                        <option value="Instagram">Instagram</option>
+                                        <option value="Justdial">Justdial</option>
+                                        <option value="Offline">Offline</option>
                                     </select>
-                                </div>
-                            </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
-                                    <div class="form-group">
-                                        <label class="form-label" for="date">Sources</label>
-                                        <select name="source" id="" class="form-control">
-                                            <option value="Google">Google</option>
-                                            <option value="Facebook">Facebook</option>
-                                            <option value="Instagram">Instagram</option>
-                                            <option value="Justdial">Justdial</option>
-                                            <option value="Offline">Offline</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                    </div>
+                    <div class="modal-footer">
 
-                            <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i>
-                                Submit</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i>
+                            Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
     <!--**********************************
-                    Content body end
-    ***********************************-->
-   
+                        Content body end
+        ***********************************-->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-<script>
-   $("form").each(function(){
-    $($(this)).validate({
-        rules: {
-            name: {
-                required: true
-            },
-            mobile: {
-                required: true,
-                number: true,
-                maxlength: 10,
-                minlength: 10
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            interested: {
-                required: true
-            },
-            type_of_visa: {
-                required: true,
-            },
-            source: {
-                required: true
-            },
-        },
-        messages: {
-            name: "Please enter your name.",
-            mobile: {
-                required: "Please enter your mobile number.",
-                number: "Please enter a valid mobile number.",
-                minlength: "Mobile number must be at least 10 digits.",
-                maxlength: "Mobile number can be max of 10 digits."
-            },
-            email: {
-                required: "Please enter your email address.",
-                email: "Please enter a valid email address."
-            },
-            interested: "Please specify your interest.",
-            type_of_visa: "Please select the type of visa.",
-            source: "Please specify your source."
-        },
-    });
-   })
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('#interested').change(function() {
-            var selectedOption = $(this).val();
-            $('#visa-options, #iets-options', '#type_of_pte').hide();
-            if (selectedOption === 'VISA') {
-                $('#visa-options').show();
-                $('#iets-options').hide();
-                $('#pte-options').hide();
-            } else if (selectedOption === 'IETS') {
-                $('#iets-options').show();
-                $('#visa-options').hide();
-                $('#pte-options').hide();
-            } else if (selectedOption === 'PTE') {
-                $('#pte-options').show();
-                $('#iets-options').hide();
-                $('#visa-options').hide();
-            }
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        $(document).on('change', '#editinterested', function() {
-            console.log("Change event triggered");
-            var selectedOption = $(this).val();
-            $('#visa-options, #iets-options', '#type_of_pte').hide();
-            if (selectedOption === 'VISA') {
-                $('#edit-visa-options').show();
-                $('#edit-iets-options').hide();
-                $('#edit-pte-options').hide();
-            } else if (selectedOption === 'IETS') {
-                $('#edit-iets-options').show();
-                $('#edit-visa-options').hide();
-                $('#edit-pte-options').hide();
-            } else if (selectedOption === 'PTE') {
-                $('#edit-pte-options').show();
-                $('#edit-iets-options').hide();
-                $('#edit-visa-options').hide();
-            }
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        $(document).on('click','.edit-enquiry',function(){
-            var name = $(this).data('name');
-            var mobile = $(this).data('mobile');
-            var email = $(this).data('email');
-            var interest=$(this).data('select');
-            var source=$(this).data('source');
-            var immigration=$(this).data('immigration');
-            var enquiryid=$(this).data('id'); 
-            $('#editenquiryform input[name="name"]').val(name);
-            $('#editenquiryform input[name="mobile"]').val(mobile);
-            $('#editenquiryform input[name="email"]').val(email);
-            $('#editenquiryform input[name="id"]').val(enquiryid);
-            $('#editenquiryform select[name="interested"]').val(interest);
-
-            $('.visa-options').toggle(interest === 'VISA');
-            $('.iets-options').toggle(interest === 'IETS');
-            $('.pte-options').toggle(interest === 'PTE');
-
-            $('#editenquiryform select[name="source"]').val(source);
-            $('#edit-' + interest.toLowerCase() + '-options select[name="type_of_' + interest.toLowerCase() + '"]').val(immigration);
+    <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script>
+        $("form").each(function() {
+            $($(this)).validate({
+                rules: {
+                    name: {
+                        required: true
+                    },
+                    mobile: {
+                        required: true,
+                        number: true,
+                        maxlength: 10,
+                        minlength: 10
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    interested: {
+                        required: true
+                    },
+                    type_of_visa: {
+                        required: true,
+                    },
+                    source: {
+                        required: true
+                    },
+                },
+                messages: {
+                    name: "Please enter your name.",
+                    mobile: {
+                        required: "Please enter your mobile number.",
+                        number: "Please enter a valid mobile number.",
+                        minlength: "Mobile number must be at least 10 digits.",
+                        maxlength: "Mobile number can be max of 10 digits."
+                    },
+                    email: {
+                        required: "Please enter your email address.",
+                        email: "Please enter a valid email address."
+                    },
+                    interested: "Please specify your interest.",
+                    type_of_visa: "Please select the type of visa.",
+                    source: "Please specify your source."
+                },
+            });
         })
-    });
-</script>
+    </script>
 
-<script type="text/javascript">
-    $(function() {
-        var table = $('.data-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ordering: false,
-            pageLength:10,
-            language: {
-                paginate: {
-                previous: '<i class="fas fa-angle-double-left"></i>',
-                next: '<i class="fas fa-angle-double-right"></i>'
+
+    <script>
+        function getImmigrationLists(selectElement) {
+            var immigration_type = selectElement.value;
+            $.ajax({
+                url: "{{ route('loadimmigrationtype') }}",
+                type: "POST",
+                data: {
+                    list_type: immigration_type,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    console.log(immigration_type);
+                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    <select id="type_of_immigration" name="type_of_immigration" class="form-control">
+                        <option value="">Select</option>`;
+                    response.forEach(function(ele) {
+                        html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
+                    });
+                    html += `</select>`
+                    console.log(html);
+                    $('#interestType').html(html);
                 }
-            },
-            ajax: "{{ route('enquiry') }}",
-            deferRender: true,
-            columns: [{ data: 'DT_RowIndex', name: 'id', orderable: false, searchable: false },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'mobile',
-                    name: 'mobile'
-                },
-                {
-                    data: 'email',
-                    name: 'email'
-                },
-                {
-                    data: 'interested',
-                    name: 'interested'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'type_of_immigration',
-                    name: 'type_of_immigration'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: true
-                },
-            ],
-            // "pagingType": "full_numbers",
-        });
-    });
-</script>
-
-<script>
-    $('#uploadExcel').validate({
-        rules: {
-            excel_file: {
-                required: true,
-            },
-        },
-        errorElement: 'div',
-        highlight: function(element, errorClass) {
-            $(element).css({ border: '1px solid #f00' });
-        },
-        unhighlight: function(element, errorClass) {
-            $(element).css({ border: '1px solid #c1c1c1' });
-        },
-        submitHandler: function(form,event) {
-            event.preventDefault();
-            $("#addExcel").attr('disabled','disabled').text('Processing...');
-            document.getElementById("uploadExcel").submit();
+            });
         }
-    });
-</script>
+
+
+        function geteditImmigrationLists(selectElement) {
+            var immigration_type = selectElement.value;
+            var type = document.getElementById("editinterested").getAttribute('data-type');
+            $.ajax({
+                url: "{{ route('loadimmigrationtype') }}",
+                type: "POST",
+                data: {
+                    list_type: immigration_type,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    console.log(immigration_type);
+                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    <select id="type_of_immigration" name="type_of_immigration" class="form-control">
+                        <option value="">Select</option>`;
+                    response.forEach(function(ele) {
+                        html += `<option value="${ele.toUpperCase()}" ${type == ele.toUpperCase() ? 'selected' : ''}>${ele.toUpperCase()}</option>`;
+                    });
+                    html += `</select>`
+                    console.log(html);
+                    $('#editinterestType').html(html);
+                }
+            });
+        }
+        
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.edit-enquiry', function() {
+                var name = $(this).data('name');
+                var mobile = $(this).data('mobile');
+                var email = $(this).data('email');
+                var interest = $(this).data('select');
+                var source = $(this).data('source');
+                var immigration = $(this).data('immigration');
+                var enquiryid = $(this).data('id');
+                $('#editenquiryform input[name="name"]').val(name);
+                $('#editenquiryform input[name="mobile"]').val(mobile);
+                $('#editenquiryform input[name="email"]').val(email);
+                $('#editenquiryform input[name="id"]').val(enquiryid);
+                $('#editenquiryform select[name="interested"]').val(interest);
+                $('#editenquiryform select[name="source"]').val(source);
+                $('#editinterested').attr('data-type',immigration);
+                $('#editinterested').trigger('change');
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function() {
+            var table = $('.data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                pageLength: 10,
+                language: {
+                    paginate: {
+                        previous: '<i class="fas fa-angle-double-left"></i>',
+                        next: '<i class="fas fa-angle-double-right"></i>'
+                    }
+                },
+                ajax: "{{ route('enquiry') }}",
+                deferRender: true,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'mobile',
+                        name: 'mobile'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'interested',
+                        name: 'interested'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'type_of_immigration',
+                        name: 'type_of_immigration'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true
+                    },
+                ],
+                // "pagingType": "full_numbers",
+            });
+        });
+    </script>
+
+    <script>
+        $('#uploadExcel').validate({
+            rules: {
+                excel_file: {
+                    required: true,
+                },
+            },
+            errorElement: 'div',
+            highlight: function(element, errorClass) {
+                $(element).css({
+                    border: '1px solid #f00'
+                });
+            },
+            unhighlight: function(element, errorClass) {
+                $(element).css({
+                    border: '1px solid #c1c1c1'
+                });
+            },
+            submitHandler: function(form, event) {
+                event.preventDefault();
+                $("#addExcel").attr('disabled', 'disabled').text('Processing...');
+                document.getElementById("uploadExcel").submit();
+            }
+        });
+    </script>
 @endpush

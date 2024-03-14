@@ -256,8 +256,8 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="{{route('allapplicants')}}">Pending Applicants</a></li>
-                            <li><a href="applicants.php">Applicants</a></li>
+                            <li><a href="{{route('pendingapplicants')}}">Pending Applicants</a></li>
+                            <li><a href="{{route('allapplicants')}}">Applicants</a></li>
 
                         </ul>
                     </li>

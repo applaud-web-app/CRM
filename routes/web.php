@@ -84,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/updatelead/{id}',[EnquiryController::class,'updateLeadData'])->name('updatelead');
     Route::post('/loadstates',[EnquiryController::class,'loadStateData'])->name('loadstates');
     Route::post('/loadcities',[EnquiryController::class,'loadCities'])->name('loadcities');
+    Route::post('/loadimmigrationtype',[EnquiryController::class,'loadImmigrationType'])->name('loadimmigrationtype');
     Route::get('/applyapproval/{id}',[EnquiryController::class,'applyApproval'])->name('applyapproval');
     Route::get('/viewLeaddata/{id}',[EnquiryController::class,'viewLeadData'])->name('viewLeaddata');
     Route::get('/addleaddocument/{id}',[EnquiryController::class,'addLeadDocument'])->name('addleaddocument');
@@ -98,8 +99,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/activities',[ActivityController::class,'getActivities'])->name('activities');
 
     //Applicants
-    Route::get( '/allapplicants',[ApplicantsController::class,'allApplicants'])->name('allapplicants');
+    Route::get( '/pendingapplicants',[ApplicantsController::class,'pendingApplicants'])->name('pendingapplicants');
     Route::get('/viewapplicant/{id}',[ApplicantsController::class,'viewApplicantData'])->name('viewapplicant');
-    Route::get('/rejectapproval/{id}',[ApplicantsController::class,'rejectapproval'])->name('rejectapproval');
+    Route::get('/rejectapproval/{id}',[ApplicantsController::class,'rejectApproval'])->name('rejectapproval');
+    Route::get('/approved/{id}',[ApplicantsController::class,'approvedRequest'])->name('approved');
+    Route::get('/allapplicants',[ApplicantsController::class,'allApplicants'])->name('allapplicants');
+    Route::get('/addnewapplicant',[ApplicantsController::class,'addNewApplicant'])->name('addnewapplicant');
 });
 

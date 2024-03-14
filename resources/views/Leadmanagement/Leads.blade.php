@@ -143,7 +143,15 @@
                     },
                     {
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
+                        width: '100px',
+                        render: function(data, type, full, meta) {
+                            if (full.proccess_status == 'rejected') {
+                                return data+'<span><i class="fa fa-circle text-danger ms-1 fs-12"></i></span> ';
+                            } else {
+                                return data;
+                            }
+                        }
                     },
                     {
                         data: 'mobile',

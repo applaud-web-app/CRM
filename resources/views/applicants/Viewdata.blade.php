@@ -63,38 +63,14 @@
                          <div class="tab-pane fade" id="documents">
                             <div class="pt-4">
                                <div id="lightboxgallery" class="d-flex flex-wrap text-center">
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain"/>
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain" />
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain" />
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain" />
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain"/>
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain" />
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain" />
-                                  </a>
-                                  <a href="images/product.jpg"  data-src="images/product.jpg" class="border border-light p-2 m-1">
-                                     <span class="d-block border-bottom text-black">Document Name</span>
-                                     <img src="images/product.jpg" alt="" style="width:150px;height:150px;object-fit:contain" />
-                                  </a>
+                                 @foreach ($documents as $document)
+                                 <a target="_blank" href="{{asset('uploads/docs/'.$document->document)}}" data-src="images/product.jpg" class="border border-light p-2 m-1">
+                                    <span class="d-block border-bottom text-black">{{$document->document_name}}</span>
+                                    <img src="{{asset('uploads/docs/'.$document->document)}}" alt="" style="width:150px;height:150px;object-fit:contain"/>
+                                 </a>
+                                 @endforeach
+                                  
+                                  
                                </div>
                              
                              
@@ -109,33 +85,22 @@
                                          <th>
                                             Serial No.
                                          </th>
-                                      
-                                     
                                          <th>Notes</th>
-                                      
                                          <th>Next Follow Up</th>
                                          <th>Added By</th>
-                                     
-                                     
                                      </tr>
                                  </thead>
                                  <tbody>
-                                   <?php for($i=1;$i<=10;$i++){ ?>
-                                     
+                                   @foreach ($followupdata as $followup)
                                      <tr>
-                                    
-                                     <td>MEP_124854</td>
+                                     <td>{{$followup['serial_id']}}</td>
                                          <td class="wspace-no">
-                                             
-                                         <span >Sell Home Loan Campaign</span>
+                                         <span >{{$followup->notes}}</span>
                                          </td>
-                                     
-                                         <td class="wspace-no"><span>12-12-2022; 14:05</span></td>
-                                         <td class="wspace-no">Admin</td>
-                                       
-                                      
+                                         <td class="wspace-no"><span>{{$followup->next_followup}}</span></td>
+                                         <td class="wspace-no">{{$followup->added_by}}</td>
                                      </tr>
-                                     <?php } ?>
+                                     @endforeach
                                  </tbody>
                              </table>
                             </div>
@@ -148,8 +113,8 @@
                 <div class="card-footer text-end">
                          
                                  <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#requestModal" class="btn btn-secondary me-2 mb-1"><i class="far fa-edit me-1"></i>Request</a>
-                                 <a href="javascript:void(0);" class="btn btn-primary me-2 mb-1"><i class="far fa-check-circle me-1"></i>Accept</a>
-                                 <a href="javascript:void(0);" class="btn btn-danger me-2 mb-1"><i class="far fa-times-circle me-1"></i>Reject</a>
+                                 <a href="{{route('approved',$data->id)}}" class="btn btn-primary me-2 mb-1"><i class="far fa-check-circle me-1"></i>Accept</a>
+                                 <a href="{{route('rejectapproval',$data->id)}}" class="btn btn-danger me-2 mb-1"><i class="far fa-times-circle me-1"></i>Reject</a>
                              
                      </div>
              </div>

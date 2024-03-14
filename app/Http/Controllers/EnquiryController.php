@@ -14,9 +14,8 @@ use App\Models\Followup;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Excel;
-use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Helpers\Common;
 
 class EnquiryController extends Controller
 {
@@ -76,24 +75,8 @@ class EnquiryController extends Controller
 
     public function saveenquiry(Request $request)
     {
-        $data = $request->all();
-        $type_of_immigration = "";
-        if ($request->interested === "VISA") {
-            $type_of_immigration = $request->type_of_visa;
-            unset($data['type_of_iets']);
-            unset($data['type_of_pte']);
-        } elseif ($request->interested === "IETS") {
-            $type_of_immigration = $request->type_of_iets;
-            unset($data['type_of_visa']);
-            unset($data['type_of_pte']);
-        } elseif ($request->interested === "PTE") {
-            $type_of_immigration = $request->type_of_pte;
-            unset($data['type_of_visa']);
-            unset($data['type_of_iets']);
-        }
-        $data['type_of_immigration'] = $type_of_immigration;
+        $data = $request->except("_token");
         $enquiry = Enquiry::create($data);
-
         if ($enquiry) {
             return redirect()->route("enquiry")->with("success", "Enquiry Created !");
         } else {
@@ -105,24 +88,6 @@ class EnquiryController extends Controller
     {
         $data= $request->except("id","_token");
         $id=$request->id;
-        $type_of_immigration = "";
-        if ($request->interested === "VISA") {
-            $type_of_immigration = $request->type_of_visa;
-            unset($data['type_of_visa']);
-            unset($data['type_of_pte']);
-            unset($data['type_of_iets']);
-        } elseif ($request->interested === "IETS") {
-            $type_of_immigration = $request->type_of_iets;
-            unset($data['type_of_visa']);
-            unset($data['type_of_pte']);
-            unset($data['type_of_iets']);
-        } elseif ($request->interested === "PTE") {
-            $type_of_immigration = $request->type_of_pte;
-            unset($data['type_of_visa']);
-            unset($data['type_of_iets']);
-            unset($data['type_of_pte']);
-        }
-        $data['type_of_immigration'] = $type_of_immigration;
         $check=Enquiry::where('id', $id)->update($data);
         if( $check ) {  
             return redirect()->route('enquiry')->with('success','Enquiry Updated');
@@ -167,25 +132,7 @@ class EnquiryController extends Controller
     public function leadGenerate(Request $request,$id)
     {
         $data=$request->except("_token");
-        $type_of_immigration = "";
-        if ($request->interested === "VISA") {
-            $type_of_immigration = $request->type_of_visa;
-            unset($data['type_of_iets']);
-            unset($data['type_of_pte']);
-            unset($data['type_of_visa']);
-        } elseif ($request->interested === "IETS") {
-            $type_of_immigration = $request->type_of_iets;
-            unset($data['type_of_visa']);
-            unset($data['type_of_pte']);
-            unset($data['type_of_iets']);
-        } elseif ($request->interested === "PTE") {
-            $type_of_immigration = $request->type_of_pte;
-            unset($data['type_of_visa']);
-            unset($data['type_of_iets']);
-            unset($data['type_of_pte']);
-        }
-        $data['type_of_immigration'] = $type_of_immigration;
-
+        // dd($data);
         $userid= Auth::id();
         $username= Auth::user()->username;
         $data["lead_mode"]="converted";
@@ -201,7 +148,7 @@ class EnquiryController extends Controller
         ]);
         if( $check ) {
             Enquiry::where('id',$id)->update(['status'=> 0]);
-            return redirect()->route("leads")->with("success","");
+            return redirect()->route("leads")->with("success","Enquiry Converted into Lead");
         } else {
             return redirect()->back()->with("error","Failed to convert to lead");
         }
@@ -214,7 +161,7 @@ class EnquiryController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $leads = Leads::where("is_deleted",1)->where('proccess_status',1)->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);     
+            $leads = Leads::where("is_deleted",1)->whereIn('proccess_status',['created','rejected'])->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);     
             $count_total= Leads::where('is_deleted', 1)->count();     
             return Datatables::of($leads)
                 ->addIndexColumn()
@@ -275,8 +222,7 @@ class EnquiryController extends Controller
 
     public function updateLeadType(Request $request,$id)
     {
-        $check=Leads::where("id", $id)->update([
-                                "lead_type"=> $request->leadtype,]);
+        $check=Leads::where("id", $id)->update([ "lead_type"=> $request->leadtype,]);
         if( $check ) {
             return "success";
         }
@@ -289,8 +235,7 @@ class EnquiryController extends Controller
     
     public function updateStatusType(Request $request,$id)
     {
-        $check=Leads::where("id", $id)->update([
-                                "status"=> $request->status,]);
+        $check=Leads::where("id", $id)->update(["status"=> $request->status,]);
         if( $check ) {
             return "success";
         }
@@ -312,24 +257,6 @@ class EnquiryController extends Controller
     public function createNewLead(Request $request)
     {   
         $data= $request->except("_token");
-        $type_of_immigration = "";
-        if ($request->interested === "VISA") {
-            $type_of_immigration = $request->type_of_visa;
-            unset($data['type_of_iets']);
-            unset($data['type_of_pte']);
-            unset($data['type_of_visa']);
-        } elseif ($request->interested === "IETS") {
-            $type_of_immigration = $request->type_of_iets;
-            unset($data['type_of_visa']);
-            unset($data['type_of_pte']);
-            unset($data['type_of_iets']);
-        } elseif ($request->interested === "PTE") {
-            $type_of_immigration = $request->type_of_pte;
-            unset($data['type_of_visa']);
-            unset($data['type_of_iets']);
-            unset($data['type_of_pte']);
-        }
-        $data['type_of_immigration'] = $type_of_immigration;
         $id= Auth::id();
         $username=Auth::user()->username;
         $data["lead_mode"]="added";
@@ -357,7 +284,6 @@ class EnquiryController extends Controller
         $states=DB::table('states')->where('country_id',$data->country)->get();
         $cities=DB::table('cities')->where('state_id',$data->state)->get();
         $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
-        // dd(json_encode($data));
         return view('Leadmanagement.Editlead',compact('data','users','countries','states','cities'));
     }
 
@@ -390,6 +316,8 @@ class EnquiryController extends Controller
 
     public function applyApproval(Request $request,$id)
     {
+        $userid=Auth::id();
+        $username=Auth::user()->username;
         $lead = Leads::with('documents')->where('id',$id)->first();
         if ($lead) {
             $leadDocumentname = $lead->documents->pluck('name')->toArray();
@@ -397,10 +325,18 @@ class EnquiryController extends Controller
            
             if(count($allDocumentname)==count($leadDocumentname))
             {
-                $check=Leads::where('id',$id)->update(['proccess_status'=> 0]);
+                $check=Leads::where('id',$id)->update(['proccess_status'=> 'proccessing']);
+                // dd($lead->name);
                 if ($check)
-                {
-                    return redirect()->back()->with("success","Lead sent for approval.");
+                {   
+                    Activity::create([
+                        "sender_id"=>$userid,
+                        "receiver_id"=>$lead->assigned_to,
+                        "activity"=>"Lead with name ".$lead->name." sent for approval",
+                        "done_by"=>$username,
+                        "date" => date('y-m-d')
+                    ]);
+                    return redirect()->route('pendingapplicants')->with("success","Lead sent for approval.");
                 }  
                 else
                     return redirect()->back()->with("error","Something went wrong!");   
@@ -430,17 +366,6 @@ class EnquiryController extends Controller
     {
         $data = Leads::with('documents')->where('id',$id)->first();
         $uplodedDocs = Documents::where('leads_id',$id)->pluck('document','document_id')->toArray();
-        // $uplodedDocs = Documents::where('leads_id',$id)->select('document','id','document_id')->get()->toArray();
-        // dd($uplodedDocs,$data);
-        // $data = Leads::select('leads.interested as visa_type','document_category.id as document_id','document_category.name as document_name')
-        // ->leftJoin('document_category', function($join) {
-        //     $join->on('leads.interested', '=', 'document_category.type');
-        // })
-        // ->where('leads.id', $id)->get();
-
-        // dd($data);
-        // $documents = Documents::where('leads_id', $id)->pluck('document_id','document')->toArray();
-        // dd($documents);
         return view("Leadmanagement.Leaddocument",compact("id","data","uplodedDocs"));
     }
 
@@ -485,7 +410,6 @@ class EnquiryController extends Controller
     public function deleteDocs($leadid,$id) 
     { 
         $filename=Documents::where('leads_id',$leadid)->where('document_id',$id)->first();
-        // dd(json_encode($filename->document));
         if($filename != NULL){
             $filePath = public_path('uploads/docs/' . $filename->document);
             if (file_exists($filePath)) {
@@ -544,5 +468,29 @@ class EnquiryController extends Controller
         {
             return redirect()->back()->with("error","Some Error occured");
         }
+    }
+
+
+    public function loadImmigrationType(Request $request)
+    {    $list=Common::immigration();
+        if(isset($request->list_type))
+        {
+            $type=strtolower($request->list_type);
+            if (isset($list[$type])) {
+                return array_keys($list[$type]);
+            } else {
+                return json_encode([]);
+            }
+        }
+        else if(isset($request->fields)&&(isset($request->field_type))){
+            $fields=strtolower($request->fields);
+            $field_type=strtolower($request->field_type);
+            if (isset($list[$field_type][$fields])) {
+                return $list[$field_type][$fields];
+            } else {
+                return json_encode([]);
+            }
+        }
+        
     }
 }

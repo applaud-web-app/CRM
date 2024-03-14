@@ -91,7 +91,7 @@
                 }
             },
             ajax: {
-                url: "{{ route('allapplicants') }}",
+                url: "{{ route('pendingapplicants') }}",
             },
             deferRender: true,
             columns: [{
@@ -126,7 +126,12 @@
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    render: function(data, type, full, meta) {
+                            if (full.proccess_status == 'proccessing') {
+                                return '<span class="badge badge-warning light">Pending</span>';
+                            } 
+                        }
                 },
                 {
                     data: 'action',
