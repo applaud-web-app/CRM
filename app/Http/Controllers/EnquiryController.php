@@ -448,7 +448,7 @@ class EnquiryController extends Controller
 
     public function loadImmigrationType(Request $request)
     {
-        if ($request->choice == true) {
+        if ($request->choice) {
             dd($request->choice);
             $list = Common::immigration(true);
             if (isset($request->list_type)) {
@@ -468,7 +468,7 @@ class EnquiryController extends Controller
                 }
             }
         }
-        else if($request->choice == false) {
+        else if($request->choice) {
             dd($request->choice);
             $list = Common::immigration(false);
             if (isset($request->list_type)) {
