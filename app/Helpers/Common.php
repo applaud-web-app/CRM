@@ -32,9 +32,8 @@ class Common
     public static function loadimmigration()
     {
       $data = DB::table("document_category")->select('type', 'subcategory', 'field_type', 'name')->get()->toArray();
-          $mergedArray = []; // Start with the default array
+          $mergedArray = []; 
 
-        // Merge fetched data with default array
         foreach ($data as $value) {
             $type = strtolower($value->type);
             $subcategory = strtolower($value->subcategory);
@@ -73,5 +72,6 @@ class Common
                 ];
             }
         }
+        return $mergedArray;
     }
   }

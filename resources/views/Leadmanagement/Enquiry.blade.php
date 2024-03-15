@@ -203,7 +203,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="editinterested">Interested</label>
                                     @php
-                                        $getInterestType = array_keys(\Common::immigration());
+                                        $getInterestType = array_keys(\Common::loadimmigration());
                                     @endphp
                                     <select name="interested" data-type="" id="editinterested" onchange="geteditImmigrationLists(this)"
                                         class="form-control">
