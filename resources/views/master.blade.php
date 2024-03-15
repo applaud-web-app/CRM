@@ -228,7 +228,7 @@
         <div class="deznav">
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
-                    @role('Admin')
+                    @role('Superadmin')
                         <li><a class=" ai-icon" href="index.php" aria-expanded="false">
                                 <i class="fas fa-tachometer-alt"></i>
                                 <span class="nav-text">Dashboard</span>
