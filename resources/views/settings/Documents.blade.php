@@ -32,6 +32,7 @@
                                             <th width="100">#</th>
                                             <th>Name</th>
                                             <th>Type</th>
+                                            <th>Category</th>
                                             <th width="200">Action</th>
                                         </tr>
                                     </thead>
@@ -42,6 +43,7 @@
                                             <td>{{$i}}</td>
                                             <td>{{$document->name}}</td>
                                             <td>{{$document->type}}</td>
+                                            <td>{{$document->subcategory}}</td>
                                             <td>
                                                 <a href="" class="btn btn-secondary btn-sm">View</a>
                                                 <a href="" class="btn btn-danger btn-sm">Delete</a>
@@ -74,26 +76,115 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="document">Document Name</label>
-                            <input type="text" class="form-control" name="name" placeholder="Enter name ">
+                       <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label" for="interested">Interested</label>
+                                @php
+                                    $getInterestType = array_keys(\Common::immigration(true));
+                                @endphp
+                                <select name="interested" id="interested" onchange="getImmigrationLists(this)"
+                                    class="form-control">
+                                    <option value="">Select Option</option>
+                                    @foreach ($getInterestType as $item)
+                                        <option value="{{ strtoupper($item) }}">{{ strtoupper($item) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12 mb-3">
-                            <label class="form-label" for="document_type">Document Tyoe</label>
-                            <select name="type" class="form-control">
-                                <option value="VISA">Visa</option>
-                                <option value="IETS">IETS</option>
-                                <option value="PTE">PTE</option>
-                            </select>
+
+                        <div class="col-lg-6 col-md-6 col-sm-4 mb-3">
+                            <div class="form-group" id="interestType">
+
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 col-md-6 col-12 mb-3">
+                            <label class="form-label" for="document_type">No. Of Document</label>
+                            <input type="text" class="form-control" name="field_count" id="fieldnum">
+                        </div>
+
+                        <div id="dynamicFieldsContainer">
 
                         </div>
                     </div>
+                    </div>
                     <div class="modal-footer">
-
                         <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i> Submit</button>
                     </div>
                 </form>
+                </div>
+                    
             </div>
         </div>
     </div>
 @endsection
+@push('scripts')
+
+
+
+
+<script>
+    function getImmigrationLists(selectElement) {
+            var immigration_type = selectElement.value;
+            $.ajax({
+                url: "{{ route('loadimmigrationtype') }}",
+                type: "POST",
+                data: {
+                    list_type: immigration_type,
+                    _token: "{{ csrf_token() }}",
+                },
+                datatype: JSON,
+                success: function(response) {
+                    console.log(response);
+                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    <select id="type_of_immigration" name="type_of_immigration" class="form-control">
+                        <option value="">Select</option>`;
+                    response.forEach(function(ele) {
+                        html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
+                    });
+                    html += `</select>`
+                    $('#interestType').html(html);
+                }
+            });
+        }
+</script>
+<script>
+    document.getElementById('fieldnum').addEventListener('input', function() {
+        var numDocuments = parseInt(this.value);
+        var dynamicFieldsContainer = document.getElementById('dynamicFieldsContainer');
+        dynamicFieldsContainer.innerHTML = ''; // Clear previous fields
+        
+        for (var i = 0; i < numDocuments; i++) {
+            var documentNameInput = document.createElement('input');
+            documentNameInput.setAttribute('type', 'text');
+            documentNameInput.setAttribute('class', 'form-control');
+            documentNameInput.setAttribute('name', 'documents[' + i + '][name]');
+            documentNameInput.setAttribute('placeholder', 'Enter name for document ' + (i + 1));
+            
+            var fieldTypeSelect = document.createElement('select');
+            fieldTypeSelect.setAttribute('class', 'form-control');
+            fieldTypeSelect.setAttribute('name', 'documents[' + i + '][field_type]');
+            
+            var inputOption = document.createElement('option');
+            inputOption.setAttribute('value', 'input');
+            inputOption.textContent = 'Input';
+            
+            var fileOption = document.createElement('option');
+            fileOption.setAttribute('value', 'file');
+            fileOption.textContent = 'File';
+            
+            fieldTypeSelect.appendChild(inputOption);
+            fieldTypeSelect.appendChild(fileOption);
+            
+            
+            var fieldContainer = document.createElement('div');
+            fieldContainer.setAttribute('class', 'd-flex align-items-center mb-3');
+            fieldContainer.appendChild(documentNameInput);
+            fieldContainer.appendChild(fieldTypeSelect);
+            
+            dynamicFieldsContainer.appendChild(fieldContainer);
+        }
+    });
+</script>
+@endpush

@@ -61,7 +61,7 @@
                                                 <td>
                                                     @if (in_array($item->id,array_keys($uplodedDocs)))
                                                         <a href="{{ asset('uploads/docs/'.$uplodedDocs[$item->id]) }}" target="_blank" class="btn btn-secondary btn-sm">View</a>
-                                                        <a href="{{route('deletedocs',[$data->id,$item->id])}}" class="btn btn-danger btn-sm">Delete</a>
+                                                        <a href="{{route('deletedocs',[$data->id,$item->id])}}" class="btn btn-danger btn-sm delete-doc">Delete</a>
                                                     @endif
 
                                                     
@@ -139,6 +139,8 @@
     </section>
 @endsection
 @push('scripts')
+
+    {{-- check form validation --}}
     <script>
         $("form").each(function() {
             $($(this)).validate({
@@ -178,6 +180,8 @@
             console.log('check');
         
     </script>
+
+    {{-- //file upload model --}}
     <script>
         $(document).on('click', '.upload-files', function() {
             console.log("success");
@@ -190,4 +194,17 @@
             $('#uploadmodal input[name="document_id"]').val(document_id);
         });
     </script>
+
+    {{-- on click confirm prompt --}}
+    <script>
+        $(document).on('click', '.delete-doc', function(e) {
+            e.preventDefault();
+            var deleteUrl = $(this).attr('href');
+            var confirmDelete = confirm("Are you sure you want to delete this document?");
+            if (confirmDelete) {
+                window.location.href = deleteUrl;
+            }
+        });
+    </script>
+    
 @endpush

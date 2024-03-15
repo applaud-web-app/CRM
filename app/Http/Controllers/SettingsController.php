@@ -155,17 +155,25 @@ class SettingsController extends Controller
     }
 
     public function addDocuments(Request $request)
-    {
-        $check= DB::table("document_category")->insert([
-            "name"=> $request->name,
-            "type"=>$request->type,
-            "status"=> 1,
-        ]);
-        if($check){
-            return redirect("/documents")->with("success","New Dcoument Type Added Successfully");
-        }else{  
-            return redirect("/documents")->with("error","Some Error Occured");
+    {   
+        $data=$request->except("_token","documents","field_count");
+        $documents = $request->input('documents');
+        // dd($documents,$data);
+        foreach ($documents as $document) {
+            $check = DB::table("document_category")->insert([
+                "name" => $document['name'],
+                "field_type" => $document['field_type'],
+                "status" => 1,
+                "type" => $data['interested'],
+                "subcategory"=> $data["type_of_immigration"],
+            ]);
+            
+            if (!$check) {
+                return redirect()->back()->with('error', 'Failed to insert document: ' . $document['name']);
+            }
         }
-        // dd($data);
+        
+        return redirect("/documents")->with("success", "New Document(s) Added Successfully");
+
     }
 }

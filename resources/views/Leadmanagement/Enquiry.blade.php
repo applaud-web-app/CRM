@@ -120,7 +120,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="interested">Interested</label>
                                     @php
-                                        $getInterestType = array_keys(\Common::immigration());
+                                        $getInterestType = array_keys(\Common::immigration(false));
                                     @endphp
                                     <select name="interested" id="interested" onchange="getImmigrationLists(this)"
                                         class="form-control">
@@ -307,11 +307,12 @@
                 type: "POST",
                 data: {
                     list_type: immigration_type,
+                    choice: false,
                     _token: "{{ csrf_token() }}",
                 },
                 datatype: JSON,
                 success: function(response) {
-                    console.log(immigration_type);
+                    console.log(response);
                     let html = `<label class="form-label" for="">Type of Immigration</label>
                     <select id="type_of_immigration" name="type_of_immigration" class="form-control">
                         <option value="">Select</option>`;

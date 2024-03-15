@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('document_category', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type');
-            $table->string('status');
+            $table->string('name',50);
+            $table->string('field_type',50);
+            $table->string('type',50);
+            $table->string('subcategory',50);
+            $table->string('status',5);
             $table->timestamps();
         });
     }

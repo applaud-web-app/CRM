@@ -25,12 +25,12 @@ class EnquiryController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $enquiries = Enquiry::where('status', 1)->orderBy('id','DESC')->skip($start)->take($pageSize);     
-            $count_total= Enquiry::where('status', 1)->count();     
+            $enquiries = Enquiry::where('status', 1)->orderBy('id', 'DESC')->skip($start)->take($pageSize);
+            $count_total = Enquiry::where('status', 1)->count();
             return Datatables::of($enquiries)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($enquiry) {
-                    return $enquiry->created_at->format('d-M-y'); 
+                    return $enquiry->created_at->format('d-M-y');
                 })
                 ->addColumn('action', function ($row) {
 
@@ -50,18 +50,18 @@ class EnquiryController extends Controller
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2"> 
                           <a class="dropdown-item edit-enquiry" href="#" data-bs-toggle="modal" data-bs-target="#editenquiry"
-                          data-name="'.$row->name.'"
-                          data-mobile="'.$row->mobile.'"
-                          data-email="'.$row->email.'"
-                          data-select="'.$row->interested.'" 
-                          data-source="'.$row->source.'"
-                          data-immigration="'.$row->type_of_immigration.'"
-                          data-id="'.$row->id.'"
+                          data-name="' . $row->name . '"
+                          data-mobile="' . $row->mobile . '"
+                          data-email="' . $row->email . '"
+                          data-select="' . $row->interested . '" 
+                          data-source="' . $row->source . '"
+                          data-immigration="' . $row->type_of_immigration . '"
+                          data-id="' . $row->id . '"
                           class="btn btn-primary mb-3"><i class="far fa-edit edit-btn "></i> Edit</a>
-                          <a class="dropdown-item" href="'.route('deleteenquiry',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
+                          <a class="dropdown-item" href="' . route('deleteenquiry', $row->id) . '"><i class="fas fa-trash-alt"></i> Delete</a>
                          
                           <div class="dropdown-divider"></div>
-                          <a class="dropdown-item text-secondary" href="'.route('convertenquiry',$row->id).'"><i class="far fa-check-square"></i> Convert To Lead</a>
+                          <a class="dropdown-item text-secondary" href="' . route('convertenquiry', $row->id) . '"><i class="far fa-check-square"></i> Convert To Lead</a>
                        </div>
                     </div>';
                     return $dropdown;
@@ -86,71 +86,70 @@ class EnquiryController extends Controller
 
     public function editenquiry(Request $request)
     {
-        $data= $request->except("id","_token");
-        $id=$request->id;
-        $check=Enquiry::where('id', $id)->update($data);
-        if( $check ) {  
-            return redirect()->route('enquiry')->with('success','Enquiry Updated');
+        $data = $request->except("id", "_token");
+        $id = $request->id;
+        $check = Enquiry::where('id', $id)->update($data);
+        if ($check) {
+            return redirect()->route('enquiry')->with('success', 'Enquiry Updated');
+        } else {
+            return redirect()->route('enquiry')->with('error', 'Error Occured');
         }
-        else
-        {
-            return redirect()->route('enquiry')->with('error','Error Occured');
-        }
-        
+
     }
 
     public function deleteenquiry(Request $request, $id)
     {
-        $check=Enquiry::where("id", $id)->update(["status"=> 0]);
-        if( $check ) {
-            return redirect()->route("enquiry")->with("success","Enquiry Deleted");
+        $check = Enquiry::where("id", $id)->update(["status" => 0]);
+        if ($check) {
+            return redirect()->route("enquiry")->with("success", "Enquiry Deleted");
         } else {
             return redirect()->route("enquiry")->with("error", "Error occured while deleting");
         }
     }
 
-    public function bulkUploadEnquiry(Request $request){
+    public function bulkUploadEnquiry(Request $request)
+    {
         $request->validate([
-            'excel_file'=>'required|mimes:xls,xlsx'
+            'excel_file' => 'required|mimes:xls,xlsx'
         ]);
 
-       Excel::import(new BulkEnquiry , request()->file('excel_file'));
-       return redirect()->back()->with('success','Excel Uploaded Successfully 📤');
-   }
-
-
-    public function convertToLead(Request $request,$id)
-    {    
-        $data=Enquiry::find($id);
-        // dd($data);
-        $countries=DB::table('countries')->get();
-        $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
-        return view('Leadmanagement.ConvertEnquiry',compact('data','users','countries'));
-        
+        Excel::import(new BulkEnquiry, request()->file('excel_file'));
+        return redirect()->back()->with('success', 'Excel Uploaded Successfully 📤');
     }
 
-    public function leadGenerate(Request $request,$id)
+
+    public function convertToLead(Request $request, $id)
     {
-        $data=$request->except("_token");
+        $data = Enquiry::find($id);
         // dd($data);
-        $userid= Auth::id();
-        $username= Auth::user()->username;
-        $data["lead_mode"]="converted";
-        $data["assigned_by"]=$userid;
-        $data["enquiry_id"]=$id;
-        $check=Leads::create($data);
+        $countries = DB::table('countries')->get();
+        $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
+        return view('Leadmanagement.ConvertEnquiry', compact('data', 'users', 'countries'));
+
+    }
+
+    public function leadGenerate(Request $request, $id)
+    {
+        $data = $request->except("_token");
+        // dd($data);
+        $userid = Auth::id();
+        $username = Auth::user()->username;
+        $data["lead_mode"] = "converted";
+        $data["assigned_by"] = $userid;
+        $data["enquiry_id"] = $id;
+        $check = Leads::create($data);
         Activity::create([
-            "sender_id"=>$userid,
-            "receiver_id"=>$data['assigned_to'],
-            "activity"=>"Lead converted from enquiry",
-            "done_by"=>$username,
+            "sender_id" => $userid,
+            "receiver_id" => $data['assigned_to'],
+            "activity" => "Lead converted from enquiry",
+            "done_by" => $username,
             "date" => date('y-m-d')
         ]);
-        if( $check ) {
-            Enquiry::where('id',$id)->update(['status'=> 0]);
-            return redirect()->route("leads")->with("success","Enquiry Converted into Lead");
+        if ($check) {
+            Enquiry::where('id', $id)->update(['status' => 0]);
+            return redirect()->route("leads")->with("success", "Enquiry Converted into Lead");
         } else {
-            return redirect()->back()->with("error","Failed to convert to lead");
+            return redirect()->back()->with("error", "Failed to convert to lead");
         }
 
     }
@@ -161,12 +160,12 @@ class EnquiryController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $leads = Leads::where("is_deleted",1)->whereIn('proccess_status',['created','rejected'])->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);     
-            $count_total= Leads::where('is_deleted', 1)->count();     
+            $leads = Leads::where("is_deleted", 1)->whereIn('proccess_status', ['created', 'rejected'])->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);
+            $count_total = Leads::where('is_deleted', 1)->count();
             return Datatables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('contacted_date', function ($dateformat) {
-                    return $dateformat->contacted_date ? $dateformat->contacted_date->format('d-M-y') : ''; 
+                    return $dateformat->contacted_date ? $dateformat->contacted_date->format('d-M-y') : '';
                 })
                 ->addColumn('action', function ($row) {
 
@@ -185,13 +184,13 @@ class EnquiryController extends Controller
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
-                            <a class="dropdown-item" href="'.route('viewLeaddata',$row->id).'"><i class="far fa-eye"></i> View</a> 
-                            <a class="dropdown-item" href="'.route('editaddedlead',$row->id).'"><i class="far fa-edit"></i> Edit</a>
-                            <a class="dropdown-item" href="'.route('leaddelete',$row->id).'"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a class="dropdown-item" href="' . route('viewLeaddata', $row->id) . '"><i class="far fa-eye"></i> View</a> 
+                            <a class="dropdown-item" href="' . route('editaddedlead', $row->id) . '"><i class="far fa-edit"></i> Edit</a>
+                            <a class="dropdown-item" href="' . route('leaddelete', $row->id) . '"><i class="fas fa-trash-alt"></i> Delete</a>
                        
                        
                           <div class="dropdown-divider"></div>
-                             <a class="dropdown-item text-success" href="'.route('applyapproval',$row->id).'"><i class="fas fa-paper-plane"></i> Send For Approval</a>
+                             <a class="dropdown-item text-success" href="' . route('applyapproval', $row->id) . '"><i class="fas fa-paper-plane"></i> Send For Approval</a>
                        </div>
                     </div>';
                     return $dropdown;
@@ -199,48 +198,43 @@ class EnquiryController extends Controller
                 ->addColumn('lead_type', function ($lead) {
                     return $lead->lead_type;
                 })
-                ->addColumn('status',function($status)
-                {
+                ->addColumn('status', function ($status) {
                     return $status->status;
                 })
                 ->rawColumns(['action'])
                 ->setTotalRecords($count_total)
                 ->make(true);
         }
-        return view('Leadmanagement.Leads');   
+        return view('Leadmanagement.Leads');
     }
 
     public function leadDelete($id)
     {
-        $check=Leads::where("id", $id)->update(["is_deleted"=> 0]);
-        if( $check ) {
-            return redirect()->route("leads")->with("success","Lead Deleted");
+        $check = Leads::where("id", $id)->update(["is_deleted" => 0]);
+        if ($check) {
+            return redirect()->route("leads")->with("success", "Lead Deleted");
         } else {
             return redirect()->route("leads")->with("error", "Lead could not be deleted");
         }
     }
 
-    public function updateLeadType(Request $request,$id)
+    public function updateLeadType(Request $request, $id)
     {
-        $check=Leads::where("id", $id)->update([ "lead_type"=> $request->leadtype,]);
-        if( $check ) {
+        $check = Leads::where("id", $id)->update(["lead_type" => $request->leadtype,]);
+        if ($check) {
             return "success";
-        }
-        else
-        {
+        } else {
             return "failure";
         }
     }
 
-    
-    public function updateStatusType(Request $request,$id)
+
+    public function updateStatusType(Request $request, $id)
     {
-        $check=Leads::where("id", $id)->update(["status"=> $request->status,]);
-        if( $check ) {
+        $check = Leads::where("id", $id)->update(["status" => $request->status,]);
+        if ($check) {
             return "success";
-        }
-        else
-        {
+        } else {
             return "failure";
         }
     }
@@ -248,249 +242,251 @@ class EnquiryController extends Controller
 
 
     public function loadCreateLead(Request $request)
-    {   
-        $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
-        $countries=DB::table('countries')->get();
-        return view('Leadmanagement.Createlead',compact('users','countries'));
+    {
+        $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
+        $countries = DB::table('countries')->get();
+        return view('Leadmanagement.Createlead', compact('users', 'countries'));
     }
 
     public function createNewLead(Request $request)
-    {   
-        $data= $request->except("_token");
-        $id= Auth::id();
-        $username=Auth::user()->username;
-        $data["lead_mode"]="added";
-        $data["assigned_by"]=$id;
-        $check=Leads::create($data);
-        if( $check ) {
+    {
+        $data = $request->except("_token");
+        $id = Auth::id();
+        $username = Auth::user()->username;
+        $data["lead_mode"] = "added";
+        $data["assigned_by"] = $id;
+        $check = Leads::create($data);
+        if ($check) {
             Activity::create([
-                "sender_id"=>$id,
-                "receiver_id"=>$data['assigned_to'],
-                "activity"=>"New Lead added Manually",
-                "done_by"=>$username,
+                "sender_id" => $id,
+                "receiver_id" => $data['assigned_to'],
+                "activity" => "New Lead added Manually",
+                "done_by" => $username,
                 "date" => date('y-m-d')
             ]);
-            return redirect()->route("leads")->with("success","New Lead created");   
-        }else 
-        {
-            return redirect()->back("leads")->with("error","Some Error occured");
+            return redirect()->route("leads")->with("success", "New Lead created");
+        } else {
+            return redirect()->back("leads")->with("error", "Some Error occured");
         }
     }
 
     public function editNewAddedLead($id)
     {
-        $data=Leads::find($id);
-        $countries=DB::table('countries')->get();
-        $states=DB::table('states')->where('country_id',$data->country)->get();
-        $cities=DB::table('cities')->where('state_id',$data->state)->get();
-        $users = User::withoutRole('Superadmin')->orderBy('id','DESC')->where('status',1)->get();
-        return view('Leadmanagement.Editlead',compact('data','users','countries','states','cities'));
+        $data = Leads::find($id);
+        $countries = DB::table('countries')->get();
+        $states = DB::table('states')->where('country_id', $data->country)->get();
+        $cities = DB::table('cities')->where('state_id', $data->state)->get();
+        $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
+        return view('Leadmanagement.Editlead', compact('data', 'users', 'countries', 'states', 'cities'));
     }
 
-    public function updateLeadData(Request $request, $id)   
+    public function updateLeadData(Request $request, $id)
     {
-        $data= $request->except('_token');
-        $check=Leads::where('id',$id)->update($data);
-        if( $check )
-        {
-            return redirect()->route('leads')->with('success','Lead updated successfully');
-        }
-        else{
-            return redirect()->back()->with('error','Lead not updated');
+        $data = $request->except('_token');
+        $check = Leads::where('id', $id)->update($data);
+        if ($check) {
+            return redirect()->route('leads')->with('success', 'Lead updated successfully');
+        } else {
+            return redirect()->back()->with('error', 'Lead not updated');
         }
     }
 
     public function loadStateData(Request $request)
     {
-        $cid=$request->id;
-        $data=DB::table('states')->where('country_id',$cid)->get();
+        $cid = $request->id;
+        $data = DB::table('states')->where('country_id', $cid)->get();
         return $data;
     }
 
     public function loadCities(Request $request)
     {
-        $sid= $request->id;
-        $data=DB::table('cities')->where('state_id', $sid)->get();
+        $sid = $request->id;
+        $data = DB::table('cities')->where('state_id', $sid)->get();
         return $data;
     }
 
-    public function applyApproval(Request $request,$id)
+    public function applyApproval(Request $request, $id)
     {
-        $userid=Auth::id();
-        $username=Auth::user()->username;
-        $lead = Leads::with('documents')->where('id',$id)->first();
+        $userid = Auth::id();
+        $username = Auth::user()->username;
+        $lead = Leads::with('documents')->where('id', $id)->first();
         if ($lead) {
             $leadDocumentname = $lead->documents->pluck('name')->toArray();
-            $allDocumentname = Documents::where('leads_id',$id)->pluck('document_name')->toArray();
-           
-            if(count($allDocumentname)==count($leadDocumentname))
-            {
-                $check=Leads::where('id',$id)->update(['proccess_status'=> 'proccessing']);
-                // dd($lead->name);
-                if ($check)
-                {   
+            $allDocumentname = Documents::where('leads_id', $id)->pluck('document_name')->toArray();
+
+            if (count($allDocumentname) == count($leadDocumentname)) {
+                $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing']);
+                if ($check) {
                     Activity::create([
-                        "sender_id"=>$userid,
-                        "receiver_id"=>$lead->assigned_to,
-                        "activity"=>"Lead with name ".$lead->name." sent for approval",
-                        "done_by"=>$username,
+                        "sender_id" => $userid,
+                        "receiver_id" => $lead->assigned_to,
+                        "activity" => "Lead with name " . $lead->name . " sent for approval",
+                        "done_by" => $username,
                         "date" => date('y-m-d')
                     ]);
-                    return redirect()->route('pendingapplicants')->with("success","Lead sent for approval.");
-                }  
-                else
-                    return redirect()->back()->with("error","Something went wrong!");   
-            }
-            else
+                    return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
+                } else
+                    return redirect()->back()->with("error", "Something went wrong!");
+            } else
                 return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
         }
-    
-    
-    
+
+
+
     }
 
-    public function viewLeadData(Request $request,$id)
+    public function viewLeadData(Request $request, $id)
     {
-        // $data=Leads::where("id",$id)->first(); 
-
         $data = Leads::select('leads.*', 'countries.name as country_name', 'states.name as state_name', 'cities.name as city_name')
             ->leftJoin('countries', 'leads.country', '=', 'countries.id')
             ->leftJoin('states', 'leads.state', '=', 'states.id')
             ->leftJoin('cities', 'leads.city', '=', 'cities.id')
             ->where('leads.id', $id)
             ->first();
-        return view("Leadmanagement.Viewleaddata",compact("data"));
+        return view("Leadmanagement.Viewleaddata", compact("data"));
     }
 
-    public function addLeadDocument(Request $request,$id)
+    public function addLeadDocument(Request $request, $id)
     {
-        $data = Leads::with('documents')->where('id',$id)->first();
-        $uplodedDocs = Documents::where('leads_id',$id)->pluck('document','document_id')->toArray();
-        return view("Leadmanagement.Leaddocument",compact("id","data","uplodedDocs"));
+        $data = Leads::with('documents')->where('id', $id)->first();
+        $uplodedDocs = Documents::where('leads_id', $id)->pluck('document', 'document_id')->toArray();
+        return view("Leadmanagement.Leaddocument", compact("id", "data", "uplodedDocs"));
     }
 
 
-    public function postAddDocuments(Request $request,$id)
+    public function postAddDocuments(Request $request, $id)
     {
         $data = $request->except('_token');
         $data['user_id'] = Auth::id();
         $data['leads_id'] = $id;
         $data['status'] = '1';
-        
+
         $file = $request->document->getClientOriginalName();
 
         $fileExtension = $request->document->getClientOriginalExtension();
-        $randomstr=Str::random();
+        $randomstr = Str::random();
 
-        $data['document_name']=$request->document_name_hidden;
-        $data['document']="Document_".$randomstr.".".$fileExtension;
-        $file=$data["document"];
+        $data['document_name'] = $request->document_name_hidden;
+        $data['document'] = "Document_" . $randomstr . "." . $fileExtension;
+        $file = $data["document"];
         $destinationPath = public_path('uploads/docs/');
         $filePath = $destinationPath . '/' . $file;
-        $leaddata=Documents::where('leads_id',$id)->where('document_id',$data['document_id'])
-        ->where("document_type",$request->document_type)->first();
-        if($leaddata){  
-            return redirect()->back()->with("error","Document already uploaded");
-            }
+        $leaddata = Documents::where('leads_id', $id)->where('document_id', $data['document_id'])
+            ->where("document_type", $request->document_type)->first();
+        if ($leaddata) {
+            return redirect()->back()->with("error", "Document already uploaded");
+        }
         $check = Documents::create($data);
-        if($check)
-            {
-                if (!file_exists($filePath)) {
-                    $fileName = $file;
-                    $request->document->move($destinationPath, $fileName);
-                }
-                return redirect()->back()->with('success','Files uploaded successfuly');
+        if ($check) {
+            if (!file_exists($filePath)) {
+                $fileName = $file;
+                $request->document->move($destinationPath, $fileName);
             }
-            else
-            {
-                return redirect()->back()->with('error','Files not uploaded');
-            }    
+            return redirect()->back()->with('success', 'Files uploaded successfuly');
+        } else {
+            return redirect()->back()->with('error', 'Files not uploaded');
+        }
     }
 
-    public function deleteDocs($leadid,$id) 
-    { 
-        $filename=Documents::where('leads_id',$leadid)->where('document_id',$id)->first();
-        if($filename != NULL){
+    public function deleteDocs($leadid, $id)
+    {
+        $filename = Documents::where('leads_id', $leadid)->where('document_id', $id)->first();
+        if ($filename != NULL) {
             $filePath = public_path('uploads/docs/' . $filename->document);
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
             $filename->delete();
-            return redirect()->back()->with('success','Deleted Successfully');  
+            return redirect()->back()->with('success', 'Deleted Successfully');
         }
-        return redirect()->back()->with('error','Something Went Wrong');  
+        return redirect()->back()->with('error', 'Something Went Wrong');
     }
 
     public function followUp($id)
-    {   
-        $data=Followup::where('lead_id',$id)->get();
-        return view('Leadmanagement.Followup',compact('id','data'));    
+    {
+        $data = Followup::where('lead_id', $id)->get();
+        return view('Leadmanagement.Followup', compact('id', 'data'));
     }
 
-    public function createFollowUp(Request $request,$id)
+    public function createFollowUp(Request $request, $id)
     {
-        $data=$request->except("_token");
-        $username=Auth::user()->username;
-        $data["lead_id"]=$id;   
-        $data["added_by"]= $username;
-        $serial= random_int(1,10000);
-        $data["serial_id"]="SI".$serial;
-        $check=Followup::create($data); 
-        if($check){
+        $data = $request->except("_token");
+        $username = Auth::user()->username;
+        $data["lead_id"] = $id;
+        $data["added_by"] = $username;
+        $serial = random_int(1, 10000);
+        $data["serial_id"] = "SI" . $serial;
+        $check = Followup::create($data);
+        if ($check) {
             return redirect()->route('followup', ['id' => $id])->with("success", "Followup Created");
+        } else {
+            return redirect()->back()->with("error", "Follow up Not Created");
         }
-        else
-        {
-            return redirect()->back()->with("error","Follow up Not Created");
-        }   
     }
 
     public function deleteFollowUp($id)
     {
-        $check=Followup::where("id",$id)->delete();
-        if($check){
-            return redirect()->back()->with("success","Follow-up Deleted");
-        }
-        else
-        {
-            return redirect()->back()->with("error","Something went Wrong");
+        $check = Followup::where("id", $id)->delete();
+        if ($check) {
+            return redirect()->back()->with("success", "Follow-up Deleted");
+        } else {
+            return redirect()->back()->with("error", "Something went Wrong");
         }
     }
 
-    public function editfollowup(Request $request)  
+    public function editfollowup(Request $request)
     {
-        $data=$request->only("id","next_followup","notes");
-        $check=Followup::where("id",$data['id'])->update($data);
-        if($check){
-            return redirect()->back()->with("success","Follow up details changed");
-        }
-        else
-        {
-            return redirect()->back()->with("error","Some Error occured");
+        $data = $request->only("id", "next_followup", "notes");
+        $check = Followup::where("id", $data['id'])->update($data);
+        if ($check) {
+            return redirect()->back()->with("success", "Follow up details changed");
+        } else {
+            return redirect()->back()->with("error", "Some Error occured");
         }
     }
 
 
     public function loadImmigrationType(Request $request)
-    {    $list=Common::immigration();
-        if(isset($request->list_type))
-        {
-            $type=strtolower($request->list_type);
-            if (isset($list[$type])) {
-                return array_keys($list[$type]);
-            } else {
-                return json_encode([]);
+    {
+        if ($request->choice == true) {
+            dd($request->choice);
+            $list = Common::immigration(true);
+            if (isset($request->list_type)) {
+                $type = strtolower($request->list_type);
+                if (isset($list[$type])) {
+                    return $list[$type];
+                } else {
+                    return json_encode([]);
+                }
+            } else if (isset($request->fields) && (isset($request->field_type))) {
+                $fields = strtolower($request->fields);
+                $field_type = strtolower($request->field_type);
+                if (isset($list[$field_type][$fields])) {
+                    return $list[$field_type][$fields];
+                } else {
+                    return json_encode([]);
+                }
             }
         }
-        else if(isset($request->fields)&&(isset($request->field_type))){
-            $fields=strtolower($request->fields);
-            $field_type=strtolower($request->field_type);
-            if (isset($list[$field_type][$fields])) {
-                return $list[$field_type][$fields];
-            } else {
-                return json_encode([]);
+        else if($request->choice == false) {
+            dd($request->choice);
+            $list = Common::immigration(false);
+            if (isset($request->list_type)) {
+                $type = strtolower($request->list_type);
+                if (isset($list[$type])) {
+                    return array_keys($list[$type]);
+                } else {
+                    return json_encode([]);
+                }
+            } else if (isset($request->fields) && (isset($request->field_type))) {
+                $fields = strtolower($request->fields);
+                $field_type = strtolower($request->field_type);
+                if (isset($list[$field_type][$fields])) {
+                    return $list[$field_type][$fields];
+                } else {
+                    return json_encode([]);
+                }
             }
         }
-        
     }
 }

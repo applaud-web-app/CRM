@@ -7,7 +7,7 @@
             <h2 class="mb-3 me-auto">Add Applicants</h2>
 
         </div>
-        <form class="row">
+        <form class="row" method="POST" action="{{route('postaddapplicant')}}" enctype="multipart/form-data">@csrf
             <div class="col-lg-12">
                 <div class="card h-auto">
                     <div class="card-header">
@@ -19,7 +19,7 @@
                                 <label class="" for="Applicants_image">Applicant Image</label>
                                 <div class="input-group">
                                     <div class="form-file">
-                                        <input type="file" name="Applicants_image" id="Applicants_image"
+                                        <input type="file" name="profile_img" id="Applicants_image"
                                             accept="image/*" class="form-file-input form-control">
                                     </div>
                                 </div>
@@ -27,7 +27,7 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="Applicantname">Applicant Name</label>
-                                    <input type="text" class="form-control" name="Applicantname"
+                                    <input type="text" class="form-control" name="name"
                                         placeholder="Enter Applicant name">
                                 </div>
                             </div>
@@ -35,21 +35,32 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="dob">Date of Birth</label>
-                                    <input type="text" class="form-control" name="dob" placeholder="Enter Date of Birth">
+                                    <input type="date" class="form-control" name="dob" placeholder="Enter Date of Birth">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="lastname">Email</label>
-                                    <input type="email" class="form-control" name="lastname"
+                                    <input type="email" class="form-control" name="email"
                                         placeholder="Enter email address">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="phonenumber">Mobile Number</label>
-                                    <input type="tel" class="form-control" name="phonenumber"
+                                    <input type="tel" class="form-control" name="mobile"
                                         placeholder="Enter mobile number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="marital">Martial Status</label>
+                                    <select name="marital_status" class="form-control">
+                                        <option value="" selected>--Choose Option--</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Unmarried">Unmarried</option>
+
+                                    </select>
                                 </div>
                             </div>
 
@@ -67,8 +78,8 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-12 mb-3">
                                 <div class="form-group">
-                                    <label for="street">Street</label>
-                                    <input type="text" class="form-control" name="street" placeholder="Enter Street">
+                                    <label for="street">Address</label>
+                                    <input type="text" class="form-control" name="address" placeholder="Enter address">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-12 mb-3">
@@ -104,7 +115,7 @@
                             <div class="col-lg-6 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="zip">Zip Code</label>
-                                    <input type="text" class="form-control" name="zip" placeholder="Enter Zip">
+                                    <input type="text" class="form-control" name="zipcode" placeholder="Enter Zip">
                                 </div>
                             </div>
 
@@ -117,47 +128,36 @@
 
                 <div class="card h-auto">
                     <div class="card-header">
-                        <h4 class="card-title">Documents Information</h4>
+                        <h4 class="card-title">Interested</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" >
+                        <div class="row" >
+                            <div class="col-lg-4 col-md-4 col-sm-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="interested">Interested</label>
+                                    @php
+                                        $getInterestType = array_keys(\Common::immigration());
+                                    @endphp
+                                    <select name="interested" id="interested" onchange="getImmigrationLists(this)" class="form-control">
+                                        <option value="">Select</option>
+                                        @foreach ($getInterestType as $item)
+                                            <option value="{{strtoupper($item)}}">{{strtoupper($item)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="row">
-                          
-                            <div class="col-lg-12 col-md-12 col-12 mb-3">
-                                <label class="" for="aadharcard">Aadhar card</label>
-                                <div class="input-group">
-                                    <div class="form-file">
-                                        <input type="file" name="aadharcard" id="aadharcard"
-                                            accept="image/*" class="form-file-input form-control">
-                                    </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 mb-3" >
+                                <div class="form-group" id="interestType">
+                                    
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-12 mb-3">
-                                <label class="" for="pancard">Pan card </label>
-                                <div class="input-group">
-                                    <div class="form-file">
-                                        <input type="file" name="pancard" id="pancard"
-                                            accept="image/*" class="form-file-input form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-12 mb-3">
-                                <label class="" for="passport">Passport</label>
-                                <div class="input-group">
-                                    <div class="form-file">
-                                        <input type="file" name="Applicants_image" id="passport"
-                                            accept="image/*" class="form-file-input form-control">
-                                    </div>
-                                </div>
-                            </div>
+
+                            <div class="row" id="fields"></div>
                             
-
-
-
                         </div>
                     </div>
                 </div>
-             
             </div>
 
 
@@ -232,7 +232,6 @@
             },
             datatype: JSON,
             success: function(response) {
-                console.log(immigration_type);
                 let html = `<label class="form-label" for="">Type of Immigration</label>
                 <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control">
                     <option value="">Select</option>`;
@@ -240,7 +239,6 @@
                     html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
                 });
                 html += `</select>`
-                console.log(html);
                 $('#interestType').html(html);
             }
         });
@@ -249,7 +247,6 @@
     //get immigration->list->fields
     function getfieldcount(selectElement,immigrationType){
         var fieldlist=selectElement.value;
-        console.log(immigrationType);
         $.ajax({
             url: "{{ route('loadimmigrationtype') }}",
             type: "POST",
@@ -262,12 +259,28 @@
             success: function(response) {
                 let html=``;
                 response.forEach(function(ele) {
-                    html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
-                                    <input type="text" class="form-control mb-2" name="${ele}"
-                                        placeholder="Enter Details"></div></div>`;
+                    html += `<div class="col-lg-12 col-md-12 col-12 mb-3">
+                                <label class="" for="${ele}">${ele}</label>
+                                <div class="input-group">
+                                    <div class="form-file">
+                                        <input type="file" name="${ele}" id="passport"
+                                            accept="image/*" class="form-file-input form-control">
+                                    </div>
+                                </div>
+                            </div>`;
                 });
-                console.log(html);
                 $('#fields').html(html);
+                response.forEach(function(ele) {
+                $("form").validate().settings.rules[ele] = {
+                    required: true
+                };
+                $("form").validate().settings.messages[ele] = {
+                    required: "Please upload the document for " + ele + "."
+                };
+            });
+
+            // Trigger validation for the form after adding dynamic fields
+            $("form").valid();
             }
         });
     }
@@ -300,13 +313,16 @@
                 type_of_visa: {
                     required: true,
                 },
-                source: {
+                country: {
+                    required: true
+                },
+                state: {
                     required: true
                 },
                 assigned_to: {
                     required: true
                 },
-                code: {
+                profile_img: {
                     required: true
                 },
                 address: {
@@ -317,7 +333,7 @@
                 },
                 type_of_immigration:{
                     required:true
-                }
+                },
             },
             messages: {
                 name: "Please enter your name.",
@@ -336,6 +352,8 @@
                 source: "Please specify your source."
             },
         });
-    })
+    });
+
+    
 </script>
 @endpush

@@ -19,7 +19,7 @@ class Leads extends Model
         "marital_status","description","address","country",
         "state","city","zipcode","lead_type","assigned_to",
         "status","assigned_by","contacted_date","close_date",
-        "lead_mode","source","proccess_status","enquiry_id","interested","type_of_immigration",
+        "lead_mode","source","proccess_status","enquiry_id","interested","type_of_immigration",'profile_img'
     ];
 
     public function employee(){

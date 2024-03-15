@@ -131,6 +131,9 @@ class ApplicantsController extends Controller
             $count_total = Leads::where('is_deleted', 1)->where('proccess_status', "approved")->count();
             return DataTables::of($leads)
                 ->addIndexColumn()
+                ->editColumn('email', function ($contact) {
+                    return $contact->email.' '.$contact->mobile;
+                })
                 ->addColumn('action', function ($row) {
 
                     $dropdown = '<div class="dropdown text-sans-serif">
@@ -148,7 +151,7 @@ class ApplicantsController extends Controller
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
-                          <a class="dropdown-item" href="' . route('viewapplicant', $row->id) . '"><i class="far fa-eye"></i> View Lead</a>  
+                          <a class="dropdown-item" href="' . route('applicantdata', $row->id) . '"><i class="far fa-eye"></i> View Lead</a>  
                     
                           <a class="dropdown-item" href="'.route('approved',$row->id).'"><i class="fas fa-check"></i> Accept Lead</a>
                           <a class="dropdown-item" href="' . route('rejectapproval', $row->id) . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
@@ -170,5 +173,30 @@ class ApplicantsController extends Controller
     {
         $countries=DB::table('countries')->get();
         return view('applicants.Newapplicant',compact('countries'));
+    }
+
+    public function applicantDetails($id)
+    {   
+        $data = Leads::select('leads.*', 'countries.name as country_name', 'states.name as state_name', 'cities.name as city_name')
+            ->leftJoin('countries', 'leads.country', '=', 'countries.id')
+            ->leftJoin('states', 'leads.state', '=', 'states.id')
+            ->leftJoin('cities', 'leads.city', '=', 'cities.id')
+            ->where('leads.id', $id)->where('proccess_status','approved')
+            ->first();
+        if($data !=NUll)
+        {
+            $documents = Documents::where('leads_id', $id)->select('document','document_name')->get();
+            $followupdata = Followup::where('lead_id', $id)->select('serial_id', 'notes', 'next_followup', 'added_by')->get();
+            return view("applicants.Applicantdetails",compact("data","documents","followupdata"));
+        }
+        else 
+            return redirect()->back()->with("error","No such user Exists");
+    }
+
+    public function postAddApplicant(Request $request)
+    {
+        $data=$request->except("_token");
+        $document=$request->document;
+        dd($document,$data);
     }
 }

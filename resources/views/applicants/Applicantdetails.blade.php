@@ -4,12 +4,13 @@
     <!-- row -->
     <div class="container-fluid">
        <div class="d-flex flex-wrap align-items-center text-head">
-          <h2 class="mb-3 me-auto">Lead Applicants Name</h2>
+          <h2 class="mb-3 me-auto">Applicants Name</h2>
  
        </div>
  
        <div class="row">
           <div class="col-xl-12">
+             
              <div class="card">
                 <div class="card-body">
                    <!-- Nav tabs -->
@@ -38,23 +39,25 @@
                                   <div class="col-xl-6 col-md-6">
                                      <ul class="list-style-1">
                                         <li><label class="custom-label w-50 mb-0">Full Name :</label>{{$data->name}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Source :</label>{{$data->source}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Age :</label>{{$data->age}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Mobile.NO</label>{{$data->mobile}}</li>
-                                        
+                                        <li><label class="custom-label w-50 mb-0">Code :</label>{{$data->code}}</li>
+                                        <li><label class="custom-label w-50 mb-0">Age :</label>{{$data->age}} Yrs</li>
+                                        <li><label class="custom-label w-50 mb-0">Address :</label>{{$data->address}}</li>
                                         <li><label class="custom-label w-50 mb-0">Country :</label>{{$data->country_name}}</li>
                                         <li><label class="custom-label w-50 mb-0">State :</label>{{$data->state_name}}</li>
                                         <li><label class="custom-label w-50 mb-0">City :</label>{{$data->city_name}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Address :</label>{{$data->address}}</li>
                                      </ul>
                                   </div>
                                   <div class="col-xl-6 col-md-6">
                                      <ul class="list-style-1">
+                                        
                                         <li><label class="custom-label w-50 mb-0">Email :</label>{{$data->email}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Date Of Birth :</label>{{date('Y-m-d', strtotime($data->dob))}}
-                                        </li>
+                                        <li><label class="custom-label w-50 mb-0">Phone :</label>{{$data->mobile}}</li>
+                                        
+                                        <li><label class="custom-label w-50 mb-0">Date Of Birth :</label>{{$data->dob}}</li>
                                         <li><label class="custom-label w-50 mb-0">Marital Status :</label>{{$data->marital_status}}</li>
+                                        <li><label class="custom-label w-50 mb-0">Permanent Address :</label>{{$data->country_name}}</li>
                                         <li><label class="custom-label w-50 mb-0">Zip code :</label>{{$data->zipcode}}</li>
+                                        <li><label class="custom-label w-50 mb-0">Applied Method :</label>{{$data->interested}}</li>
                                      </ul>
                                   </div>
                                </div>
@@ -62,17 +65,14 @@
                          </div>
                          <div class="tab-pane fade" id="documents">
                             <div class="pt-4">
-                               <div id="lightboxgallery" class="d-flex flex-wrap text-center">
-                                 @foreach ($documents as $document)
-                                 <a target="_blank" href="{{asset('uploads/docs/'.$document->document)}}" class="border border-light p-2 m-1">
-                                    <span class="d-block border-bottom text-black">{{$document->document_name}}</span>
-                                    <img src="{{asset('uploads/docs/'.$document->document)}}" alt="" style="width:150px;height:150px;object-fit:contain"/>
-                                 </a>
-                                 @endforeach
-                                  
-                                  
-                               </div>
-                             
+                                    <div id="lightboxgallery" class="d-flex flex-wrap text-center">
+                                     @foreach ($documents as $document)
+                                        <a href="{{asset('uploads/docs/'.$document->document)}}" target="_blank" class="border border-light p-2 m-1">
+                                            <span class="d-block border-bottom text-black">{{$document->document_name}}</span>
+                                            <img src="{{asset('uploads/docs/'.$document->document)}}" alt="" style="width:150px;height:150px;object-fit:contain"/>
+                                     </a>
+                                     @endforeach
+                                 </div>
                              
                             </div>
                          </div>
@@ -88,12 +88,14 @@
                                          <th>Notes</th>
                                          <th>Next Follow Up</th>
                                          <th>Added By</th>
+                                     
+                                     
                                      </tr>
                                  </thead>
                                  <tbody>
                                    @foreach ($followupdata as $followup)
                                      <tr>
-                                     <td>{{$followup['serial_id']}}</td>
+                                        <td>{{$followup->serial_id}}</td>
                                          <td class="wspace-no">
                                          <span >{{$followup->notes}}</span>
                                          </td>
@@ -111,16 +113,11 @@
                    </div>
                 </div>
                 <div class="card-footer text-end">
-                         
-                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#requestModal" class="btn btn-secondary me-2 mb-1"><i class="far fa-edit me-1"></i>Request</a>
-                                 <a href="{{route('approved',$data->id)}}" class="btn btn-primary me-2 mb-1"><i class="far fa-check-circle me-1"></i>Accept</a>
-                                 <a href="{{route('rejectapproval',$data->id)}}" class="btn btn-danger me-2 mb-1"><i class="far fa-times-circle me-1"></i>Reject</a>
-                             
-                     </div>
+                         <a href="javascript:void(0);"  class="btn btn-primary btn-rounded"><i class="fas fa-check pe-2"></i>Mark as Complete</a>
+                 </div>
              </div>
         
           </div>
        </div>
- </section>
-     
+ </section>    
 @endsection

@@ -105,5 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/approved/{id}',[ApplicantsController::class,'approvedRequest'])->name('approved');
     Route::get('/allapplicants',[ApplicantsController::class,'allApplicants'])->name('allapplicants');
     Route::get('/addnewapplicant',[ApplicantsController::class,'addNewApplicant'])->name('addnewapplicant');
+    Route::get('/applicantdata/{id}',[ApplicantsController::class,'applicantDetails'])->name('applicantdata');
+    Route::post('/postaddapplicant',[ApplicantsController::class,'postAddApplicant'])->name('postaddapplicant');
 });
 
