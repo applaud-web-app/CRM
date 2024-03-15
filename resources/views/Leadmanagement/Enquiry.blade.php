@@ -64,7 +64,7 @@
                         <p class="mb-3 text-dark">To download a demo Excel file, just click the link below and download the
                             provided Excel file. Review any accompanying instructions to ensure proper formatting. Prepare
                             your data accordingly, then follow the platform's upload process, verifying success afterward.
-                            <a href="images/Enquiry-Demo-File.xlsx" class="text-primary text-decoration-underline"
+                            <a href="{{asset('/assets/images/Enquiry-Demo-File.xlsx')}}" class="text-primary text-decoration-underline"
                                 download><i class="fas fa-download"></i> Download Demo File(Excel)</a>
                         </p>
                         <div class="form-group mb-2">
