@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Excel;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Common;
+use App\Models\DocumentCategory;
 
 class EnquiryController extends Controller
 {
@@ -244,7 +245,7 @@ class EnquiryController extends Controller
     public function loadCreateLead(Request $request)
     {
         $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
-        $countries = DB::table('countries')->get();
+        $countries = DB::table('countries')->get();;
         return view('Leadmanagement.Createlead', compact('users', 'countries'));
     }
 
@@ -448,44 +449,21 @@ class EnquiryController extends Controller
 
     public function loadImmigrationType(Request $request)
     {
-        if ($request->choice) {
-            dd($request->choice);
-            $list = Common::immigration(true);
-            if (isset($request->list_type)) {
-                $type = strtolower($request->list_type);
-                if (isset($list[$type])) {
-                    return $list[$type];
-                } else {
-                    return json_encode([]);
-                }
-            } else if (isset($request->fields) && (isset($request->field_type))) {
-                $fields = strtolower($request->fields);
-                $field_type = strtolower($request->field_type);
-                if (isset($list[$field_type][$fields])) {
-                    return $list[$field_type][$fields];
-                } else {
-                    return json_encode([]);
-                }
+        $list = Common::immigration();
+        if (isset($request->list_type)) {
+            $type = strtolower($request->list_type);
+            if (isset($list[$type])) {
+                return $list[$type];
+            } else {
+                return json_encode([]);
             }
-        }
-        else if($request->choice) {
-            dd($request->choice);
-            $list = Common::immigration(false);
-            if (isset($request->list_type)) {
-                $type = strtolower($request->list_type);
-                if (isset($list[$type])) {
-                    return array_keys($list[$type]);
-                } else {
-                    return json_encode([]);
-                }
-            } else if (isset($request->fields) && (isset($request->field_type))) {
-                $fields = strtolower($request->fields);
-                $field_type = strtolower($request->field_type);
-                if (isset($list[$field_type][$fields])) {
-                    return $list[$field_type][$fields];
-                } else {
-                    return json_encode([]);
-                }
+        } else if (isset($request->fields) && (isset($request->field_type))) {
+            $fields = strtolower($request->fields);
+            $field_type = strtolower($request->field_type);
+            if (isset($list[$field_type][$fields])) {
+                return $list[$field_type][$fields];
+            } else {
+                return json_encode([]);
             }
         }
     }

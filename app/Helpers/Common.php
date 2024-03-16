@@ -6,28 +6,48 @@ use Illuminate\Support\Facades\DB;
 
 class Common
 {
+  // public static function immigration()
+  // {
+  //   return $defaultArray = [
+  //       "visa" => [
+  //           'tourist visa' => ['Passport', 'Indentity Proof', 'High School Marksheet'],
+  //           'x visa' => ['Passport'],
+  //           'business visa' => ['Passport', 'Identity Proof', 'GSTIN'],
+  //           'student visa' => ['field1', 'field2', 'field3'],
+  //           'employee visa' => ['field1', 'field2'],
+  //       ],
+  //       "iets" => [
+  //           "academic" => ['field1', 'field2', 'field3'],
+  //           "general training" => ["field1", "field2", "field3"],
+  //       ],
+  //       "pte" => [
+  //           "general" => ["field1"],
+  //           "academic" => ["field1", "field2", "field3"],
+  //       ],
+  //     ];
+  // }
+
   public static function immigration()
   {
-       $defaultArray = [
-
+    return $defaultArray = [
         "visa" => [
-          'tourist visa',
-          'x visa',
-          'business visa',
-          'student visa',
-          'employee visa'
+            'tourist visa',
+            'x visa',
+            'business visa',
+            'student visa',
+            'employee visa',
         ],
         "iets" => [
-          "academic",
-          "general training",
+            "academic",
+            "general training",
         ],
         "pte" => [
-          "general",
-          "academic",
+            "general",
+            "academic",
         ],
       ];
-      return $defaultArray;
-    }
+  }
+
 
     public static function loadimmigration()
     {

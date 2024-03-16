@@ -6,6 +6,8 @@ use App\Models\Ratings;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\DocumentCategory;
+
 class SettingsController extends Controller
 {
     
@@ -149,17 +151,29 @@ class SettingsController extends Controller
 
     public function DocumentSetting()
     {
-        // dd('klk');
-        $documents=DB::table('document_category')->orderBy('type','ASC')->get();
+        $documents = DB::table('document_category')->orderBy('type','ASC')->get();
         return view("settings.Documents",compact("documents"));
     }
 
     public function addDocuments(Request $request)
     {   
+
+        $request->validate([
+            'interested'=>'required',
+            'type_of_immigration'=>'required',
+            'documents'=>'required'
+        ]);
+
         $data=$request->except("_token","documents","field_count");
         $documents = $request->input('documents');
-        // dd($documents,$data);
         foreach ($documents as $document) {
+
+            $checkPreviousData = DocumentCategory::where('name',$document['name'])->where('field_type',$document['field_type'])->where('type',$data['interested'])->where('subcategory',$data["type_of_immigration"])->first();
+
+            if($checkPreviousData){
+                return redirect()->back()->with('error','This Document Type Already Exist');
+            }
+            
             $check = DB::table("document_category")->insert([
                 "name" => $document['name'],
                 "field_type" => $document['field_type'],
@@ -169,8 +183,9 @@ class SettingsController extends Controller
             ]);
             
             if (!$check) {
-                return redirect()->back()->with('error', 'Failed to insert document: ' . $document['name']);
+               return redirect()->back()->with('error', 'Failed to insert document: ' . $document['name']);
             }
+            
         }
         
         return redirect("/documents")->with("success", "New Document(s) Added Successfully");

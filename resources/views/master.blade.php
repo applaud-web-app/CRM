@@ -229,7 +229,7 @@
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
                     @role('Superadmin')
-                        <li><a class=" ai-icon" href="index.php" aria-expanded="false">
+                        <li><a class=" ai-icon" href="{{route('dashboard')}}" aria-expanded="false">
                                 <i class="fas fa-tachometer-alt"></i>
                                 <span class="nav-text">Dashboard</span>
                             </a>
