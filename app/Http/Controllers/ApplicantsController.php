@@ -52,8 +52,6 @@ class ApplicantsController extends Controller
                     
                           <a class="dropdown-item" href="'.route('approved',$row->id).'"><i class="fas fa-check"></i> Accept Lead</a>
                           <a class="dropdown-item" href="' . route('rejectapproval', $row->id) . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
-                       
-                       
                        </div>
                     </div>
                  </div>';
@@ -77,7 +75,6 @@ class ApplicantsController extends Controller
             ->first();
         $documents = Documents::where('leads_id', $id)->select('document','document_name')->get();
         $followupdata = Followup::where('lead_id', $id)->select('serial_id', 'notes', 'next_followup', 'added_by')->get();
-        // dd($documents,$followupdata);
         return view("applicants.Viewdata", compact("data", 'documents', "followupdata"));
 
     }
@@ -88,7 +85,6 @@ class ApplicantsController extends Controller
         $username=Auth::user()->username;
         $lead=Leads::where('id',$id)->first();
         $approval = Leads::where("id", $id)->update(["proccess_status" => 'rejected']);
-        // dd($lead->name,$lead->assigned_to);
         if($approval)
         {    
             Activity::create([
@@ -198,5 +194,28 @@ class ApplicantsController extends Controller
         $data=$request->except("_token");
         $document=$request->document;
         dd($document,$data);
+    }
+
+    public function sendRequest(Request $request,$id)
+    {
+        $user_id= Auth::id();
+        $username=Auth::user()->username;
+        $lead= Leads::where('id',$id)->select("name","assigned_to")->first();
+        $check=Leads::where("id", $id)->update([
+            "notes"=> $request->notes,
+        ]);
+        if($check)
+        {
+            Activity::create([
+                "sender_id"=>$user_id,
+                "receiver_id"=>$lead->assigned_to,
+                "activity"=>$username." requested  some documents ".$lead->name,
+                "done_by"=>$username,
+                "date" => date('y-m-d')
+            ]);
+            return redirect()->back()->with('success','Request for document sent');
+        }
+        else
+            return redirect()->back()->with('error','Error occured');
     }
 }

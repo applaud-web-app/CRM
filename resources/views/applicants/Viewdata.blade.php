@@ -122,5 +122,43 @@
           </div>
        </div>
  </section>
-     
+ <div class="modal fade show" id="requestModal"  aria-modal="true" role="dialog">
+   <div class="modal-dialog" role="document">
+       <div class="modal-content">
+           <form method="POST" action="{{route('sendrequest',$data->id)}}">@csrf
+               <div class="modal-header">
+                   <h4 class="modal-title">Add Notes</h4>
+                   <button type="button" class="btn-close" data-bs-dismiss="modal">
+                   </button>
+               </div>
+               <div class="modal-body">
+                       <div class="form-group">
+                      
+                           <textarea  class="form-control" name="notes"  placeholder="Enter Notes" style="height:100px;"></textarea>
+                       </div>
+               </div>
+               <div class="modal-footer">
+                 
+                   <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i> Submit</button>
+               </div>
+           </form>
+       </div>
+   </div>
+</div>
 @endsection
+@push('scripts')
+<script>
+   $("form").each(function() {
+      $($(this)).validate({
+          rules: {
+              notes: {
+                  required: true
+              },
+          },
+          messages: {
+              notes: "Please enter a note.",
+          },
+      });
+   })
+</script>
+@endpush
