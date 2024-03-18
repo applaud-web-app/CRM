@@ -68,8 +68,6 @@ Route::middleware(['auth', ])->group(function () {
     Route::get('/editemployees/{id}',[EmployeeController::class,'editEmployees'])->name('editemployees' );
     Route::get('/deleteemployees/{id}',[EmployeeController::class,'deleteEployees'])->name('deleteemployees');
     Route::post('/posteditemployee/{id}',[EmployeeController::class,'updateEmployeeData'])->name('posteditemployee');
-    Route::get('/sendnotification',[EmployeeController::class,'sendNotification'])->name('sendnotification');
-        
 
     // ENQUIRY
     Route::get('/enquiry',[EnquiryController::class,'loadenquiry'])->name('enquiry');
@@ -100,6 +98,7 @@ Route::middleware(['auth', ])->group(function () {
     Route::post('/createfollowup/{id}',[EnquiryController::class,'createFollowUp'])->name('createfollowup');
     Route::get('/deletefollowup/{id}',[EnquiryController::class,'deleteFollowUp'])->name('deletefollowup');
     Route::post('/editfollowup',[EnquiryController::class,'editFollowUp'])->name('editfollowup');
+    Route::get('/delete-category/{id}',[EnquiryController::class,'deleteDocumentCategory'])->name('delete-category');
     
     //Activities
     Route::get('/activities',[ActivityController::class,'getActivities'])->name('activities');
