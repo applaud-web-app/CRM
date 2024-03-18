@@ -39,8 +39,7 @@
                                             <td>{{$document->type}}</td>
                                             <td>{{$document->subcategory}}</td>
                                             <td>
-                                                <a href="" class="btn btn-secondary btn-sm">View</a>
-                                                <a href="" class="btn btn-danger btn-sm">Delete</a>
+                                                <a href="{{route('delete-category',$document->id)}}" class="btn btn-danger btn-sm">Delete</a>
                                             </td>
                                         </tr>
                                         <?php $i++ ?>

@@ -123,6 +123,7 @@ class EnquiryController extends Controller
     {
         $data = Enquiry::find($id);
         // dd($data);
+
         $countries = DB::table('countries')->get();
         $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
         return view('Leadmanagement.ConvertEnquiry', compact('data', 'users', 'countries'));
@@ -132,12 +133,14 @@ class EnquiryController extends Controller
     public function leadGenerate(Request $request, $id)
     {
         $data = $request->except("_token");
-        // dd($data);
+        
+        $leadId = '#'.rand();
         $userid = Auth::id();
         $username = Auth::user()->username;
         $data["lead_mode"] = "converted";
         $data["assigned_by"] = $userid;
         $data["enquiry_id"] = $id;
+        $data["code"] = $leadId;
         $check = Leads::create($data);
         Activity::create([
             "sender_id" => $userid,
@@ -467,4 +470,15 @@ class EnquiryController extends Controller
             }
         }
     }
+
+    public function deleteDocumentCategory($id){
+        $deleteCategrory = DocumentCategory::where('id',$id)->first();
+        if($deleteCategrory != NULL){
+            $deleteCategrory->delete();
+            return redirect()->back()->with('success','Deleted Successfully');
+        }
+        return redirect()->back()->with('error','Something Went Wrong');
+    }
+
+
 }

@@ -4,12 +4,10 @@
         <!-- row -->
         <div class="container-fluid">
             <div class=" d-flex flex-wrap align-items-center text-head">
-                <h2 class="mb-3 me-auto">Lead Name (#4553545)</h2>
-
+                <h2 class="mb-3 me-auto">{{ $data->name }}</h2>
             </div>
             <form class="row" method="POST" action="{{ route('leadgenerate', $data->id) }}">@csrf
                 <div class="col-lg-12">
-
                     <div class="card h-auto">
                         <div class="card-header">
                             <h4 class="card-title">Lead Information</h4>
@@ -18,43 +16,36 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" value="{{ $data->name }}"
-                                            name="name" placeholder="Enter Name">
+                                        <label for="name">Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" value="{{$data->name}}"
+                                            name="name" placeholder="Enter Name" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="lcode">Code</label>
-                                        <input type="text" class="form-control" value="" name="code"
-                                            placeholder="Enter Lead Code">
+                                        <label for="age">Candidate Age <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" value="" name="age"
+                                            placeholder="Enter Age" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="age">Candidate Age</label>
-                                        <input type="text" class="form-control" value="" name="age"
-                                            placeholder="Enter Value">
+                                        <label for="Leadvalue">Lead Value(₹) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="price" placeholder="Enter Value" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="Leadvalue">Lead Value(₹)</label>
-                                        <input type="number" class="form-control" name="price" placeholder="Enter Value">
+                                        <label for="emailaddress">Email Address <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" value="{{$data->email}}"
+                                            name="email" placeholder="Enter Email Address" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="emailaddress">Email Address</label>
-                                        <input type="email" class="form-control" value="{{ $data->email }}"
-                                            name="email" placeholder="Enter Email Address">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="emailaddress">Mobile number</label>
-                                        <input type="number" class="form-control" value="{{ $data->mobile }}"
-                                            name="mobile" placeholder="Enter Mobile number">
+                                        <label for="emailaddress">Mobile number <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" value="{{$data->mobile}}"
+                                            name="mobile" placeholder="Enter Mobile number" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
@@ -71,7 +62,6 @@
                                             <option value="" selected>--Choose Option--</option>
                                             <option value="Married">Married</option>
                                             <option value="Unmarried">Unmarried</option>
-
                                         </select>
                                     </div>
                                 </div>
@@ -83,26 +73,20 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="card h-auto">
                         <div class="card-header">
                             <h4 class="card-title">Address Information</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="address">Address</label>
+                                        <label for="address">Address <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="address"
-                                            placeholder="Enter Address">
+                                            placeholder="Enter Address" required>
                                     </div>
                                 </div>
-
-
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="country">Country</label>
@@ -113,7 +97,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="state">State</label>
@@ -141,7 +124,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card h-auto">
                         <div class="card-header">
                             <h4 class="card-title">Source Information</h4>
@@ -150,20 +132,18 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="type">Type</label>
-                                        <select name="lead_type" class="form-control">
+                                        <label for="type">Type <span class="text-danger">*</span></label>
+                                        <select name="lead_type" class="form-control" required>
                                             <option value="Hot leads">Hot leads</option>
                                             <option value="Cold leads">Cold leads</option>
                                             <option value="Warm leads">Warm leads</option>
-
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select name="status" class="form-control">
+                                        <label for="status">Status <span class="text-danger">*</span></label>
+                                        <select name="status" class="form-control" required>
                                             <option value="Generated">Generated</option>
                                             <option value="Qualified">Qualified</option>
                                             <option value="Initial">Initial Contact</option>
@@ -174,11 +154,10 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="source">Sources</label>
-                                        <select name="source" class="form-control">
+                                        <label for="source">Sources <span class="text-danger">*</span></label>
+                                        <select name="source" class="form-control" required>
                                             <option value="Google" @if ($data->source == 'Google') selected @endif>Google
                                             </option>
                                             <option value="Facebook" @if ($data->source == 'Facebook') selected @endif>
@@ -193,11 +172,10 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="assignedto">Assigned To</label>
-                                        <select name="assigned_to" class="form-control">
+                                        <label for="assignedto">Assigned To <span class="text-danger">*</span></label>
+                                        <select name="assigned_to" class="form-control" required>
                                             @isset($users)
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">{{ $user->username }}</option>
@@ -206,12 +184,11 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="contacted_date">Contacted Date</label>
+                                        <label for="contacted_date">Contacted Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="contacted_date"
-                                            placeholder="Enter date">
+                                            placeholder="Enter date" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
@@ -224,49 +201,43 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card h-auto">
                         <div class="card-header">
                             <h4 class="card-title">Interested Information type</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                                     <div class="form-group">
-                                        <label class="form-label" for="interested">Interested</label>
+                                        <label class="form-label" for="interested">Interested <span class="text-danger">*</span></label>
                                         @php
-                                        $getInterestType = array_keys(\Common::immigration());
+                                            $getInterestType = array_keys(\Common::immigration());
                                         @endphp
-                                        <select name="interested" id="interested" onchange="getImmigrationLists(this,'{{ $data->interested }}')" class="form-control">
+                                        <select name="interested" id="interested"
+                                            onchange="getImmigrationLists(this,'{{ $data->interested }}')"
+                                            class="form-control" required>
                                             @foreach ($getInterestType as $item)
-                                                <option value="{{strtoupper($item)}}" @if ($data->interested == strtoupper($item)) selected @endif>{{strtoupper($item)}}</option>
+                                                <option value="{{ strtoupper($item) }}"
+                                                    @if ($data->interested == strtoupper($item)) selected @endif>
+                                                    {{ strtoupper($item) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                
-                                
-
-                                <div class="col-lg-4 col-md-4 col-sm-4 mb-3" >
+                                <div class="col-lg-4 col-md-4 col-sm-4 mb-3">
                                     <div class="form-group" id="interestType">
-                                        
                                     </div>
                                 </div>
-
                                 <div class="row" id="fields"></div>
+                            </div>
                         </div>
-
-
                     </div>
-
-                    
-
-                </div>
-                <div class="col-lg-12 ">
-                    <button type="submit" class="btn btn-primary  mb-2"><i
-                            class="far fa-check-square pe-2"></i>Submit</button>
-                    <button type="button" class="btn btn-dark  mb-2"><i class="far fa-window-close pe-2"></i>Cancel
-                    </button>
+                    <div class="col-lg-12 ">
+                        <button type="submit" class="btn btn-primary  mb-2"><i
+                                class="far fa-check-square pe-2"></i>Submit</button>
+                        <button type="button" class="btn btn-dark  mb-2"><i class="far fa-window-close pe-2"></i>Cancel
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -389,9 +360,8 @@
             $('#interested').trigger('change');
         });
         // get immigration lists
-        function getImmigrationLists(selectElement,preselectedValue)
-        {
-            var immigration_type=selectElement.value;
+        function getImmigrationLists(selectElement, preselectedValue) {
+            var immigration_type = selectElement.value;
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",
@@ -402,11 +372,12 @@
                 datatype: JSON,
                 success: function(response) {
                     console.log(immigration_type);
-                    let html = `<label class="form-label" for="">Interested</label>
-                    <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="interest_type" class="form-control">
+                    let html = `<label class="form-label" for="">Type of Immigration <span class="text-danger">*</span></label>
+                    <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
-                        html += `<option value="${ele.toUpperCase()}" ${ele.toUpperCase() === '{{ $data->type_of_immigration }}' ? 'selected' : ''}>${ele.toUpperCase()}</option>`;
+                        html +=
+                            `<option value="${ele.toUpperCase()}" ${ele.toUpperCase() === '{{ $data->type_of_immigration }}' ? 'selected' : ''}>${ele.toUpperCase()}</option>`;
                     });
                     html += `</select>`
                     console.log(html);
@@ -417,20 +388,20 @@
         }
 
         // get immigration->list->fields
-        function getfieldcount(selectElement,immigrationType){
-            var fieldlist=selectElement.value;
+        function getfieldcount(selectElement, immigrationType) {
+            var fieldlist = selectElement.value;
             console.log(immigrationType);
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",
                 data: {
                     fields: fieldlist,
-                    field_type:immigrationType,
+                    field_type: immigrationType,
                     _token: "{{ csrf_token() }}",
                 },
                 datatype: JSON,
                 success: function(response) {
-                    let html=``;
+                    let html = ``;
                     response.forEach(function(ele) {
                         html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
                                         <input type="text" class="form-control mb-2" name="${ele}"

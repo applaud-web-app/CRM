@@ -120,7 +120,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="interested">Interested</label>
                                     @php
-                                        $getInterestType = array_keys(\Common::immigration(false));
+                                        $getInterestType = array_keys(\Common::immigration());
                                     @endphp
                                     <select name="interested" id="interested" onchange="getImmigrationLists(this)"
                                         class="form-control">
@@ -198,29 +198,23 @@
                                         placeholder="Enter email ">
                                 </div>
                             </div>
-
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="editinterested">Interested</label>
-                                    @php
-                                        $getInterestType = array_keys(\Common::loadimmigration());
-                                    @endphp
-                                    <select name="interested" data-type="" id="editinterested" onchange="geteditImmigrationLists(this)"
-                                        class="form-control">
+                                    @php $getInterestType = array_keys(\Common::immigration());@endphp
+                                    <select name="interested" data-type="" id="editinterested" onchange="geteditImmigrationLists(this)" class="form-control">
                                         <option value="">Select Option</option>
                                         @foreach ($getInterestType as $item)
-                                            <option value="{{ strtoupper($item) }}">{{ strtoupper($item) }}</option>
+                                            <option value="{{strtoupper($item)}}">{{strtoupper($item)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
                             <div class="col-lg-6 col-md-6 col-sm-4 mb-3">
                                 <div class="form-group" id="editinterestType">
 
                                 </div>
                             </div>
-                            
                             <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="date">Sources</label>
@@ -236,7 +230,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-
                         <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i>
                             Submit</button>
                     </div>
@@ -314,7 +307,7 @@
                 success: function(response) {
                     console.log(response);
                     let html = `<label class="form-label" for="">Type of Immigration</label>
-                    <select id="type_of_immigration" name="type_of_immigration" class="form-control">
+                    <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
                         html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
@@ -325,7 +318,6 @@
                 }
             });
         }
-
 
         function geteditImmigrationLists(selectElement) {
             var immigration_type = selectElement.value;
@@ -341,7 +333,7 @@
                 success: function(response) {
                     console.log(immigration_type);
                     let html = `<label class="form-label" for="">Type of Immigration</label>
-                    <select id="type_of_immigration" name="type_of_immigration" class="form-control">
+                    <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
                         html += `<option value="${ele.toUpperCase()}" ${type == ele.toUpperCase() ? 'selected' : ''}>${ele.toUpperCase()}</option>`;
@@ -351,8 +343,7 @@
                     $('#editinterestType').html(html);
                 }
             });
-        }
-        
+        }        
     </script>
 
     <script>

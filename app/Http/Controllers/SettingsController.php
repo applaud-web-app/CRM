@@ -166,8 +166,8 @@ class SettingsController extends Controller
 
         $data=$request->except("_token","documents","field_count");
         $documents = $request->input('documents');
+        
         foreach ($documents as $document) {
-
             $checkPreviousData = DocumentCategory::where('name',$document['name'])->where('field_type',$document['field_type'])->where('type',$data['interested'])->where('subcategory',$data["type_of_immigration"])->first();
 
             if($checkPreviousData){
@@ -185,10 +185,12 @@ class SettingsController extends Controller
             if (!$check) {
                return redirect()->back()->with('error', 'Failed to insert document: ' . $document['name']);
             }
-            
+
         }
         
         return redirect("/documents")->with("success", "New Document(s) Added Successfully");
 
     }
+
+    
 }
