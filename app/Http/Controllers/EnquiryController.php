@@ -26,8 +26,8 @@ class EnquiryController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $enquiries = Enquiry::where('status', 1)->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-            $count_total = Enquiry::where('status', 1)->count();
+            $enquiries = Enquiry::where('status', 1)->where('is_deleted',0)->orderBy('id', 'DESC')->skip($start)->take($pageSize);
+            $count_total = Enquiry::where('status', 1)->where('is_deleted',0)->count();
             return Datatables::of($enquiries)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($enquiry) {
@@ -102,7 +102,7 @@ class EnquiryController extends Controller
 
     public function deleteenquiry(Request $request, $id)
     {
-        $check = Enquiry::where("id", $id)->update(["status" => 0]);
+        $check = Enquiry::where("id", $id)->update(["is_deleted" => 1]);
         if ($check) {
             return redirect()->route("enquiry")->with("success", "Enquiry Deleted");
         } else {
@@ -168,8 +168,8 @@ class EnquiryController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $leads = Leads::where("is_deleted", 1)->whereIn('proccess_status', ['created', 'rejected'])->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-            $count_total = Leads::where('is_deleted', 1)->count();
+            $leads = Leads::where("is_deleted", 0)->whereIn('proccess_status', ['created', 'rejected'])->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);
+            $count_total = Leads::where('is_deleted', 0)->count();
             return Datatables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('contacted_date', function ($dateformat) {
@@ -218,7 +218,7 @@ class EnquiryController extends Controller
 
     public function leadDelete($id)
     {
-        $check = Leads::where("id", $id)->update(["is_deleted" => 0]);
+        $check = Leads::where("id", $id)->update(["is_deleted" => 1]);
         if ($check) {
             return redirect()->route("leads")->with("success", "Lead Deleted");
         } else {

@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row gx-2">
                 <div class="col-xl-3 col-lg-3 col-md-6">
                     <div class="widget-stat card">
                         <div class="card-body">
@@ -32,9 +32,8 @@
                                     </svg>
                                 </span>
                                 <div class="media-body">
-                                    <p class="mb-1">Patient</p>
-                                    <h4 class="mb-0">3280</h4>
-
+                                    <p class="mb-1">Enquiry</p>
+                                    <h4 class="mb-0">{{$enquiry > 10 ? $enquiry : "0".$enquiry}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +54,8 @@
                                     </svg>
                                 </span>
                                 <div class="media-body">
-                                    <p class="mb-1">Patient</p>
-                                    <h4 class="mb-0">3280</h4>
-
+                                    <p class="mb-1">Leads</p>
+                                    <h4 class="mb-0">{{$leads > 10 ? $leads : "0".$leads}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -78,9 +76,8 @@
                                     </svg>
                                 </span>
                                 <div class="media-body">
-                                    <p class="mb-1">Patient</p>
-                                    <h4 class="mb-0">3280</h4>
-
+                                    <p class="mb-1">Approved Leads</p>
+                                    <h4 class="mb-0">{{$approvedLeads > 10 ? $approvedLeads : "0".$approvedLeads}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -101,9 +98,8 @@
                                     </svg>
                                 </span>
                                 <div class="media-body">
-                                    <p class="mb-1">Patient</p>
-                                    <h4 class="mb-0">3280</h4>
-
+                                    <p class="mb-1">Pending Leads</p>
+                                    <h4 class="mb-0">{{$pendingLeads > 10 ? $pendingLeads : "0".$pendingLeads}}</h4>
                                 </div>
                             </div>
                         </div>

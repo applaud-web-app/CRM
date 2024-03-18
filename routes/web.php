@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +30,10 @@ Route::get('/forget-password',[AuthController::class,'forgetPassword'])->name('f
 Route::post('/forget-password',[AuthController::class,'postforgetPassword'])->name('forgetPassword');
 Route::get('/error',[AuthController::class,'wrongAccess'])->name('error');
 
-Route::middleware(['auth', ])->group(function () {
+Route::middleware(['auth',"role:Superadmin"])->group(function () {
 
-    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
-    Route::get('/', function () { return view('dashboard'); })->name('dashboard');
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class,'index'])->name('dashboard');
     Route::get('/logout',[AuthController::class,'logout'])->name('logout');
     Route::get('/account-setting',[UserController::class,'accountSetting'])->name('accountSetting');
     Route::post('/account-setting',[UserController::class,'updateAccountSetting'])->name('accountSetting');
