@@ -155,7 +155,7 @@
 @endsection
 
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script> --}}
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 <script>

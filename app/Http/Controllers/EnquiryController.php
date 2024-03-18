@@ -135,8 +135,8 @@ class EnquiryController extends Controller
 
     public function leadGenerate(Request $request, $id)
     {
+        $common=new Common();
         $data = $request->except("_token");
-        
         $leadId = '#'.rand();
         $userid = Auth::id();
         $username = Auth::user()->username;
@@ -145,14 +145,16 @@ class EnquiryController extends Controller
         $data["enquiry_id"] = $id;
         $data["code"] = $leadId;
         $check = Leads::create($data);
-        Activity::create([
-            "sender_id" => $userid,
-            "receiver_id" => $data['assigned_to'],
-            "activity" => "Lead converted from enquiry",
-            "done_by" => $username,
-            "date" => date('y-m-d')
-        ]);
         if ($check) {
+            $note="Enquiry converted into lead by ".$username;
+            Activity::create([
+                "sender_id" => $userid,
+                "receiver_id" => $data['assigned_to'],
+                "activity" => $note,
+                "done_by" => $username,
+                "date" => date('y-m-d')
+            ]);
+            $common->sendNotification($userid,$data['assigned_to'],$note);
             Enquiry::where('id', $id)->update(['status' => 0]);
             return redirect()->route("leads")->with("success", "Enquiry Converted into Lead");
         } else {
@@ -256,7 +258,7 @@ class EnquiryController extends Controller
     }
 
     public function createNewLead(Request $request)
-    {
+    {   $common=new Common();
         $data = $request->except("_token");
         $id = Auth::id();
         $username = Auth::user()->username;
@@ -264,13 +266,17 @@ class EnquiryController extends Controller
         $data["assigned_by"] = $id;
         $check = Leads::create($data);
         if ($check) {
+            $note="New Lead added manually by ".$username;
             Activity::create([
                 "sender_id" => $id,
                 "receiver_id" => $data['assigned_to'],
-                "activity" => "New Lead added Manually",
+                "activity" =>$note,
                 "done_by" => $username,
                 "date" => date('y-m-d')
+                
             ]);
+
+            $common->sendNotification($id,$data['assigned_to'],$note);
             return redirect()->route("leads")->with("success", "New Lead created");
         } else {
             return redirect()->back("leads")->with("error", "Some Error occured");

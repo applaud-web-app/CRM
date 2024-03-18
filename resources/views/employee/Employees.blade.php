@@ -11,7 +11,6 @@
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
         
                 <div>
-                    <a href="{{route('sendnotification')}}" class="btn btn-primary  mb-sm-0 mb-2"><i class="fas fa-plus pe-2"></i>Send Notification</a>
                     <a href="{{route('addEmployee')}}" class="btn btn-primary  mb-sm-0 mb-2"><i class="fas fa-plus pe-2"></i>Add New</a>
                 </div>
             </div>
