@@ -79,7 +79,6 @@ class EnquiryController extends Controller
         $userid = Auth::id();
         $data = $request->except("_token");
         $data["assigned_by"] = $userid;
-        // dd($data,$userid);
         $enquiry = Enquiry::create($data);
         if ($enquiry) {
             return redirect()->route("enquiry")->with("success", "Enquiry Created !");
@@ -320,6 +319,7 @@ class EnquiryController extends Controller
 
     public function applyApproval(Request $request, $id)
     {
+        $common=new Common();
         $userid = Auth::id();
         $username = Auth::user()->username;
         $lead = Leads::with('documents')->where('id', $id)->first();
@@ -330,13 +330,15 @@ class EnquiryController extends Controller
             if (count($allDocumentname) == count($leadDocumentname)) {
                 $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing']);
                 if ($check) {
+                    $note="Lead with name " . $lead->name . " was sent for approval";
                     Activity::create([
                         "sender_id" => $userid,
                         "receiver_id" => $lead->assigned_to,
-                        "activity" => "Lead with name " . $lead->name . " sent for approval",
+                        "activity" => $note,
                         "done_by" => $username,
                         "date" => date('y-m-d')
                     ]);
+                    $common->sendNotification($userid,$lead->assigned_to, $note);
                     return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
                 } else
                     return redirect()->back()->with("error", "Something went wrong!");

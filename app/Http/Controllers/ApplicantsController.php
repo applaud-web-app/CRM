@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Common;
 use App\Models\Activity;
 use App\Models\Documents;
 use App\Models\Followup;
@@ -80,39 +81,45 @@ class ApplicantsController extends Controller
     }
 
     public function rejectApproval($id)
-    {   
+    {   $common=new Common();
         $user_id= Auth::id();
         $username=Auth::user()->username;
         $lead=Leads::where('id',$id)->first();
         $approval = Leads::where("id", $id)->update(["proccess_status" => 'rejected']);
         if($approval)
-        {    
+        {       
+            $note="Lead with name ".$lead->name." was rejected by ".$username;
             Activity::create([
             "sender_id"=>$user_id,
             "receiver_id"=>$lead->assigned_to,
-            "activity"=>"Lead with name ".$lead->name." was rejected",
+            "activity"=>$note,
             "done_by"=>$username,
             "date" => date('y-m-d')
         ]);
+
+            $common->sendNotification($user_id,$lead->assigned_to,$note);
             return redirect()->route("leads")->with("error","Approval for this lead was rejected");
         }
     }
 
     public function approvedRequest($id)
     {
+        $common=new Common();
         $user_id= Auth::id();
         $username=Auth::user()->username;
         $lead=Leads::where('id',$id)->first();
         $approved = Leads::where("id", $id)->update(["proccess_status"=> "approved"]);
         if($approved)
         {   
+            $note="Lead with name ".$lead->name." was approved by ".$username;
             Activity::create([
                 "sender_id"=>$user_id,
                 "receiver_id"=>$lead->assigned_to,
-                "activity"=>"Lead with name ".$lead->name." was approved by ".$username,
+                "activity"=>$note,
                 "done_by"=>$username,
                 "date" => date('y-m-d')
             ]);
+            $common->sendNotification($user_id,$lead->assigned_to,$note);
             return redirect()->route("leads")->with("success","Lead approved");
         }
     }
@@ -198,6 +205,7 @@ class ApplicantsController extends Controller
 
     public function sendRequest(Request $request,$id)
     {
+        $common=new Common();
         $user_id= Auth::id();
         $username=Auth::user()->username;
         $lead= Leads::where('id',$id)->select("name","assigned_to")->first();
@@ -206,13 +214,15 @@ class ApplicantsController extends Controller
         ]);
         if($check)
         {
+            $note=$username." requested some documents from ".$lead->name;
             Activity::create([
                 "sender_id"=>$user_id,
                 "receiver_id"=>$lead->assigned_to,
-                "activity"=>$username." requested  some documents ".$lead->name,
+                "activity"=>$note,
                 "done_by"=>$username,
                 "date" => date('y-m-d')
             ]);
+            $common->sendNotification($user_id,$lead->assigned_to,$note);
             return redirect()->back()->with('success','Request for document sent');
         }
         else

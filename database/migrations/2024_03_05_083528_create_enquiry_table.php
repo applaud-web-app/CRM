@@ -21,6 +21,7 @@ return new class extends Migration
             $table->mediumText('type_of_immigration');
             $table->mediumText('source');
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('is_deleted')->default(0);
             $table->timestamps();
         });
     }

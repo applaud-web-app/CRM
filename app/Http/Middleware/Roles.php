@@ -25,7 +25,8 @@ class Roles
             if (Auth::user()->hasRole($role)) {
                 return $next($request); 
             }
+            return redirect()->route('error');
         }
-        return redirect()->route('error');
+       
     }
 }

@@ -106,10 +106,6 @@ class Common
         if (!$accessToken) {
             die('Failed to obtain access token');
         }
-       
-        // $fcmtoken = Activity::select('User.device_token as token','activities.sender_id as sid,activities.receiver_id as rid,activities.activity as notes, activities.done_by as sender')->where('receiver_id',5)->with('senderToken','reciverToken')->first();
-        // $fcmtoken = Activity::where('sender_id',1)->where('receiver_id',5)->with('senderToken','reciverToken')->first();
-
 
         $fcmtoken = DB::table('activities')
         ->where('activities.sender_id', $sender)
@@ -120,8 +116,7 @@ class Common
         ->first();
         $image = asset('assets/images/logo.jpg');
         $url = 'https://fcm.googleapis.com/v1/projects/laravelpushnotification-78b76/messages:send';
-        // dd($fcmtoken,$sender,$receiver,$notes);
-        // dd($fcmtoken);
+        
         foreach ($fcmtoken as $token) {
             $data = [
                 "message" => [
@@ -166,7 +161,6 @@ class Common
             } else {
                 print_r(json_decode($result, true));
             }
-
             curl_close($ch);
         }
         
