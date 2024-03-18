@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('enquiry', function (Blueprint $table) {
             $table->id();
+            $table->integer('assigned_by');
             $table->mediumText('name');
             $table->bigInteger('mobile');
             $table->mediumText('email');

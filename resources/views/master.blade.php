@@ -228,13 +228,15 @@
         <div class="deznav">
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
-                    @role('Superadmin')
+                    @role(['Superadmin','Filler','Counsellor','Telecaller','Manager'])
                         <li><a class=" ai-icon" href="{{route('dashboard')}}" aria-expanded="false">
                                 <i class="fas fa-tachometer-alt"></i>
                                 <span class="nav-text">Dashboard</span>
                             </a>
                         </li>
                     @endrole
+
+                    @role(['Superadmin','Counsellor','Manager'])
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-chart-bar"></i>
                             <span class="nav-text">Lead Management</span>
@@ -247,9 +249,10 @@
 
                         </ul>
                     </li>
+                    @endrole
 
 
-
+                    @role(['Counsellor','filler','Superadmin'])
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-user-shield"></i>
                             <span class="nav-text">Applicants</span>
@@ -261,10 +264,10 @@
 
                         </ul>
                     </li>
+                    @endrole
 
 
-
-
+                    @role(['Superadmin','Manager'])
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-users-cog"></i>
                             <span class="nav-text">Human Resources</span>
@@ -277,6 +280,7 @@
 
                         </ul>
                     </li>
+                    @endrole
                     <li>
                         <a href="{{route('activities')}}" class="ai-icon" aria-expanded="false">
                             <i class="flaticon-013-checkmark"></i>
@@ -291,14 +295,14 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="all-reports.php">All Reports</a></li>
+                            <li><a href="{{route('allreports')}}">All Reports</a></li>
 
-                            <li><a href="lead-reports.php">Lead Reports</a></li>
+                            <li><a href="{{route('leadreports')}}">Lead Reports</a></li>
 
                         </ul>
                     </li>
                     <li>
-                        <a href="email-templates.php" class="ai-icon" aria-expanded="false">
+                        <a href="{{route('emailtemplates')}}" class="ai-icon" aria-expanded="false">
                             <i class="fas fa-envelope-open-text"></i>
                             <span class="nav-text">Email Templates</span>
                         </a>
@@ -336,8 +340,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright © Designed &amp; Developed by <a href="https://applaudwebmedia.com/"
-                        target="_blank">Applaud Web Media</a> 2023</p>
+                <p>Copyright © {{date('Y')}}</p>
             </div>
         </div>
         <!--**********************************

@@ -134,4 +134,85 @@
     <!--**********************************
                 Content body end
             ***********************************-->
+
+            <!-- Modal -->
+<div class="modal fade" id="notificationPermissionModal" tabindex="-1" role="dialog" aria-labelledby="notificationPermissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationPermissionModalLabel">Notification Permission</h5>
+        </div>
+        <div class="modal-body">
+          <p>Do you allow us to send you notifications?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Deny</button>
+          <button type="button" class="btn btn-primary" onclick="startFCM()" id="allowNotificationBtn">Allow</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+<script>
+$(document).ready(function() {
+    var deviceToken = '{{ Auth::user()->device_token }}';
+    if (!deviceToken) {
+        $('#notificationPermissionModal').modal('show');
+    }
+});
+
+    var firebaseConfig = {
+        apiKey: "AIzaSyB9FzIUo3bBKunVLVqi1o0M9gVqeX_VoHo",
+        authDomain: "laravelpushnotification-78b76.firebaseapp.com",
+        projectId: "laravelpushnotification-78b76",
+        storageBucket: "laravelpushnotification-78b76.appspot.com",
+        messagingSenderId: "724240981380",
+        appId: "1:724240981380:web:e5272851af03d4c37e51d1",
+        measurementId: "G-TSQ5CB26NT"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+        function startFCM() {
+        messaging
+            .requestPermission()
+            .then(function() {
+                return messaging.getToken()
+            }).then(function(response) {
+                console.log(response);
+                $('#notificationPermissionModal').modal('hide');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+                    $.ajax({
+                        url: '{{ route('saveToken') }}',
+                        type: 'POST',
+                        data: {
+                            notify_token: response
+                        },
+                        dataType: 'JSON',
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        },
+                    });
+                    }).catch(function(error) {
+                        alert(error);
+            });
+        }
+        function closeModal()
+        {
+            $('#notificationPermissionModal').modal('hide');
+        }
+        </script>
+
+@endpush

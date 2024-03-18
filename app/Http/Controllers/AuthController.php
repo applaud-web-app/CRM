@@ -85,4 +85,9 @@ class AuthController extends Controller
 
     }
 
+    public function wrongAccess()
+    {
+        return view('auth.Wrongaccess');
+    }
+
 }

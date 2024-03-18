@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('profile_img');
+            $table->string('device_token');
             $table->string('emp_code',50)->nullable();
             $table->string('username');
             $table->string('first_name');

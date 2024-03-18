@@ -19,11 +19,17 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body p-3">
+                            <div class="card-header">
+                                <h4 class="card-title">Roles and Permissions</h4>
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addpermission"
+                                    class="btn btn-primary btn-md"><i class="fas fa-plus"></i> Add New</a>
+                            </div>
                             <div class="table-responsive ">
                                 <table class="table">
                                     <thead>
                                         <th>#</th>
-                                        <th>Title</th>
+                                        <th>Role</th>
+                                        <th>Permissions</th>
                                         <th>Monthly Target</th>
                                         <th>Action</th>
                                     </thead>
@@ -33,6 +39,11 @@
                                                 <tr>
                                                     <td>{{ ++$loop->index }}</td>
                                                     <td>{{ $item->name }}</td>
+                                                    <td>
+                                                        @foreach ($item->permissions as $permission)
+                                                        <li class=" badge badge-warning light">{{ $permission->name }}</li>
+                                                        @endforeach
+                                                    </td>
                                                     <td>{{ $item->target }}</td>
                                                     <td>
                                                         <div class="d-flex align-items-center">
@@ -54,6 +65,32 @@
           Content body end
     ***********************************-->
     <div class="modal fade" id="rolesModal" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{route('updateRole')}}" method="POST" autocomplete="off">
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">Manager</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="target">Target <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="target" id="target" placeholder="Enter target" required>
+                            <input type="hidden" class="form-control" name="role" id="role" value="" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Add permissions --}}
+    <div class="modal fade" id="addpermission" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="{{route('updateRole')}}" method="POST" autocomplete="off">

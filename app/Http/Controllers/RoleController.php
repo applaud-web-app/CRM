@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+
 class RoleController extends Controller
 {
 
     public function viewRoles(){
-        $roles = Role::get();
+        $roles = Role::with('permissions')->get();
         return view('roles.view',compact('roles'));
     }
     
@@ -26,5 +28,10 @@ class RoleController extends Controller
             return redirect(route('viewRoles'))->with('success','Role Updated Successfully');
         }
         return redirect()->back()->with('error','Something Went Wrong');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'roles_has_permission', 'role_id', 'permission_id');
     }
 }

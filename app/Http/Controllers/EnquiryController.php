@@ -74,9 +74,12 @@ class EnquiryController extends Controller
         return view('Leadmanagement.Enquiry');
     }
 
-    public function saveenquiry(Request $request)
+    public function saveEnquiry(Request $request)
     {
+        $userid = Auth::id();
         $data = $request->except("_token");
+        $data["assigned_by"] = $userid;
+        // dd($data,$userid);
         $enquiry = Enquiry::create($data);
         if ($enquiry) {
             return redirect()->route("enquiry")->with("success", "Enquiry Created !");

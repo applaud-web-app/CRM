@@ -24,7 +24,7 @@ class User extends Authenticatable
         'last_name',
         'password',
         'email',
-        'profile_img','emp_code','username','remember_token','phone','gender','blood_group','dob','department','status','joining_date','address'
+        'profile_img','emp_code','username','remember_token','phone','gender','blood_group','dob','department','status','joining_date','address','device_token'
     ];
 
     /**
@@ -50,4 +50,5 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo(Role::class);
     }
+
 }

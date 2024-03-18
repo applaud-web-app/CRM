@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -71,6 +72,21 @@ class UserController extends Controller
         return redirect()->back()->with('success','Password Updated Successfully!! 😋');
    }
 
-   
+    public function saveToken(Request $request)
+    {
+        $id=Auth::id();
+        // dd($id);
+        $token = $request->notify_token;
+        $check=User::where('id',$id)->update([
+            'device_token'=> $token
+        ]);
+        if($check)
+        {
+            return "success";
+        }
+        else
+            return "failed";
+
+    }
 
 }

@@ -33,7 +33,7 @@
                                             <th>Name</th>
                                             <th>Contact Info</th>
                                             <th>Value</th>
-                                            <th>Assigned</th>
+                                            <th>Assigned To</th>
                                             <th>Source</th>
                                             <th>Created</th>
                                             <th>Type</th>

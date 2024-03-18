@@ -4,10 +4,12 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ApplicantsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 
 /*
@@ -25,8 +27,9 @@ Route::get('/login',[AuthController::class,'login'])->name('login');
 Route::post('/login',[AuthController::class,'checkLogin'])->name('login');
 Route::get('/forget-password',[AuthController::class,'forgetPassword'])->name('forgetPassword');
 Route::post('/forget-password',[AuthController::class,'postforgetPassword'])->name('forgetPassword');
+Route::get('/error',[AuthController::class,'wrongAccess'])->name('error');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', ])->group(function () {
 
     Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
     Route::get('/', function () { return view('dashboard'); })->name('dashboard');
@@ -35,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/account-setting',[UserController::class,'updateAccountSetting'])->name('accountSetting');
     Route::get('/update-password',[UserController::class,'userpassword'])->name('userpassword');
     Route::post('/update-password',[UserController::class,'updateUserpassword'])->name('updateUserpassword');
+    Route::post('/saveToken',[UserController::class,'saveToken'])->name('saveToken');
 
     // EXCEL UPLOADS
 
@@ -61,14 +65,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/view-employee',[EmployeeController::class,'viewEmployee'])->name('viewEmployee');
     Route::get('/add-employee',[EmployeeController::class,'addEmployee'])->name('addEmployee');
     Route::post('/postaddemployee',[EmployeeController::class,'postAddEmployee'])->name('postaddemployee');
-    Route::get('editemployees/{id}',[EmployeeController::class,'editEmployees'])->name('editemployees' );
-    Route::get('deleteemployees/{id}',[EmployeeController::class,'deleteEployees'])->name('deleteemployees');
+    Route::get('/editemployees/{id}',[EmployeeController::class,'editEmployees'])->name('editemployees' );
+    Route::get('/deleteemployees/{id}',[EmployeeController::class,'deleteEployees'])->name('deleteemployees');
     Route::post('/posteditemployee/{id}',[EmployeeController::class,'updateEmployeeData'])->name('posteditemployee');
+    Route::get('/sendnotification',[EmployeeController::class,'sendNotification'])->name('sendnotification');
         
 
     // ENQUIRY
     Route::get('/enquiry',[EnquiryController::class,'loadenquiry'])->name('enquiry');
-    Route::post('/newenquiry',[EnquiryController::class,'saveenquiry'])->name('newenquiry');
+    Route::post('/newenquiry',[EnquiryController::class,'saveEnquiry'])->name('newenquiry');
     Route::post('/editenquiry',[EnquiryController::class,'editenquiry'])->name('editenquiry');
     Route::get('/deleteenquiry/{id}',[EnquiryController::class,'deleteenquiry'])->name('deleteenquiry');
     Route::post('/enquiry/bulk-uploads',[EnquiryController::class,'bulkUploadEnquiry'])->name('bulkUploadEnquiry');
@@ -109,5 +114,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/applicantdata/{id}',[ApplicantsController::class,'applicantDetails'])->name('applicantdata');
     Route::post('/postaddapplicant',[ApplicantsController::class,'postAddApplicant'])->name('postaddapplicant');
     Route::post('/sendrequest/{id}',[ApplicantsController::class,'sendRequest'])->name('sendrequest');
+
+    //email
+    Route::get('/emailtemplates',[EmailController::class,'loadEmailTemplates'])->name('emailtemplates');
+    Route::get('/previewbday',[EmailController::class,'previewBday'])->name('previewbday');
+
+    //Report Controller
+    Route::get('allreports',[ReportController::class,'allReports'])->name('allreports');
+    Route::get('leadreports',[ReportController::class,'leadReports'])->name('leadreports');
 });
 
