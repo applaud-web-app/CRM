@@ -18,12 +18,14 @@
 
                             <div class="form-group mb-3">
                                 <label for="publickey">Public Key</label>
-                                <input type="text" class="form-control" value="{{$data->google_api_key}}" name="api_key" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->google_api_key){{$data->google_api_key}} @endisset"
+                                
+                                name="google_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
                                 <label for="publickey">Secret Key</label>
-                                <input type="text" class="form-control" value="{{$data->google_api_secret}}" name="api_secret" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->google_api_secret){{$data->google_api_secret}} @endisset" name="google_api_secret" placeholder="Enter Api Key">
 
                             </div>
 
@@ -47,12 +49,12 @@
 
                             <div class="form-group mb-3">
                                 <label for="publickey">Public Key</label>
-                                <input type="text" class="form-control" value="{{$data->fb_api_key}}" name="api_key" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->fb_api_key){{$data->fb_api_key}} @endisset" name="fb_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
                                 <label for="publickey">Secret Key</label>
-                                <input type="text" class="form-control" value="{{$data->fb_api_secret}}" name="api_secret" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->fb_api_secret){{$data->fb_api_secret}} @endisset" name="fb_api_secret" placeholder="Enter Api Key">
 
                             </div>
 
@@ -76,12 +78,12 @@
 
                             <div class="form-group mb-3">
                                 <label for="publickey">Public Key</label>
-                                <input type="text" class="form-control" value="{{$data->justdial_api_key}}" name="api_key" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->justdial_api_key){{$data->justdial_api_key}} @endisset" name="justdial_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
                                 <label for="publickey">Secret Key</label>
-                                <input type="text" class="form-control" value="{{$data->justdial_api_secret}}" name="api_secret" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->justdial_api_secret){{$data->justdial_api_secret}} @endisset" name="justdial_api_secret" placeholder="Enter Api Key">
 
                             </div>
 
@@ -105,12 +107,12 @@
 
                             <div class="form-group mb-3">
                                 <label for="publickey">Public Key</label>
-                                <input type="text" class="form-control" value="{{$data->instagram_api_key}}" name="api_key" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->instagram_api_key){{$data->instagram_api_key}} @endisset" name="instagram_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
                                 <label for="publickey">Secret Key</label>
-                                <input type="text" class="form-control" value="{{$data->instagram_api_secret}}" name="api_secret" placeholder="Enter Api Key">
+                                <input type="text" class="form-control" value="@isset($data->instagram_api_secret){{$data->instagram_api_secret}} @endisset" name="instagram_api_secret" placeholder="Enter Api Key">
 
                             </div>
 
@@ -139,40 +141,34 @@
        $("form").each(function(){
     $($(this)).validate({
         rules: {
-            api_key: {
+            instagram_api_key: {
                 required: true
             },
-            api_secret: {
+            instagram_api_secret: {
+                required: true,
+            },
+            justdial_api_key: {
+                required: true
+            },
+            justdial_api_secret: {
+                required: true,
+            },
+            fb_api_key: {
+                required: true
+            },
+            fb_api_secret: {
+                required: true,
+            },
+            google_api_key: {
+                required: true
+            },
+            google_api_secret: {
                 required: true,
             }
-            // fb_api_key: {
-            //     required: true
-            // },
-            // fb_api_secret: {
-            //     required: true,
-            // },
-            // justdial_api_key: {
-            //     required: true
-            // },
-            // justdial_api_secret: {
-            //     required: true,
-            // },
-            // instagram_api_key: {
-            //     required: true
-            // },
-            // instagram_api_secret: {
-            //     required: true,
-            // },
         },
         messages: {
             api_key: "Api Key required",
             api_secret: "API Secret required",
-            // fb_api_key: "Api Key required",
-            // fb_api_secret: "API Secret required.",
-            // justdial_api_key: "Api Key required",
-            // justdial_api_secret: "API Secret required."
-            // instagram_api_key: "Api Key required",
-            // instagram_api_secret: "API Secret required."
         },
     });
    })

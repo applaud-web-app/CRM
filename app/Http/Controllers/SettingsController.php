@@ -87,8 +87,8 @@ class SettingsController extends Controller
         try
         {
             $check= DB::table("general_settings")->where("id",1)->update([
-                "google_api_key"=> $data["api_key"],
-                "google_api_secret"=> $data["api_secret"],
+                "google_api_key"=> $data["google_api_key"],
+                "google_api_secret"=> $data["google_api_secret"],
             ]);
             return redirect("/apisetting")->with("success","Details updated");
         }
@@ -104,8 +104,8 @@ class SettingsController extends Controller
         try
         {
             $check= DB::table("general_settings")->where("id",1)->update([
-                "fb_api_key"=> $data["api_key"],
-                "fb_api_secret"=> $data["api_secret"],
+                "fb_api_key"=> $data["fb_api_key"],
+                "fb_api_secret"=> $data["fb_api_secret"],
             ]);
             return redirect("/apisetting")->with("success","Details updated");
         }
@@ -121,8 +121,8 @@ class SettingsController extends Controller
         try
         {
             $check= DB::table("general_settings")->where("id",1)->update([
-                "instagram_api_key"=> $data["api_key"],
-                "instagram_api_secret"=> $data["api_secret"],
+                "instagram_api_key"=> $data["instagram_api_key"],
+                "instagram_api_secret"=> $data["instagram_api_secret"],
             ]);
             return redirect("/apisetting")->with("success","Details updated");
         }
@@ -138,8 +138,8 @@ class SettingsController extends Controller
         try
         {
             $check= DB::table("general_settings")->where("id",1)->update([
-                "justdial_api_key"=> $data["api_key"],
-                "justdial_api_secret"=> $data["api_secret"],
+                "justdial_api_key"=> $data["justdial_api_key"],
+                "justdial_api_secret"=> $data["justdial_api_secret"],
             ]);
             return redirect("/apisetting")->with("success","Details updated");
         }
