@@ -168,22 +168,22 @@
             fieldTypeSelect.setAttribute('required', 'required');
             fieldTypeSelect.setAttribute('name', 'documents[' + i + '][field_type]');
             
-            var inputOption = document.createElement('option');
-            inputOption.setAttribute('value', 'input');
-            inputOption.textContent = 'Input';
+            // var inputOption = document.createElement('option');
+            // inputOption.setAttribute('value', 'input');
+            // inputOption.textContent = 'Input';
             
-            var fileOption = document.createElement('option');
-            fileOption.setAttribute('value', 'file');
-            fileOption.textContent = 'File';
+            // var fileOption = document.createElement('option');
+            // fileOption.setAttribute('value', 'file');
+            // fileOption.textContent = 'File';
             
-            fieldTypeSelect.appendChild(inputOption);
-            fieldTypeSelect.appendChild(fileOption);
+            // fieldTypeSelect.appendChild(inputOption);
+            // fieldTypeSelect.appendChild(fileOption);
             
             
             var fieldContainer = document.createElement('div');
             fieldContainer.setAttribute('class', 'd-flex align-items-center mb-3');
             fieldContainer.appendChild(documentNameInput);
-            fieldContainer.appendChild(fieldTypeSelect);
+            // fieldContainer.appendChild(fieldTypeSelect);
             
             dynamicFieldsContainer.appendChild(fieldContainer);
         }

@@ -483,7 +483,7 @@
                 success: function(response) {
                     console.log(immigration_type);
                     let html = `<label class="form-label" for="">Interested</label>
-                    <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="interest_type" class="form-control">
+                    <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control">
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
                         html += `<option value="${ele.toUpperCase()}" ${ele.toUpperCase() === '{{ $data->type_of_immigration }}' ? 'selected' : ''}>${ele.toUpperCase()}</option>`;

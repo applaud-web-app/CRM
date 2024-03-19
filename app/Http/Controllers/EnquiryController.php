@@ -124,8 +124,6 @@ class EnquiryController extends Controller
     public function convertToLead(Request $request, $id)
     {
         $data = Enquiry::find($id);
-        // dd($data);
-
         $countries = DB::table('countries')->get();
         $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
         return view('Leadmanagement.ConvertEnquiry', compact('data', 'users', 'countries'));

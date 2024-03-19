@@ -151,7 +151,7 @@
                                 <div class="form-group">
                                     <label for="lastname">Password</label> <span class="text-danger">*</span>
                                     <input type="password" class="form-control" name="password"
-                                        placeholder="Enter last name">
+                                        placeholder="Enter password ">
                                     <i class="toggle-password far fa-fw fa-eye-slash"></i>
                                 </div>
                             </div>
