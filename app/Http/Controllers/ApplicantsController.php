@@ -238,9 +238,7 @@ class ApplicantsController extends Controller
         $user_id= Auth::id();
         $username=Auth::user()->username;
         $lead= Leads::where('id',$id)->select("name","assigned_to")->first();
-        $check=Leads::where("id", $id)->update([
-            "notes"=> $request->notes,
-        ]);
+        $check=Leads::where("id", $id)->update(['notes'=>$request->notes]);
         if($check)
         {
             $note=$username." requested some documents from ".$lead->name;
