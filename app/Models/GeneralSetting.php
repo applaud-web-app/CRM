@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GeneralSetting extends Model
 {
     use HasFactory;
-    protected $fillable = ['site_name','site_title','company','email','phone','address'] ;
+    protected $table="general_settings";
 }
 
 

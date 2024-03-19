@@ -15,42 +15,42 @@
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="site_name">Site Name<span class="text-danger">*</span></label>
-                                <input type="text" name="site_name" value="{{$data->site_name}}" id="site_name" class="form-control "
+                                <input type="text" name="site_name" value="@isset($data->site_name){{$data->site_name}}@endisset" id="site_name" class="form-control "
                                     placeholder="Site name">
                             </div>
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="site_title">Site Title<span class="text-danger">*</span></label>
-                                <input type="text" name="site_title" value="{{$data->site_title}}" id="site_title" class="form-control "
+                                <input type="text" name="site_title" value="@isset($data->site_title){{$data->site_title}}@endisset" id="site_title" class="form-control "
                                     placeholder="Site title">
                             </div>
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="company">Company<span class="text-danger">*</span></label>
-                                <input type="text" name="company" value="{{$data->company}}" id="company" class="form-control "
+                                <input type="text" name="company" value="@isset($data->company){{$data->company}}@endisset" id="company" class="form-control "
                                     placeholder="Company name">
                             </div>
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="email">Email<span class="text-danger">*</span></label>
-                                <input type="text" name="email" value="{{$data->email}}" id="email" class="form-control "
+                                <input type="text" name="email" value="@isset($data->email){{$data->email}}@endisset" id="email" class="form-control "
                                     placeholder="abc@gmail.com">
                             </div>
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="phone">Phone<span class="text-danger">*</span></label>
-                                <input type="number" name="phone" value="{{$data->phone}}" id="phone" class="form-control "
+                                <input type="number" name="phone" value="@isset($data->phone){{$data->phone}}@endisset" id="phone" class="form-control "
                                     placeholder="Enter phone number">
                             </div>
                         </div>
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="address">Address<span class="text-danger">*</span></label>
-                                <textarea name="address" id="address" class="form-control" placeholder="Enter Full Address" style="height: 100px;">{{$data->address}}</textarea>
+                                <textarea name="address" id="address" class="form-control" placeholder="Enter Full Address" style="height: 100px;">@isset($data->address){{$data->address}}@endisset</textarea>
                             </div>
                         </div>
 

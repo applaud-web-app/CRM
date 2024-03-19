@@ -35,20 +35,23 @@
 
                         </div>
                         <div class="card-body">
-                            <div class="alert alert-danger alert-dismissible fade show">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
-                                </button>
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h5 class="mt-1 mb-1 text-danger fw-normal">Request</h5>
-                                        <hr>
-                                        <p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi
-                                            dicta quod voluptas vel quibusdam sunt dolorum quos sed, maxime cumque cum
-                                            impedit? Fuga dolores, nisi temporibus itaque nobis eveniet voluptatum?</p>
+                            @isset($data->notes)
+                            @if ($data->notes != "" && $data->notes != NULL)
+                                <div class="alert alert-danger alert-dismissible fade show">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="btn-close"><span><i class="mdi mdi-btn-close"></i></span>
+                                    </button>
+                                    <div class="media">
+                                        <div class="media-body">
+                                            
+                                            <h5 class="mt-1 mb-1 text-danger fw-normal">Request</h5>
+                                            <hr>
+                                            <p class="mb-0">{{$data->notes}}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
+                            @endisset
                             <h4 class="card-title mb-3">Personal Information</h4>
 
 

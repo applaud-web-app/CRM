@@ -16,21 +16,25 @@
                    <div class="mb-3">
                       <div class="form-group">
                          <label for="smtpHost">SMTP Host<span class="text-danger">*</span></label>
-                         <input type="text" name="smtp_host" value="{{$data->smtp_host}}" id="smtp_host" class="form-control" value="">
+                         <input type="text" name="smtp_host" value="@isset($data->smtp_host){{$data->smtp_host}} @endisset" id="smtp_host" class="form-control">
                       </div>
                    </div>
                    <div class="mb-3">
                       <div class="form-group">
                          <label for="smtp_port">SMTP Port<span class="text-danger">*</span></label>
-                         <input type="number" name="smtp_port" value="{{$data->smtp_port}}" id="smtp_port" class="form-control" value="465" placeholder="587">
+                         <input type="number" name="smtp_port" value="@isset($data->smtp_port){{$data->smtp_port}}@endisset" id="smtp_port" class="form-control" >
                       </div>
                    </div>
                    <div class="mb-3">
                       <div class="form-group">
                          <label for="smtp_security">SMTP Security</label>
                          <select name="smtp_security" class="form-control">
-                            <option value="TLS" @if($data->smtp_security === "TLS") selected @endif>TLS</option>
-                            <option value="SSL" @if($data->smtp_security === "SSL") selected @endif>SSL</option>
+                           @php $smtp = NULL;@endphp
+                           @isset($data->smtp_security)
+                              @php $smtp = $data->smtp_security; @endphp
+                           @endisset
+                            <option value="TLS" @if($smtp === "TLS") selected @endif>TLS</option>
+                            <option value="SSL" @if($smtp === "SSL") selected @endif>SSL</option>
                             
                          </select>
                       </div>
@@ -38,13 +42,13 @@
                    <div class="mb-3">
                       <div class="form-group">
                          <label for="smtpUsername">SMTP Username<span class="text-danger">*</span></label>
-                         <input type="text" name="username" value="{{$data->username}}" id="smtpUsername" class="form-control" value="">
+                         <input type="text" name="username" value="@isset($data->username){{$data->username}} @endisset" id="smtpUsername" class="form-control">
                       </div>
                    </div>
                    <div class="">
                       <div class="form-group">
                          <label for="smtpPassword">SMTP Password<span class="text-danger">*</span></label>
-                         <input type="text" name="smtppassword" value="{{$data->smtppassword}}" id="smtpPassword" class="form-control" value="">
+                         <input type="text" name="smtppassword" value="@isset($data->smtppassword){{$data->smtppassword}} @endisset" id="smtpPassword" class="form-control">
                       </div>
                    </div>
                 </div>
@@ -78,8 +82,8 @@
                 },
                 username: {
                     required: true,
-                }
-                password: {
+                },
+                smtppassword: {
                     required: true,
                     minlength:8
                 }

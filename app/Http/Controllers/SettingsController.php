@@ -86,10 +86,12 @@ class SettingsController extends Controller
         $data=$request->except("_token");
         try
         {
+
             $check= DB::table("general_settings")->where("id",1)->update([
                 "google_api_key"=> $data["google_api_key"],
                 "google_api_secret"=> $data["google_api_secret"],
             ]);
+
             return redirect("/apisetting")->with("success","Details updated");
         }
         catch(\Exception $e)
