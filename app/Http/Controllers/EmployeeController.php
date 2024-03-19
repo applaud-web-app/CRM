@@ -146,18 +146,19 @@ class EmployeeController extends Controller
             'username' => 'required',
             'password'=>'required|min:8',
         ]);
+
         $empCode = "#".rand().time();
         $emailUnique = User::where('email', $request->email)->exists();
         $usernameUnique = User::where('username', $request->username)->exists();
         $phoneUnique = User::where('phone', $request->phone)->exists();
         if($emailUnique){
-            return redirect()->route('viewEmployee')->with('error','Email already in use');
+            return redirect()->back()->with('error','Email already in use');
         }
         else if($usernameUnique){
-            return redirect()->route('viewEmployee')->with('error','username already in use');
+            return redirect()->back()->with('error','username already in use');
         }
         else if($phoneUnique){
-            return redirect()->route('viewEmployee')->with('error','Mobile number already in use');
+            return redirect()->back()->with('error','Mobile number already in use');
         }
         else{
 
