@@ -20,9 +20,7 @@ class EmployeeController extends Controller
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
             $employee = User::withoutRole('Superadmin')->with('roles:name')->where('status', 1)->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-
-            $count_total = User::where('status', 1)
-                ->withoutRole('Superadmin')->count();
+            $count_total = User::where('status', 1)->withoutRole('Superadmin')->count();
             return Datatables::of($employee)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($enquiry) {
@@ -84,7 +82,6 @@ class EmployeeController extends Controller
             'phone' => 'required|numeric|digits:10',
             'email' => 'email|required',
             'username' => 'required',
-            'password'=>'required|min:8',
         ]);
 
         $emailUnique = User::where('email', $request->email)->where('id', '!=', $id)->doesntExist();
@@ -117,17 +114,17 @@ class EmployeeController extends Controller
             if($request->hasfile('profile'))
             {
                 $file = $request->file('profile');
-                $extenstion = $file->getClientOriginalExtension();
-                $filename = "EMP".rand().time().'.'.$extenstion;
-                $file->move('/uploads/employee/', $filename);
-                $data['profile'] = $filename;
+                $imageName =  "EMP-".rand().".".$file->extension();
+                $file->move(public_path('uploads/users/') , $imageName);  
+                $data['profile_img']  = $imageName; 
             }
+
             if ($request->filled('password')) {
                 $data['password'] = Hash::make($request->password);
             }
-            if($request->filled('profile_img')){
-                $data['profile_img'] = $request->profile_img;
-            }
+            // if($request->filled('profile_img')){
+            //     $data['profile_img'] = $request->profile_img;
+            // }
             $check = User::where("id", $id)->update($data);
             if ($check) {
                 return redirect()->route("viewEmployee")->with("success", "Employee Data Updated");
@@ -158,7 +155,7 @@ class EmployeeController extends Controller
             'password'=>'required|min:8',
         ]);
 
-        $empCode = "#".rand().time();
+        $empCode = "#".rand();
         $emailUnique = User::where('email', $request->email)->exists();
         $usernameUnique = User::where('username', $request->username)->exists();
         $phoneUnique = User::where('phone', $request->phone)->exists();
@@ -177,11 +174,11 @@ class EmployeeController extends Controller
             if($request->hasfile('profile'))
             {
                 $file = $request->file('profile');
-                $extenstion = $file->getClientOriginalExtension();
-                $filename = "EMP".rand().time().'.'.$extenstion;
-                $file->move('/uploads/employee/', $filename);
-                $data['profile'] = $filename;
+                $imageName =  "EMP-".rand().".".$file->extension();
+                $file->move(public_path('uploads/users/') , $imageName);  
+                $data['profile_img']  = $imageName; 
             }
+            
             $data['emp_code'] = $empCode;
             $data['status'] = 1;
             $user = User::create($data);

@@ -17,7 +17,10 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-12 mb-3">
-                                    <label class="" for="Staff_image">Profile Image</label>
+                                    <label class="" for="Staff_image">Profile Image</label><br/>
+                                    @isset($data->profile_img)
+                                        <img src="{{asset('/uploads/user/'.$data->profile_img.'')}}" alt="">
+                                    @endisset
                                     <div class="input-group">
                                         <div class="form-file">
                                             <input type="file" name="profile" id="Staff_image" accept="image/*"
@@ -125,7 +128,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="lastname">Password</label> <span class="text-danger">*</span>
+                                        <label for="lastname">Password</label>
                                         <input type="password" class="form-control" name="password"
                                             placeholder="Enter last name">
                                         <i class="toggle-password far fa-fw fa-eye-slash"></i>
@@ -134,11 +137,7 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
-
                 <div class="col-lg-12 ">
                     <button type="submit" class="btn btn-primary  mb-2"><i
                             class="far fa-check-square pe-2"></i>Submit</button>

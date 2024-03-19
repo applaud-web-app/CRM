@@ -27,6 +27,7 @@
                                 <thead>
                                     <tr>
                                         <th>Id</th>
+                                        <th>Code</th>
                                         <th>Name</th>
                                         <th>Role</th>
                                         <th>Mobile</th>
@@ -69,10 +70,14 @@
             },
             deferRender: true,
             columns: [{
-                    data: 'emp_code',
-                    name: 'emp_code',
-                    // orderable: false,
-                    // searchable: false
+                    data: 'DT_RowIndex',
+                    name: 'id',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data:'emp_code',
+                    name:'code'
                 },
                 
                 {
@@ -81,7 +86,7 @@
                     render: function(data, type, row, meta) {
                         if (type === 'display') {
                             if (data && data.trim() !== '') {
-                                return '<img src="/uploads/employee/' + data + '" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
+                                return '<img src="{{url("/")}}/uploads/users/' + data + '" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
                             } else {
                                 return '<img src="assets/images/user.jpg" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
                             }
