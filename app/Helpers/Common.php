@@ -8,7 +8,12 @@ use Google\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\DB;
+<<<<<<< Updated upstream
 use Spatie\Permission\Models\Role;
+=======
+use Carbon\Carbon;
+use Auth;
+>>>>>>> Stashed changes
 
 class Common
 {
@@ -209,4 +214,21 @@ class Common
             return null;
         }
     }
+
+    public static function getNotificationCount(){
+        $userId = Auth::id();
+        if(Auth::user()->hasRole('Superadmin')){
+            $unReadNotification = Activity::where('admin_read',0)->count();
+            $topNotification = Activity::latest()->take(5)->get();
+        }else{
+            $unReadNotification = Activity::where('reciver_read',0)->Where('receiver_id',$userId)->count();
+            $topNotification = Activity::Where('receiver_id',$userId)->latest()->take(5)->get();
+        }
+        return [
+            'unreadMessage'=>$unReadNotification,
+            'topNotification'=>$topNotification
+        ];
+    }
+
+
   }

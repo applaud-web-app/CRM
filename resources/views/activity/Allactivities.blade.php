@@ -33,7 +33,6 @@
                                                 <p class="mb-0 fs-14">{{ $activity->activity }}</p>
                                             </div>
                                         </div>
-
                                     </div>
                                 @endforeach
                             @endforeach

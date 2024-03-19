@@ -118,6 +118,7 @@ Route::middleware(['auth'])->group(function () {
     //email
     Route::get('/emailtemplates',[EmailController::class,'loadEmailTemplates'])->name('emailtemplates');
     Route::get('/previewbday',[EmailController::class,'previewBday'])->name('previewbday');
+    Route::get('/work-anniversary',[EmailController::class,'WorkAnniversary'])->name('WorkAnniversary');
 
     //Report Controller
     Route::get('allreports',[ReportController::class,'allReports'])->name('allreports');

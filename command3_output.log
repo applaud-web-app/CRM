@@ -1,0 +1,4 @@
+Illuminate\Database\Eloquent\Collection {#1657
+  #items: []
+  #escapeWhenCastingToString: false
+} // app\Console\Commands\WorkAnniversary.php:33

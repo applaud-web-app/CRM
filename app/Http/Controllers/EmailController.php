@@ -15,4 +15,8 @@ class EmailController extends Controller
    {
     return view("email.Birthday");
    }
+
+   public function WorkAnniversary(){
+      return view("email.work-anniversary");
+   }
 }

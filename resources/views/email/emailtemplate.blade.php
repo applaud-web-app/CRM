@@ -43,7 +43,7 @@
 													<td>2</td>
 													<td>Work Anniversary</td>
 													<td>Employees</td>
-                                                    <td><a href="{{route('previewbday')}}" class="btn btn-primary btn-sm"> <i class="fas fa-eye"></i></a></td>
+                                                    <td><a href="{{route('WorkAnniversary')}}" class="btn btn-primary btn-sm"> <i class="fas fa-eye"></i></a></td>
 												
 												</tr>
 											

@@ -12,7 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('employeebirthdayNotification:every_day')->dailyAt('7:00')->sendOutputTo('command1_output.log');
+        $schedule->command('applicantbirthdayNotification:every_day')->dailyAt('7:00')->sendOutputTo('command2_output.log');
+        $schedule->command('workAnniversary:every_day')->everyMinute()->sendOutputTo('command3_output.log');
     }
 
     /**
