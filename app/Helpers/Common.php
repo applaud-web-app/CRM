@@ -6,14 +6,8 @@ use App\Models\Activity;
 use App\Models\User;
 use Google\Client;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\DB;
-<<<<<<< Updated upstream
 use Spatie\Permission\Models\Role;
-=======
-use Carbon\Carbon;
-use Auth;
->>>>>>> Stashed changes
 
 class Common
 {
