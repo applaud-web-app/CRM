@@ -26,19 +26,17 @@
                             <table class="table display data-table" style="min-width: 100%">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                           
-                                            <th>Name</th>
-                                            <th>Role</th>
-                                            <th>Mobile</th>
-                                            <th>Email</th>
-                                            <th>Score </th>
-                                            <th>Joining Date</th>
-                                            <th>Action</th>
-                                        </tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Mobile</th>
+                                        <th>Email</th>
+                                        <th>Score</th>
+                                        <th>Joining Date</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                         </div>
@@ -71,10 +69,10 @@
             },
             deferRender: true,
             columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'id',
-                    orderable: false,
-                    searchable: false
+                    data: 'emp_code',
+                    name: 'emp_code',
+                    // orderable: false,
+                    // searchable: false
                 },
                 
                 {
@@ -83,7 +81,7 @@
                     render: function(data, type, row, meta) {
                         if (type === 'display') {
                             if (data && data.trim() !== '') {
-                                return '<img src="assets/images/' + data + '" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
+                                return '<img src="/uploads/employee/' + data + '" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
                             } else {
                                 return '<img src="assets/images/user.jpg" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
                             }
