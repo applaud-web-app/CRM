@@ -168,7 +168,7 @@ class SettingsController extends Controller
         $documents = $request->input('documents');
         
         foreach ($documents as $document) {
-            $checkPreviousData = DocumentCategory::where('name',$document['name'])->where('field_type',$document['field_type'])->where('type',$data['interested'])->where('subcategory',$data["type_of_immigration"])->first();
+            $checkPreviousData = DocumentCategory::where('name',$document['name'])->where('type',$data['interested'])->where('subcategory',$data["type_of_immigration"])->first();
 
             if($checkPreviousData){
                 return redirect()->back()->with('error','This Document Type Already Exist');
@@ -176,7 +176,6 @@ class SettingsController extends Controller
             
             $check = DB::table("document_category")->insert([
                 "name" => $document['name'],
-                "field_type" => $document['field_type'],
                 "status" => 1,
                 "type" => $data['interested'],
                 "subcategory"=> $data["type_of_immigration"],
