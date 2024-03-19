@@ -15,25 +15,16 @@
                             <h4 class="card-title">Lead Information</h4>
                         </div>
                         <div class="card-body">
-
                             <div class="row">
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="name">Name</label>
+                                        <label for="name">Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="name" placeholder="Enter Name">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="lcode">Code</label>
-                                        <input type="text" class="form-control" name="code"
-                                            placeholder="Enter Lead Code">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="age">Candidate Age</label>
+                                        <label for="age">Candidate Age <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="age" placeholder="Enter Value">
                                     </div>
                                 </div>
@@ -45,27 +36,25 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="emailaddress">Email Address</label>
+                                        <label for="emailaddress">Email Address <span class="text-danger">*</span></label>
                                         <input type="email" class="form-control" name="email"
                                             placeholder="Enter Email Address">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="emailaddress">Mobile number</label>
+                                        <label for="emailaddress">Mobile number <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="mobile"
                                             placeholder="Enter Mobile number">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="dob">Date of Birth</label>
+                                        <label for="dob">Date of Birth <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="dob"
                                             placeholder="Enter Date of Birth">
                                     </div>
                                 </div>
-
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="marital">Martial Status</label>
@@ -73,7 +62,6 @@
                                             <option value="" selected>--Choose Option--</option>
                                             <option value="">Married</option>
                                             <option value="">Unmarried</option>
-
                                         </select>
                                     </div>
                                 </div>
@@ -83,16 +71,7 @@
                                         <textarea name="description" class="form-control" id="" placeholder="Enter Drescription" style="height:100px;"></textarea>
                                     </div>
                                 </div>
-
-
-
-
-
                             </div>
-
-
-
-
                         </div>
                     </div>
                     <div class="card h-auto">
@@ -101,19 +80,13 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="address">Address</label>
+                                        <label for="address">Address <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="address"
                                             placeholder="Enter Address">
                                     </div>
                                 </div>
-
-
-
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="country">Country</label>
@@ -124,7 +97,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="state">State</label>
@@ -142,8 +114,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="zip">Zip Code</label>
@@ -162,12 +132,11 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="type">Type</label>
+                                        <label for="type">Type </label>
                                         <select name="lead_type" class="form-control">
                                             <option value="Hot leads">Hot leads</option>
                                             <option value="Cold leads">Cold leads</option>
                                             <option value="Warm leads">Warm leads</option>
-
                                         </select>
                                     </div>
                                 </div>
@@ -185,10 +154,9 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="source">Sources</label>
+                                        <label for="source">Sources <span class="text-danger">*</span></label>
                                         <select name="source" class="form-control">
                                             <option value="Google">Google</option>
                                             <option value="Facebook">Facebook</option>
@@ -201,7 +169,7 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="assigned_to">Assigned To</label>
+                                        <label for="assigned_to">Assigned To <span class="text-danger">*</span></label>
                                         <select name="assigned_to" class="form-control">
                                             @isset($users)
                                                 @foreach ($users as $user)
@@ -226,47 +194,45 @@
                                             placeholder="Enter date">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                     <div class="card h-auto">
                         <div class="card-header">
                             <h4 class="card-title">Interested</h4>
                         </div>
-                        <div class="card-body" >
-                            <div class="row" >
+                        <div class="card-body">
+                            <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 mb-3">
                                     <div class="form-group">
-                                        <label class="form-label" for="interested">Interested</label>
+                                        <label class="form-label" for="interested">Interested <span
+                                                class="text-danger">*</span></label>
                                         @php
                                             $getInterestType = array_keys(\Common::immigration());
                                         @endphp
-                                        <select name="interested" id="interested" onchange="getImmigrationLists(this)" class="form-control">
+                                        <select name="interested" id="interested" onchange="getImmigrationLists(this)"
+                                            class="form-control">
                                             <option value="">Select</option>
                                             @foreach ($getInterestType as $item)
-                                                <option value="{{strtoupper($item)}}">{{strtoupper($item)}}</option>
+                                                <option value="{{ strtoupper($item) }}">{{ strtoupper($item) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-4 col-sm-4 mb-3" >
+                                <div class="col-lg-4 col-md-4 col-sm-4 mb-3">
                                     <div class="form-group" id="interestType">
-                                        
+
                                     </div>
                                 </div>
 
                                 <div class="row" id="fields"></div>
-                                
+
                             </div>
                         </div>
                     </div>
                 </div>
         </div>
-
-
         <div class="col-lg-12 ">
             <button type="submit" class="btn btn-primary  mb-2"><i class="far fa-check-square pe-2"></i>Submit</button>
             <button type="button" class="btn btn-dark  mb-2"><i class="far fa-window-close pe-2"></i>Cancel
@@ -315,17 +281,11 @@
                     assigned_to: {
                         required: true
                     },
-                    code: {
-                        required: true
-                    },
                     address: {
                         required: true
                     },
-                    interested:{
-                        required:true
-                    },
-                    type_of_immigration:{
-                        required:true
+                    type_of_immigration: {
+                        required: true
                     }
                 },
                 messages: {
@@ -395,9 +355,8 @@
         }
 
         //get immigration lists
-        function getImmigrationLists(selectElement)
-        {
-            var immigration_type=selectElement.value;
+        function getImmigrationLists(selectElement) {
+            var immigration_type = selectElement.value;
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",
@@ -408,7 +367,7 @@
                 datatype: JSON,
                 success: function(response) {
                     console.log(immigration_type);
-                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    let html = `<label class="form-label" for="">Type of Immigration <span class="text-danger">*</span></label>
                     <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control">
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
@@ -422,20 +381,20 @@
         }
 
         //get immigration->list->fields
-        function getfieldcount(selectElement,immigrationType){
-            var fieldlist=selectElement.value;
+        function getfieldcount(selectElement, immigrationType) {
+            var fieldlist = selectElement.value;
             console.log(immigrationType);
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",
                 data: {
                     fields: fieldlist,
-                    field_type:immigrationType,
+                    field_type: immigrationType,
                     _token: "{{ csrf_token() }}",
                 },
                 datatype: JSON,
                 success: function(response) {
-                    let html=``;
+                    let html = ``;
                     response.forEach(function(ele) {
                         html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
                                         <input type="text" class="form-control mb-2" name="${ele}"
@@ -446,7 +405,6 @@
                 }
             });
         }
-
     </script>
 
     {{-- <script>

@@ -109,17 +109,26 @@
             </div>
 
             <div class="row">
-
-                <div class="col-lg-6  col-md-6 col-sm-6 ">
+                <div class="col-lg-4 col-md-6 col-sm-6 ">
                     <div class="card">
-                        <div class="card-header border-0 flex-wrap pb-0">
+                        <div class="card-header border-1 flex-wrap pb-0">
                             <div class="mb-sm-0 mb-2">
-                                <h4 class="fs-20">Today’s Enquiry Data</h4>
+                                <h4 class="fs-20">Today’s Overview</h4>
                             </div>
-
                         </div>
-                        <div class="card-body py-0">
+                        <div class="card-body">
                             <div id="enquiry"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-6 col-sm-6 ">
+                    <div class="card">
+                        <div class="card-header border-1 flex-wrap pb-0">
+                            <div class="mb-sm-0 mb-2">
+                                <h4 class="fs-20">Exployee's Overview</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
                         </div>
                     </div>
                 </div>

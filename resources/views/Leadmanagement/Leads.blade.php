@@ -27,9 +27,8 @@
                                 <table class="table display data-table">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                #
-                                            </th>
+                                            <th>#</th>
+                                            <th>Code</th>
                                             <th>Name</th>
                                             <th>Contact Info</th>
                                             <th>Value</th>
@@ -142,6 +141,10 @@
                         searchable: false
                     },
                     {
+                        data:'code',
+                        name:'code'
+                    },
+                    {
                         data: 'name',
                         name: 'name',
                         width: '100px',
@@ -214,8 +217,8 @@
                         '<option value="Close" ' + (data.status === "Close" ? "selected" : "") +
                         '>Close</option>' +
                         '</select>';
-                    $('td:eq(7)', row).html(leadTypeSelect);
-                    $('td:eq(8)', row).html(statusSelect);
+                    $('td:eq(8)', row).html(leadTypeSelect);
+                    $('td:eq(9)', row).html(statusSelect);
                 },
             });
         });

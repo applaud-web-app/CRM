@@ -272,9 +272,11 @@ class EnquiryController extends Controller
     {   $common=new Common();
         $data = $request->except("_token");
         $id = Auth::id();
+        $leadCode = "#".rand();
         $username = Auth::user()->username;
         $data["lead_mode"] = "added";
         $data["assigned_by"] = $id;
+        $data["code"] = $leadCode;
         $check = Leads::create($data);
         if ($check) {
             $note="New Lead added manually by ".$username;

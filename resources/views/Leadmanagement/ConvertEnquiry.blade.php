@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="dob">Date of Birth</label>
+                                        <label for="dob">Date of Birth <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" value="" name="dob"
                                             placeholder="Enter Date of Birth">
                                     </div>
