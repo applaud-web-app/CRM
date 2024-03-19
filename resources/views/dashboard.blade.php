@@ -1,8 +1,8 @@
 @extends('master')
 @section('main-content')
     <!--**********************************
-                Content body start
-            ***********************************-->
+                    Content body start
+                ***********************************-->
     <div class="content-body">
         <!-- row -->
         <div class="container-fluid">
@@ -33,7 +33,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Enquiry</p>
-                                    <h4 class="mb-0">{{$enquiry > 10 ? $enquiry : "0".$enquiry}}</h4>
+                                    <h4 class="mb-0">{{ $data['enquiry'] > 10 ? $data['enquiry'] : '0' . $data['enquiry'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Leads</p>
-                                    <h4 class="mb-0">{{$leads > 10 ? $leads : "0".$leads}}</h4>
+                                    <h4 class="mb-0">{{ $data['leads'] > 10 ? $data['leads'] : '0' . $data['leads'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Approved Leads</p>
-                                    <h4 class="mb-0">{{$approvedLeads > 10 ? $approvedLeads : "0".$approvedLeads}}</h4>
+                                    <h4 class="mb-0">{{ $data['approved'] > 10 ? $data['approved'] : '0' . $data['approved'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Pending Leads</p>
-                                    <h4 class="mb-0">{{$pendingLeads > 10 ? $pendingLeads : "0".$pendingLeads}}</h4>
+                                    <h4 class="mb-0">{{ $data['pending'] > 10 ? $data['pending'] : '0' . $data['pending'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
 
             <div class="row">
 
-                <div class="col-xl-12 col-md-12">
+                <div class="col-lg-6  col-md-6 col-sm-6 ">
                     <div class="card">
                         <div class="card-header border-0 flex-wrap pb-0">
                             <div class="mb-sm-0 mb-2">
@@ -120,7 +120,7 @@
 
                         </div>
                         <div class="card-body py-0">
-                            <div id="revenueChart" class="revenueChart"></div>
+                            <div id="enquiry"></div>
                         </div>
                     </div>
                 </div>
@@ -128,60 +128,62 @@
         </div>
     </div>
     <!--**********************************
-                Content body end
-            ***********************************-->
+                    Content body end
+                ***********************************-->
 
-            <!-- Modal -->
-<div class="modal fade" id="notificationPermissionModal" tabindex="-1" role="dialog" aria-labelledby="notificationPermissionModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="notificationPermissionModalLabel">Notification Permission</h5>
+    <!-- Modal -->
+    <div class="modal fade" id="notificationPermissionModal" tabindex="-1" role="dialog"
+        aria-labelledby="notificationPermissionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationPermissionModalLabel">Notification Permission</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Do you allow us to send you notifications?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()"
+                        data-dismiss="modal">Deny</button>
+                    <button type="button" class="btn btn-primary" onclick="startFCM()"
+                        id="allowNotificationBtn">Allow</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <p>Do you allow us to send you notifications?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Deny</button>
-          <button type="button" class="btn btn-primary" onclick="startFCM()" id="allowNotificationBtn">Allow</button>
-        </div>
-      </div>
     </div>
-  </div>
 @endsection
 
 @push('scripts')
-{{-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script> --}}
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-<script>
-$(document).ready(function() {
-    var deviceToken = '{{ Auth::user()->device_token }}';
-    if (!deviceToken) {
-        $('#notificationPermissionModal').modal('show');
-    }
-});
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+    <script>
+        $(document).ready(function() {
+            var deviceToken = '{{ Auth::user()->device_token }}';
+            if (!deviceToken) {
+                $('#notificationPermissionModal').modal('show');
+            }
+        });
 
-    var firebaseConfig = {
-        apiKey: "AIzaSyB9FzIUo3bBKunVLVqi1o0M9gVqeX_VoHo",
-        authDomain: "laravelpushnotification-78b76.firebaseapp.com",
-        projectId: "laravelpushnotification-78b76",
-        storageBucket: "laravelpushnotification-78b76.appspot.com",
-        messagingSenderId: "724240981380",
-        appId: "1:724240981380:web:e5272851af03d4c37e51d1",
-        measurementId: "G-TSQ5CB26NT"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
+        var firebaseConfig = {
+            apiKey: "AIzaSyB9FzIUo3bBKunVLVqi1o0M9gVqeX_VoHo",
+            authDomain: "laravelpushnotification-78b76.firebaseapp.com",
+            projectId: "laravelpushnotification-78b76",
+            storageBucket: "laravelpushnotification-78b76.appspot.com",
+            messagingSenderId: "724240981380",
+            appId: "1:724240981380:web:e5272851af03d4c37e51d1",
+            measurementId: "G-TSQ5CB26NT"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
 
         function startFCM() {
-        messaging
-            .requestPermission()
-            .then(function() {
-                return messaging.getToken()
-            }).then(function(response) {
-                console.log(response);
-                $('#notificationPermissionModal').modal('hide');
+            messaging
+                .requestPermission()
+                .then(function() {
+                    return messaging.getToken()
+                }).then(function(response) {
+                    console.log(response);
+                    $('#notificationPermissionModal').modal('hide');
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -201,14 +203,55 @@ $(document).ready(function() {
                             console.log(error);
                         },
                     });
-                    }).catch(function(error) {
-                        alert(error);
-            });
+                }).catch(function(error) {
+                    alert(error);
+                });
         }
-        function closeModal()
-        {
+
+        function closeModal() {
             $('#notificationPermissionModal').modal('hide');
         }
-        </script>
+    </script>
 
+
+    <script>
+        todayEnquiry={{$data['todayenquiry']}};
+        todayleads={{$data['todayleads']}};
+        todayapprovedleads={{$data['todayapprovedleads']}};
+        todayrejectedleads={{$data['todayrejectedleads']}};
+
+          var options = {
+          series: [todayEnquiry,todayleads,todayapprovedleads,todayrejectedleads],
+          labels: ['Today Enquiry', 'Today Leads', 'Today Approved Leads', 'Today Rejected Leads'],
+          chart: {
+          type: 'pie',
+            sparkline: {
+            enabled: true
+            }
+        },
+        stroke: {
+          width:1
+        },
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+        },
+        fill: {
+          opacity: 1
+        },
+        
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+          }
+        }]
+        };
+        
+        var chart = new ApexCharts(document.querySelector("#enquiry"), options);
+        chart.render();
+    </script>
 @endpush

@@ -12,11 +12,25 @@ class ReportController extends Controller
     public function allReports()
     {
         $userId = Auth::id();
-        $enquirydata = Enquiry::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('assigned_by', $userId)
+        if(Auth::user()->hasRole("Superadmin")){
+            $enquirydata = Enquiry::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
+            $leadsData = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, proccess_status as status')
+            ->addSelect('proccess_status')
+            ->whereIn('proccess_status', ['created', 'proccessing', 'rejected', 'approved'])
+            ->groupBy('month', 'proccess_status')
+            ->orderBy('month')
+            ->get();
+        }
+        else
+        {
+            $enquirydata = Enquiry::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('assigned_by', $userId)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()->toArray();
 
             $leadsData = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, proccess_status as status')
             ->addSelect('proccess_status')
@@ -24,26 +38,10 @@ class ReportController extends Controller
             ->whereIn('proccess_status', ['created', 'proccessing', 'rejected', 'approved'])
             ->groupBy('month', 'proccess_status')
             ->orderBy('month')
-            ->get();
-        // dd($leadsData);
-        json_encode($leadsData);
+            ->get()->toArray();
+        }
         return view('reports.allreports', compact('enquirydata','leadsData'));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function leadReports()
     {

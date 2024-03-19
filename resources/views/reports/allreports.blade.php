@@ -40,7 +40,6 @@
                                 </div>
                             </div>
                         </div>
-                        <button onclick="startFCM()" class="button "> Click</button>
                     </div>
                 </div>
             </div>
@@ -50,36 +49,59 @@
 
 @push('scripts')
     <script>
-        
-        // const barChart_3 = document.getElementById("barreport").getContext('2d');
-		// 	//generate gradient
-			
+        //bar chart
+        const barChart_1 = document.getElementById("barreport").getContext('2d');
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+        ];
 
-		// 	new Chart(barChart_3, {
-		// 		type: 'bar',
-		// 		data: barChartData,
-		// 		options: {
-		// 			legend: {
-		// 				display: false
-		// 			}, 
-		// 			title: {
-		// 				display: false
-		// 			},
-		// 			tooltips: {
-		// 				mode: 'index',
-		// 				intersect: false
-		// 			},
-		// 			responsive: true,
-		// 			scales: {
-		// 				xAxes: [{
-		// 					stacked: true,
-		// 				}],
-		// 				yAxes: [{
-		// 					stacked: true
-		// 				}]
-		// 			}
-		// 		}
-		// 	});
+        const monthdata = {};
+        @foreach ($leadsData as $data)
+            var month = "{{ date('F', strtotime($data->month)) }}";
+            if (monthdata.hasOwnProperty(month)) {
+                monthdata[month] += {{ $data->count }};
+            } else {
+                monthdata[month] = {{ $data->count }};
+            }
+        @endforeach
+
+        console.log(monthdata);
+        const leadlabels = [];
+        const leaddata = [];
+        months.forEach(month => {
+            leadlabels.push(month);
+            leaddata.push(monthdata[month] || 0); 
+        });
+        new Chart(barChart_1, {
+				type: 'bar',
+				data: {
+					defaultFontFamily: 'Poppins',
+					labels: months,
+					datasets: [
+						{
+							label: "My First dataset",
+							data: leaddata,
+							borderColor: 'rgba(253, 104, 62, 1)',
+							borderWidth: "0",
+							backgroundColor: 'rgba(253, 104, 62, 1)'
+						}
+					]
+				},
+				options: {
+					legend: false, 
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+						xAxes: [{
+							barPercentage: 0.5
+						}]
+					}
+				}
+			});
+        // bar chart ends here
 
 
 
@@ -102,8 +124,6 @@
             labels.push(month);
             data.push(monthcount[month] || 0); 
         });
-
-
         new Chart(lineChart_1, {
             type: 'line',
             data: {
@@ -137,52 +157,7 @@
                 }
             }
         });
+        // line chart ends here
+
     </script>
-
-<script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-<script>
-    var firebaseConfig = {
-        apiKey: "AIzaSyB9FzIUo3bBKunVLVqi1o0M9gVqeX_VoHo",
-        authDomain: "laravelpushnotification-78b76.firebaseapp.com",
-        projectId: "laravelpushnotification-78b76",
-        storageBucket: "laravelpushnotification-78b76.appspot.com",
-        messagingSenderId: "724240981380",
-        appId: "1:724240981380:web:e5272851af03d4c37e51d1",
-        measurementId: "G-TSQ5CB26NT"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
-
-    function startFCM() {
-        messaging
-            .requestPermission()
-            .then(function() {
-                return messaging.getToken()
-            }).then(function(response) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    });
-                    $.ajax({
-                        url: '{{ route('saveToken') }}',
-                        type: 'POST',
-                        data: {
-                            notify_token: response
-                        },
-                        dataType: 'JSON',
-                        success: function(response) {
-                            console.log(response);
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        },
-                    });
-                    }).catch(function(error) {
-                        alert(error);
-            });
-        }
-        </script>
 @endpush
