@@ -152,13 +152,13 @@ class EmployeeController extends Controller
         $usernameUnique = User::where('username', $request->username)->exists();
         $phoneUnique = User::where('phone', $request->phone)->exists();
         if($emailUnique){
-            return redirect()->back()->with('error','Email already in use');
+            return redirect()->back()->with('error','Email Already In Use');
         }
         else if($usernameUnique){
-            return redirect()->back()->with('error','username already in use');
+            return redirect()->back()->with('error','Username Already In Use');
         }
         else if($phoneUnique){
-            return redirect()->back()->with('error','Mobile number already in use');
+            return redirect()->back()->with('error','Mobile Number Already In Use');
         }
         else{
 
