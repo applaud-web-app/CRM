@@ -146,13 +146,27 @@ class EnquiryController extends Controller
         $check = Leads::create($data);
         if ($check) {
             $note="Enquiry converted into lead by ".$username;
-            Activity::create([
-                "sender_id" => $userid,
-                "receiver_id" => $data['assigned_to'],
-                "activity" => $note,
-                "done_by" => $username,
-                "date" => date('y-m-d')
-            ]);
+            if(Auth::user()->hasRole('Superadmin')) {
+                Activity::create([
+                    "sender_id" => $userid,
+                    "receiver_id" => $data['assigned_to'],
+                    "activity" => $note,
+                    "done_by" => $username,
+                    "admin_read"=>1,
+                    "date" => date('y-m-d')
+                ]);
+            }
+            else
+            {
+                Activity::create([
+                    "sender_id" => $userid,
+                    "receiver_id" => $data['assigned_to'],
+                    "activity" => $note,
+                    "done_by" => $username,
+                    "admin_read"=>0,
+                    "date" => date('y-m-d')
+                ]);
+            }
             $common->sendNotification($userid,$data['assigned_to'],$note);
             Enquiry::where('id', $id)->update(['status' => 0]);
             return redirect()->route("leads")->with("success", "Enquiry Converted into Lead");
@@ -266,15 +280,28 @@ class EnquiryController extends Controller
         $check = Leads::create($data);
         if ($check) {
             $note="New Lead added manually by ".$username;
-            Activity::create([
-                "sender_id" => $id,
-                "receiver_id" => $data['assigned_to'],
-                "activity" =>$note,
-                "done_by" => $username,
-                "date" => date('y-m-d')
-                
-            ]);
-
+            if(Auth::user()->hasRole('Superadmin')) 
+            {
+                Activity::create([
+                    "sender_id" => $id,
+                    "receiver_id" => $data['assigned_to'],
+                    "activity" =>$note,
+                    "done_by" => $username,
+                    "admin_read"=>1,
+                    "date" => date('y-m-d')
+                ]);
+            }
+            else
+            {
+                Activity::create([
+                    "sender_id" => $id,
+                    "receiver_id" => $data['assigned_to'],
+                    "activity" =>$note,
+                    "done_by" => $username,
+                    "admin_read"=>0,
+                    "date" => date('y-m-d')
+                ]);
+            }
             $common->sendNotification($id,$data['assigned_to'],$note);
             return redirect()->route("leads")->with("success", "New Lead created");
         } else {
@@ -331,13 +358,28 @@ class EnquiryController extends Controller
                 $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing']);
                 if ($check) {
                     $note="Lead with name " . $lead->name . " was sent for approval";
-                    Activity::create([
-                        "sender_id" => $userid,
-                        "receiver_id" => $lead->assigned_to,
-                        "activity" => $note,
-                        "done_by" => $username,
-                        "date" => date('y-m-d')
-                    ]);
+                    if(Auth::user()->hasRole('Superadmin')) 
+                    {
+                        Activity::create([
+                            "sender_id" => $userid,
+                            "receiver_id" => $lead->assigned_to,
+                            "activity" => $note,
+                            "done_by" => $username,
+                            "admin_read"=>1,
+                            "date" => date('y-m-d')
+                        ]);
+                    }
+                    else
+                    {
+                        Activity::create([
+                            "sender_id" => $userid,
+                            "receiver_id" => $lead->assigned_to,
+                            "activity" => $note,
+                            "done_by" => $username,
+                            "admin_read"=>0,
+                            "date" => date('y-m-d')
+                        ]);
+                    }
                     $common->sendNotification($userid,$lead->assigned_to, $note);
                     return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
                 } else

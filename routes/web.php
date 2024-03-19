@@ -30,7 +30,7 @@ Route::get('/forget-password',[AuthController::class,'forgetPassword'])->name('f
 Route::post('/forget-password',[AuthController::class,'postforgetPassword'])->name('forgetPassword');
 Route::get('/error',[AuthController::class,'wrongAccess'])->name('error');
 
-Route::middleware(['auth',"role:Superadmin"])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
     Route::get('/', [DashboardController::class,'index'])->name('dashboard');

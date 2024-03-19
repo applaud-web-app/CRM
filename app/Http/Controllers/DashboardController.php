@@ -46,11 +46,23 @@ class DashboardController extends Controller
             $todayleads= Leads::whereDate('created_at', $currentDate)->where('assigned_by',$userId)->count();
             $todayapprovedleads= Leads::whereDate('created_at', $currentDate)->where('assigned_by',$userId)->where('proccess_status', 'approved')->count();
             $todayrejectedleads= Leads::whereDate('created_at', $currentDate)->where('assigned_by',$userId)->where('proccess_status', 'rejected')->count();
-
+            
             $enquiry = Enquiry::where('assigned_by', $userId)->where('is_deleted', 0)->count();
             $leads = Leads::where('assigned_by', $userId)->where('is_deleted', 0)->count();
             $approvedLeads = Leads::where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'approved')->count();
             $pendingLeads = Leads::where('assigned_by', $userId)->where('is_deleted', 0)->whereIn('proccess_status', ['proccessing', 'created'])->count();
+            $data=([
+                'todayenquiry'=> $todayenquiry,
+                'todayleads'=> $todayleads,
+                'todayapprovedleads'=> $todayapprovedleads,
+                'todayrejectedleads'=> $todayrejectedleads,
+
+                'pending'=> $pendingLeads,
+                'approved'=> $approvedLeads,
+                'leads'=>$leads,
+                'enquiry'=>$enquiry
+            ]);
+
         }
         return view('dashboard', compact('data'));
     }

@@ -78,11 +78,15 @@
                 },
                 
                 {
-                    data: 'profile_img', 
+                    data: 'profile_img',
                     name: 'profile_img',
                     render: function(data, type, row, meta) {
-                        if (type === 'display' && data) {
-                            return '<img src="assets/images/' + data + '" class="rounded-circle" style="width:50px;height:50px;">'+" "+row.first_name ;
+                        if (type === 'display') {
+                            if (data && data.trim() !== '') {
+                                return '<img src="assets/images/' + data + '" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
+                            } else {
+                                return '<img src="assets/images/user.jpg" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
+                            }
                         } else {
                             return row.first_name + ' ' + row.last_name;
                         }
@@ -118,11 +122,6 @@
     });
 </script>
 
-
-
-
-
-{{-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 <script>
@@ -138,36 +137,7 @@
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
 
-    function startFCM() {
-        messaging
-            .requestPermission()
-            .then(function() {
-                return messaging.getToken()
-            })
-            .then(function(response) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-                $.ajax({
-                    url: '{{ route('saveToken') }}',
-                    type: 'POST',
-                    data: {
-                        notify_token: response
-                    },
-                    dataType: 'JSON',
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    },
-                });
-             }).catch(function(error) {
-                alert(error);
-            });
-    }--}}
+    
 
     messaging.onMessage(function(payload) {
         console.log(payload.notification.data.url);

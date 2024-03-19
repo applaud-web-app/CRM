@@ -79,7 +79,7 @@
 					labels: months,
 					datasets: [
 						{
-							label: "My First dataset",
+							label: "Leads",
 							data: leaddata,
 							borderColor: 'rgba(253, 104, 62, 1)',
 							borderWidth: "0",

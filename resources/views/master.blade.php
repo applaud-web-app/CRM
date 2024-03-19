@@ -77,11 +77,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="nav-item">
-                                <div class="input-group search-area">
-                                    <input type="text" class="form-control" placeholder="Search here">
-                                    <span class="input-group-text"><a href="javascript:void(0)"><i
-                                                class="flaticon-381-search-2"></i></a></span>
-                                </div>
+                                
                             </div>
                         </div>
                         <ul class="navbar-nav header-right">
@@ -228,15 +224,11 @@
         <div class="deznav">
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
-                    @role(['Superadmin','Filler','Counsellor','Telecaller','Manager'])
                         <li><a class=" ai-icon" href="{{route('dashboard')}}" aria-expanded="false">
                                 <i class="fas fa-tachometer-alt"></i>
                                 <span class="nav-text">Dashboard</span>
                             </a>
                         </li>
-                    @endrole
-
-                    @role(['Superadmin','Counsellor','Manager'])
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-chart-bar"></i>
                             <span class="nav-text">Lead Management</span>
@@ -249,10 +241,6 @@
 
                         </ul>
                     </li>
-                    @endrole
-
-
-                    @role(['Counsellor','filler','Superadmin'])
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-user-shield"></i>
                             <span class="nav-text">Applicants</span>
@@ -264,10 +252,10 @@
 
                         </ul>
                     </li>
-                    @endrole
+                    
 
 
-                    @role(['Superadmin','Manager'])
+                  
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-users-cog"></i>
                             <span class="nav-text">Human Resources</span>
@@ -280,7 +268,7 @@
 
                         </ul>
                     </li>
-                    @endrole
+                    
                     <li>
                         <a href="{{route('activities')}}" class="ai-icon" aria-expanded="false">
                             <i class="flaticon-013-checkmark"></i>

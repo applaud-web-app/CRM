@@ -5,8 +5,10 @@ namespace App\Helpers;
 use App\Models\Activity;
 use App\Models\User;
 use Google\Client;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\DB;
-
+use Spatie\Permission\Models\Role;
 
 class Common
 {
@@ -102,70 +104,96 @@ class Common
 
     public function sendNotification($sender,$receiver,$notes)
     {
+        
         $accessToken = $this->getAccessToken();
         if (!$accessToken) {
             die('Failed to obtain access token');
         }
-
-        $fcmtoken = DB::table('activities')
-        ->where('activities.sender_id', $sender)
-        ->where('activities.receiver_id', $receiver)
-        ->join('users as sender', 'activities.sender_id', '=', 'sender.id')
-        ->join('users as receiver', 'activities.receiver_id', '=', 'receiver.id')
-        ->select('sender.device_token as sender_token', 'receiver.device_token as receiver_token')
-        ->first();
-        $image = asset('assets/images/logo.jpg');
-        $url = 'https://fcm.googleapis.com/v1/projects/laravelpushnotification-78b76/messages:send';
-        
-        foreach ($fcmtoken as $token) {
-            $data = [
-                "message" => [
-                    "token" => $token,
-                    "webpush" => [
-                        "notification" => [
-                            "title" =>"CRM Notification",
-                            "body" => $notes,
-                            "image" => $image,
-                            // "actions" => [
-                            //     [
-                            //         "action" => "open_url",
-                            //         "title" => "Open Website",
-                            //     ]
-                            //     ],
-                            // "data" => [
-                            //         "url" => "https://google.com"
-                            //     ]
-                        ],
-                    ]
-                ]
-            ];
-
-            $notify_data = json_encode($data);
-            $headers = [
-                'Authorization: Bearer ' . $accessToken,
-                'Content-Type: application/json',
-            ];
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $notify_data);
-            $result = curl_exec($ch);
-
-            if ($result === false) {
-                die('curl failed' . curl_error($ch));
-            } else {
-                print_r(json_decode($result, true));
-            }
-            curl_close($ch);
+    
+        if(!Auth::user()->hasRole('Superadmin')) {
+            
+            $superadminToken = Role::where('name', 'Superadmin')->firstOrFail() ->users 
+            ->pluck('device_token')
+            ->first();
+            $fcmtoken = DB::table('activities')
+            ->where('activities.sender_id', $sender)
+            ->where('activities.receiver_id', $receiver)
+            ->join('users as sender', 'activities.sender_id', '=', 'sender.id')
+            ->join('users as receiver', 'activities.receiver_id', '=', 'receiver.id')
+            ->select('sender.device_token as sender_token', 'receiver.device_token as receiver_token')
+            ->first();  
+            $tokens=([
+                'sender_token'=> $fcmtoken->sender_token,
+                'receiver_token'=> $fcmtoken->receiver_token,
+                'admin_token'=> $superadminToken
+            ]);
         }
-        
+        else
+        {
+            $fcmtoken = DB::table('activities')
+            ->where('activities.sender_id', $sender)
+            ->where('activities.receiver_id', $receiver)
+            ->join('users as sender', 'activities.sender_id', '=', 'sender.id')
+            ->join('users as receiver', 'activities.receiver_id', '=', 'receiver.id')
+            ->select('sender.device_token as sender_token', 'receiver.device_token as receiver_token')
+            ->first();
+            $tokens=([
+                'sender_token'=> $fcmtoken->sender_token,
+                'receiver_token'=> $fcmtoken->receiver_token,
+            ]);
+        }
+            $image = asset('assets/images/logo.jpg');
+            $url = 'https://fcm.googleapis.com/v1/projects/laravelpushnotification-78b76/messages:send';
+            
+            foreach ($tokens as $token) {
+                $data = [
+                    "message" => [
+                        "token" => $token,
+                        "webpush" => [
+                            "notification" => [
+                                "title" =>"CRM Notification",
+                                "body" => $notes,
+                                "image" => $image,
+                                // "actions" => [
+                                //     [
+                                //         "action" => "open_url",
+                                //         "title" => "Open Website",
+                                //     ]
+                                //     ],
+                                // "data" => [
+                                //         "url" => "https://google.com"
+                                //     ]
+                            ],
+                        ]
+                    ]
+                ];
 
+                $notify_data = json_encode($data);
+                $headers = [
+                    'Authorization: Bearer ' . $accessToken,
+                    'Content-Type: application/json',
+                ];
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $notify_data);
+                $result = curl_exec($ch);
+
+                if ($result === false) {
+                    die('curl failed' . curl_error($ch));
+                } else {
+                    print_r(json_decode($result, true));
+                }
+                curl_close($ch);
+            }
     }
+
+    
     private function getAccessToken()
     {
         $serviceAccountFile = public_path('service-account.json');

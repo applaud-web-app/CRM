@@ -114,8 +114,7 @@
                     <div class="card">
                         <div class="card-header border-0 flex-wrap pb-0">
                             <div class="mb-sm-0 mb-2">
-                                <h4 class="fs-20">Today’s Enquiry</h4>
-                                <span>Lorem ipsum dolor sit amet, consectetur</span>
+                                <h4 class="fs-20">Today’s Enquiry Data</h4>
                             </div>
 
                         </div>
@@ -219,10 +218,12 @@
         todayleads={{$data['todayleads']}};
         todayapprovedleads={{$data['todayapprovedleads']}};
         todayrejectedleads={{$data['todayrejectedleads']}};
-
+        if (todayEnquiry === 0 && todayleads === 0 && todayapprovedleads === 0 && todayrejectedleads === 0) {
+            document.querySelector("#enquiry").innerHTML = "No new data available for today";
+        } else {
           var options = {
           series: [todayEnquiry,todayleads,todayapprovedleads,todayrejectedleads],
-          labels: ['Today Enquiry', 'Today Leads', 'Today Approved Leads', 'Today Rejected Leads'],
+          labels: ['Enquiry', 'Converted to Leads', 'Approved Leads', 'Rejected Leads'],
           chart: {
           type: 'pie',
             sparkline: {
@@ -253,5 +254,6 @@
         
         var chart = new ApexCharts(document.querySelector("#enquiry"), options);
         chart.render();
+    }
     </script>
 @endpush

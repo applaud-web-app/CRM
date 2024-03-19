@@ -23,10 +23,10 @@ class ApplicantsController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $leads = Leads::where("is_deleted", 1)
+            $leads = Leads::where("is_deleted", 0)
                 ->where("proccess_status", "proccessing")
                 ->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-            $count_total = Leads::where('is_deleted', 1)->where('proccess_status', "proccessing")->count();
+            $count_total = Leads::where('is_deleted', 0)->where('proccess_status', "proccessing")->count();
             return DataTables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('contacted_date', function ($dateformat) {
@@ -89,14 +89,28 @@ class ApplicantsController extends Controller
         if($approval)
         {       
             $note="Lead with name ".$lead->name." was rejected by ".$username;
-            Activity::create([
-            "sender_id"=>$user_id,
-            "receiver_id"=>$lead->assigned_to,
-            "activity"=>$note,
-            "done_by"=>$username,
-            "date" => date('y-m-d')
-        ]);
-
+            if(Auth::user()->hasRole('Superadmin')) 
+            {
+                Activity::create([
+                    "sender_id"=>$user_id,
+                    "receiver_id"=>$lead->assigned_to,
+                    "activity"=>$note,
+                    "done_by"=>$username,
+                    "admin_read"=> 1,
+                    "date" => date('y-m-d')
+                ]);
+            }
+            else
+            {
+                Activity::create([
+                    "sender_id"=>$user_id,
+                    "receiver_id"=>$lead->assigned_to,
+                    "activity"=>$note,
+                    "done_by"=>$username,
+                    "admin_read"=>0,
+                    "date" => date('y-m-d')
+                ]);
+            }        
             $common->sendNotification($user_id,$lead->assigned_to,$note);
             return redirect()->route("leads")->with("error","Approval for this lead was rejected");
         }
@@ -112,13 +126,28 @@ class ApplicantsController extends Controller
         if($approved)
         {   
             $note="Lead with name ".$lead->name." was approved by ".$username;
-            Activity::create([
-                "sender_id"=>$user_id,
-                "receiver_id"=>$lead->assigned_to,
-                "activity"=>$note,
-                "done_by"=>$username,
-                "date" => date('y-m-d')
-            ]);
+            if(Auth::user()->hasRole('Superadmin')) 
+            {
+                Activity::create([
+                    "sender_id"=>$user_id,
+                    "receiver_id"=>$lead->assigned_to,
+                    "activity"=>$note,
+                    "done_by"=>$username,
+                    "admin_read"=>1,
+                    "date" => date('y-m-d')
+                ]);
+            }
+            else
+            {
+                Activity::create([
+                    "sender_id"=>$user_id,
+                    "receiver_id"=>$lead->assigned_to,
+                    "activity"=>$note,
+                    "done_by"=>$username,
+                    "admin_read"=>0,
+                    "date" => date('y-m-d')
+                ]);
+            }
             $common->sendNotification($user_id,$lead->assigned_to,$note);
             return redirect()->route("leads")->with("success","Lead approved");
         }
@@ -215,13 +244,28 @@ class ApplicantsController extends Controller
         if($check)
         {
             $note=$username." requested some documents from ".$lead->name;
-            Activity::create([
-                "sender_id"=>$user_id,
-                "receiver_id"=>$lead->assigned_to,
-                "activity"=>$note,
-                "done_by"=>$username,
-                "date" => date('y-m-d')
-            ]);
+            if(Auth::user()->hasRole('Superadmin')) 
+            {
+                Activity::create([
+                    "sender_id"=>$user_id,
+                    "receiver_id"=>$lead->assigned_to,
+                    "activity"=>$note,
+                    "done_by"=>$username,
+                    "admin_read"=>1,
+                    "date" => date('y-m-d')
+                ]);
+            }
+            else
+            {
+                Activity::create([
+                    "sender_id"=>$user_id,
+                    "receiver_id"=>$lead->assigned_to,
+                    "activity"=>$note,
+                    "done_by"=>$username,
+                    "admin_read"=>0,
+                    "date" => date('y-m-d')
+                ]);
+            }
             $common->sendNotification($user_id,$lead->assigned_to,$note);
             return redirect()->back()->with('success','Request for document sent');
         }

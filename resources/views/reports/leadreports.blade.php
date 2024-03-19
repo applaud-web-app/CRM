@@ -87,14 +87,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-12 col-lg-8 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Monthly Lead Reports</h4>
                         </div>
                         <div class="card-body">
                             <div class="chart_container">
-                                <canvas id="myChart" style="width: 100%;height: 400px"></canvas>
+                                <canvas id="myChart" ></canvas>
                             </div>
                         </div>
                     </div>
@@ -144,6 +144,7 @@
                         ticks: {
                             beginAtZero: true,
                             stepSize: 5,
+                            barbarPercentage: 0.5
                         }
                     }]
                 }

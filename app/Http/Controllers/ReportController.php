@@ -30,7 +30,7 @@ class ReportController extends Controller
             $enquirydata = Enquiry::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('assigned_by', $userId)
             ->groupBy('month')
             ->orderBy('month')
-            ->get()->toArray();
+            ->get();
 
             $leadsData = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, proccess_status as status')
             ->addSelect('proccess_status')
@@ -38,25 +38,43 @@ class ReportController extends Controller
             ->whereIn('proccess_status', ['created', 'proccessing', 'rejected', 'approved'])
             ->groupBy('month', 'proccess_status')
             ->orderBy('month')
-            ->get()->toArray();
+            ->get();
         }
         return view('reports.allreports', compact('enquirydata','leadsData'));
     }
 
     public function leadReports()
-    {
-        $data = Leads::whereIn("proccess_status", ['created', 'proccessing', 'rejected', 'approved'])->get();
-        $leadcount = ([
-            'total' => $data->count(),
-            'pending' => $data->where('proccess_status', 'proccessing')->count(),
-            'rejected' => $data->where('proccess_status', 'rejected')->count(),
-            'approved' => $data->where('proccess_status', 'approved')->count(),
-        ]);
+    {   
+        $userId = Auth::id();
+        if(Auth::user()->hasRole('Superadmin')){
+            $data = Leads::whereIn("proccess_status", ['created', 'proccessing', 'rejected', 'approved'])->get();
+            $leadcount = ([
+                'total' => $data->count(),
+                'pending' => $data->where('proccess_status', 'proccessing')->count(),
+                'rejected' => $data->where('proccess_status', 'rejected')->count(),
+                'approved' => $data->where('proccess_status', 'approved')->count(),
+            ]);
 
-        $chartdata = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+            $chartdata = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        }
+        else
+        {
+            $data = Leads::whereIn("proccess_status", ['created', 'proccessing', 'rejected', 'approved'])->where('assigned_by',$userId)->get();
+            $leadcount = ([
+                'total' => $data->count(),
+                'pending' => $data->where('proccess_status', 'proccessing')->count(),
+                'rejected' => $data->where('proccess_status', 'rejected')->count(),
+                'approved' => $data->where('proccess_status', 'approved')->count(),
+            ]);
+
+            $chartdata = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('assigned_by',$userId)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        }
         return view('reports.leadreports', compact('leadcount', 'chartdata'));
     }
 }
