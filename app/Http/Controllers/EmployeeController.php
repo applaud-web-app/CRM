@@ -77,12 +77,14 @@ class EmployeeController extends Controller
     {
         $check = $request->validate([
             'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'email|required',
+            'joining_date'=>'required',
+            'dob'=>'required',
+            'gender'=> 'required',
+            'address'=>'required',
             'phone' => 'required|numeric|digits:10',
+            'email' => 'email|required',
             'username' => 'required',
-            'emp_code' => 'required',
-            'blood_group' => 'required',
+            'password'=>'required|min:8',
         ]);
 
         $emailUnique = User::where('email', $request->email)->where('id', '!=', $id)->doesntExist();
@@ -98,19 +100,28 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error','Mobile number already in use');
         }
         else {
+
+            
             $data = ([
                 "first_name" => $request->first_name,
                 "last_name" => $request->last_name,
                 "email" => $request->email,
                 "phone" => $request->phone,
                 "username" => $request->username,
-                "emp_code" => $request->emp_code,
                 "blood_group" => $request->blood_group,
                 "joining_date" => $request->joining_date,
                 "dob" => $request->dob,
-                "department" => $request->department,
                 "address"=> $request->address,
             ]);
+
+            if($request->hasfile('profile'))
+            {
+                $file = $request->file('profile');
+                $extenstion = $file->getClientOriginalExtension();
+                $filename = "EMP".rand().time().'.'.$extenstion;
+                $file->move('/uploads/employee/', $filename);
+                $data['profile'] = $filename;
+            }
             if ($request->filled('password')) {
                 $data['password'] = Hash::make($request->password);
             }
@@ -169,10 +180,10 @@ class EmployeeController extends Controller
                 $extenstion = $file->getClientOriginalExtension();
                 $filename = "EMP".rand().time().'.'.$extenstion;
                 $file->move('/uploads/employee/', $filename);
-                $date['profile'] = $filename;
+                $data['profile'] = $filename;
             }
-            $date['emp_code'] = $empCode;
-            $date['status'] = 1;
+            $data['emp_code'] = $empCode;
+            $data['status'] = 1;
             $user = User::create($data);
             $role = Role::where('name', $request->role)->first();
             $user->assignRole($role);
