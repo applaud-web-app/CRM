@@ -311,30 +311,30 @@
             },
             width: '100%', // Adjust the width of the chart
             height: 400,
-        },
-        stroke: {
-          width:1
-        },
-        tooltip: {
-          fixed: {
-            enabled: false
-          },
-        },
-        fill: {
-          opacity: 1
-        },
-        legend: {
-            show: true,
-            position:'bottom'
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 100
             },
-          }
-        }]
+            stroke: {
+            width:1
+            },
+            tooltip: {
+            fixed: {
+                enabled: false
+            },
+            },
+            fill: {
+            opacity: 1
+            },
+            legend: {
+                show: true,
+                position:'bottom'
+            },
+            responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                width: 100
+                },
+            }
+            }]
         };
         
         var chart = new ApexCharts(document.querySelector("#enquiry"), options);
