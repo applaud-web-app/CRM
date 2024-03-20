@@ -20,10 +20,12 @@ class RoleController extends Controller
         $request->validate([
             'role'=>'required',
             'target'=>'required',
+            'deduction'=>'required',
         ]);
         $role = Role::find($request->role);
         if($role != NULL){
             $role->target = $request->target;
+            $role->deduction = $request->deduction;
             $role->save();
             return redirect(route('viewRoles'))->with('success','Role Updated Successfully');
         }
