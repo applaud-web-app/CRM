@@ -112,9 +112,8 @@
                 </div>
                 <div class="card-footer text-end">
                          
-                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#requestModal" class="btn btn-secondary me-2 mb-1"><i class="far fa-edit me-1"></i>Request</a>
+                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#requestModal" class="btn btn-secondary me-2 mb-1"><i class="far fa-edit me-1"></i>Reject</a>
                                  <a href="{{route('approved',$data->id)}}" class="btn btn-primary me-2 mb-1"><i class="far fa-check-circle me-1"></i>Accept</a>
-                                 <a href="{{route('rejectapproval',$data->id)}}" class="btn btn-danger me-2 mb-1"><i class="far fa-times-circle me-1"></i>Reject</a>
                              
                      </div>
              </div>

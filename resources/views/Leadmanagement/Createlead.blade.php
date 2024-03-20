@@ -227,10 +227,125 @@
                                 </div>
 
                                 <div class="row" id="fields"></div>
+                                {{-- <div class="row" id="defaultfields"></div> --}}
 
                             </div>
                         </div>
                     </div>
+
+                    {{-- VISA --}}
+                    <div class="card h-auto" id="VISA" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">VISA</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Adhaar Card</label>
+                                        <input type="input" class="form-control" name="Adhaar Card"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file" name="profile_img" id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Application Number</label>
+                                        <input type="text" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- IETS --}}
+                    <div class="card h-auto" id="IETS" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">IETS</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Graduation Degree</label>
+                                        <input type="input" class="form-control" name="Adhaar Card"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file" name="profile_img" id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Marksheet</label>
+                                        <input type="text" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- PTE --}}
+                    <div class="card h-auto" id="PTE" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">PTE</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Adhaar Card</label>
+                                        <input type="input" class="form-control" name="Adhaar Card"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file" name="profile_img" id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Application Number</label>
+                                        <input type="text" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
         </div>
         <div class="col-lg-12 ">
@@ -354,9 +469,19 @@
             });
         }
 
+        let previousCardId = '';
         //get immigration lists
-        function getImmigrationLists(selectElement) {
+        function getImmigrationLists(selectElement) 
+        {   
             var immigration_type = selectElement.value;
+           
+            if (previousCardId) {
+                document.getElementById(previousCardId).style.display = 'none';
+            }
+            if (immigration_type) {
+                document.getElementById(immigration_type).style.display = 'block';
+                previousCardId = immigration_type;
+            }
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",
@@ -366,66 +491,61 @@
                 },
                 datatype: JSON,
                 success: function(response) {
-                    console.log(immigration_type);
                     let html = `<label class="form-label" for="">Type of Immigration <span class="text-danger">*</span></label>
                     <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control">
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
                         html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
                     });
-                    html += `</select>`
-                    console.log(html);
+                    html += `</select>`;
                     $('#interestType').html(html);
                 }
             });
         }
 
         //get immigration->list->fields
-        function getfieldcount(selectElement, immigrationType) {
-            var fieldlist = selectElement.value;
-            console.log(immigrationType);
-            $.ajax({
-                url: "{{ route('loadimmigrationtype') }}",
-                type: "POST",
-                data: {
-                    fields: fieldlist,
-                    field_type: immigrationType,
-                    _token: "{{ csrf_token() }}",
-                },
-                datatype: JSON,
-                success: function(response) {
-                    let html = ``;
-                    response.forEach(function(ele) {
-                        html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
-                                        <input type="text" class="form-control mb-2" name="${ele}"
-                                            placeholder="Enter Details"></div></div>`;
-                    });
-                    console.log(html);
-                    $('#fields').html(html);
-                }
-            });
-        }
+        // function getfieldcount(selectElement, immigrationType) {
+        //     var fieldlist = selectElement.value;
+        //     $.ajax({
+        //         url: "{{ route('documentnames') }}",
+        //         type: "POST",
+        //         data: {
+        //             field_type: fieldlist,
+        //             type_immigrant: immigrationType,
+        //             _token: "{{ csrf_token() }}",
+        //         },
+        //         datatype: JSON,
+        //         success: function(response) {
+        //             let html = ``;
+        //             response.forEach(function(ele) {
+        //                 if (ele.field_type === 'input') {
+        //                     html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele.name}">${ele.name}</label>
+        //                         <input type="text" class="form-control mb-2" name="${ele.name}" placeholder="Enter Details"></div></div>`;
+        //                 } else if (ele.field_type === 'file') {
+        //                     html += ``;
+        //                 }
+        //             });
+        //             console.log(html);
+        //             $('#fields').html(html);
+        //         }
+        //     });
+        // }
+
+    // function createfield()
+    // {
+    //     let html=``;
+    //     for(i=0;i<2;i++){
+    //                     html += `<div class="col-lg-6 col-md-6 col-6 mb-3">
+    //                                 <label class="" for="dasds">Fields</label>
+    //                                 <div class="input-group">
+    //                                     <div class="form-file">
+    //                                         <input type="file" name="visa" id="passport" class="form-file-input form-control">
+    //                                     </div>
+    //                                 </div>
+    //                             </div>`;
+    //                         }
+    //                 $('#defaultfields').html(html);
+    // }
     </script>
 
-    {{-- <script>
-        $(document).ready(function() {
-            $('#interested').change(function() {
-                var selectedOption = $(this).val();
-                $('#visa-options, #iets-options', '#type_of_pte').hide();
-                if (selectedOption === 'VISA') {
-                    $('#visa-options').show();
-                    $('#iets-options').hide();
-                    $('#pte-options').hide();
-                } else if (selectedOption === 'IETS') {
-                    $('#iets-options').show();
-                    $('#visa-options').hide();
-                    $('#pte-options').hide();
-                } else if (selectedOption === 'PTE') {
-                    $('#pte-options').show();
-                    $('#iets-options').hide();
-                    $('#visa-options').hide();
-                }
-            });
-        });
-    </script> --}}
 @endpush

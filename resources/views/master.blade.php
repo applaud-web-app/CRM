@@ -237,7 +237,7 @@
                     </li>
 
 
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    {{-- <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="flaticon-072-printer"></i>
                             <span class="nav-text">Reports</span>
                         </a>
@@ -248,7 +248,7 @@
                             <li><a href="{{route('leadreports')}}">Lead Reports</a></li>
 
                         </ul>
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="{{route('emailtemplates')}}" class="ai-icon" aria-expanded="false">
                             <i class="fas fa-envelope-open-text"></i>
