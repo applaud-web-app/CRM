@@ -77,7 +77,7 @@
                 },
                 {
                     data:'emp_code',
-                    name:'code'
+                    name:'emp_code'
                 },
                 
                 {
