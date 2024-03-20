@@ -111,10 +111,10 @@
                                     <div class="form-group">
                                         <label for="address">Description</label>
                                         <textarea name="description" class="form-control" id="" placeholder="Enter Drescription" style="height:100px;">
-@isset($data->description)
-{{ $data->description }}
-@endisset
-</textarea>
+                                        @isset($data->description)
+                                        {{ $data->description }}
+                                        @endisset
+                                        </textarea>
                                     </div>
                                 </div>
 
@@ -338,6 +338,8 @@
                         </div>
                     </div>
 
+                    
+
                 </div>
 
 
@@ -468,10 +470,18 @@
             // Trigger the change event for the interested select element
             $('#interested').trigger('change');
         });
+        let previousCardId = '';
         // get immigration lists
         function getImmigrationLists(selectElement,preselectedValue)
         {
             var immigration_type=selectElement.value;
+            if (previousCardId) {
+                document.getElementById(previousCardId).style.display = 'none';
+            }
+            if (immigration_type) {
+                document.getElementById(immigration_type).style.display = 'block';
+                previousCardId = immigration_type;
+            }
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",

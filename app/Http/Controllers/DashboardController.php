@@ -62,6 +62,31 @@ class DashboardController extends Controller
             $totalApprovedLeadsJson = json_encode($totalApprovedLeads);
             $totalRejectedLeadsJson = json_encode($totalRejectedLeads);
 
+            $enquirydata = Enquiry::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+
+            $leadsData = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, proccess_status as status')
+                ->addSelect('proccess_status')
+                ->whereIn('proccess_status', ['created', 'proccessing', 'rejected', 'approved'])
+                ->groupBy('month', 'proccess_status')
+                ->orderBy('month')
+                ->get();
+
+            $data2 = Leads::whereIn("proccess_status", ['created', 'proccessing', 'rejected', 'approved'])->get();
+            $leadcount = ([
+                'total' => $data2->count(),
+                'pending' => $data2->where('proccess_status', 'proccessing')->count(),
+                'rejected' => $data2->where('proccess_status', 'rejected')->count(),
+                'approved' => $data2->where('proccess_status', 'approved')->count(),
+            ]);
+
+            $chartdata = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+
             $data = ([
                 'todayenquiry' => $todayenquiry,
                 'todayleads' => $todayleads,
@@ -74,6 +99,7 @@ class DashboardController extends Controller
                 'enquiry' => $enquiry
             ]);
 
+            $employees=User::withoutRole("Superadmin")->count();
 
         } else {
             // per day enquiry data according to user
@@ -105,24 +131,53 @@ class DashboardController extends Controller
                 ->groupBy('users.username')
                 ->first();
 
-                $usernamesJson = json_encode([$userLeads->username]); 
-                $totalLeadsJson = json_encode([$userLeads->total_leads]); 
-                $totalApprovedLeadsJson = json_encode([$userLeads->total_approved_leads]); 
-                $totalRejectedLeadsJson = json_encode([$userLeads->total_rejected_leads]); 
+            $usernamesJson = json_encode([$userLeads->username]);
+            $totalLeadsJson = json_encode([$userLeads->total_leads]);
+            $totalApprovedLeadsJson = json_encode([$userLeads->total_approved_leads]);
+            $totalRejectedLeadsJson = json_encode([$userLeads->total_rejected_leads]);
+
+            $enquirydata = Enquiry::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('assigned_by', $userId)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+
+            $leadsData = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, proccess_status as status')
+                ->addSelect('proccess_status')
+                ->where('assigned_by', $userId)
+                ->whereIn('proccess_status', ['created', 'proccessing', 'rejected', 'approved'])
+                ->groupBy('month', 'proccess_status')
+                ->orderBy('month')
+                ->get();
+
+
+            $data2 = Leads::whereIn("proccess_status", ['created', 'proccessing', 'rejected', 'approved'])->where('assigned_by', $userId)->get();
+            $leadcount = ([
+                'total' => $data2->count(),
+                'pending' => $data2->where('proccess_status', 'proccessing')->count(),
+                'rejected' => $data2->where('proccess_status', 'rejected')->count(),
+                'approved' => $data2->where('proccess_status', 'approved')->count(),
+            ]);
+
+            $chartdata = Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('assigned_by', $userId)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
 
             $data = ([
                 'todayenquiry' => $todayenquiry,
                 'todayleads' => $todayleads,
                 'todayapprovedleads' => $todayapprovedleads,
                 'todayrejectedleads' => $todayrejectedleads,
-
                 'pending' => $pendingLeads,
                 'approved' => $approvedLeads,
                 'leads' => $leads,
                 'enquiry' => $enquiry
             ]);
 
+            $employees=0;
+
         }
-        return view('dashboard', compact('data', 'usernamesJson', 'totalLeadsJson', 'totalApprovedLeadsJson', 'totalRejectedLeadsJson'));
+        return view('dashboard', compact('data','leadcount','chartdata','enquirydata', 'leadsData', 'usernamesJson', 'totalLeadsJson', 'totalApprovedLeadsJson', 'totalRejectedLeadsJson','employees'));
     }
+
 }

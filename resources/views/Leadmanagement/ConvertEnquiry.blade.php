@@ -232,6 +232,119 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- VISA --}}
+                    <div class="card h-auto" id="VISA" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">VISA</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Adhaar Card</label>
+                                        <input type="input" class="form-control" name="Adhaar Card"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file" name="profile_img" id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Application Number</label>
+                                        <input type="text" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- IETS --}}
+                    <div class="card h-auto" id="IETS" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">IETS</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Graduation Degree</label>
+                                        <input type="input" class="form-control" name="Adhaar Card"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file" name="profile_img" id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Marksheet</label>
+                                        <input type="text" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- PTE --}}
+                    <div class="card h-auto" id="PTE" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">PTE</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Adhaar Card</label>
+                                        <input type="input" class="form-control" name="Adhaar Card"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file" name="profile_img" id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Application Number</label>
+                                        <input type="text" class="form-control" name="contacted_date"
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="col-lg-12 ">
                         <button type="submit" class="btn btn-primary  mb-2"><i
                                 class="far fa-check-square pe-2"></i>Submit</button>
@@ -359,9 +472,18 @@
             // Trigger the change event for the interested select element
             $('#interested').trigger('change');
         });
+
+        let previousCardId = '';
         // get immigration lists
         function getImmigrationLists(selectElement, preselectedValue) {
             var immigration_type = selectElement.value;
+            if (previousCardId) {
+                document.getElementById(previousCardId).style.display = 'none';
+            }
+            if (immigration_type) {
+                document.getElementById(immigration_type).style.display = 'block';
+                previousCardId = immigration_type;
+            }
             $.ajax({
                 url: "{{ route('loadimmigrationtype') }}",
                 type: "POST",
@@ -388,30 +510,30 @@
         }
 
         // get immigration->list->fields
-        function getfieldcount(selectElement, immigrationType) {
-            var fieldlist = selectElement.value;
-            console.log(immigrationType);
-            $.ajax({
-                url: "{{ route('loadimmigrationtype') }}",
-                type: "POST",
-                data: {
-                    fields: fieldlist,
-                    field_type: immigrationType,
-                    _token: "{{ csrf_token() }}",
-                },
-                datatype: JSON,
-                success: function(response) {
-                    let html = ``;
-                    response.forEach(function(ele) {
-                        html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
-                                        <input type="text" class="form-control mb-2" name="${ele}"
-                                            placeholder="Enter Zip"></div></div>`;
-                    });
-                    console.log(html);
-                    $('#fields').html(html);
-                }
-            });
-        }
+        // function getfieldcount(selectElement, immigrationType) {
+        //     var fieldlist = selectElement.value;
+        //     console.log(immigrationType);
+        //     $.ajax({
+        //         url: "{{ route('loadimmigrationtype') }}",
+        //         type: "POST",
+        //         data: {
+        //             fields: fieldlist,
+        //             field_type: immigrationType,
+        //             _token: "{{ csrf_token() }}",
+        //         },
+        //         datatype: JSON,
+        //         success: function(response) {
+        //             let html = ``;
+        //             response.forEach(function(ele) {
+        //                 html += `<div class="col-lg-4 col-md-6 col-12 mb-3"><div class="form-group"><label for="${ele}">${ele}</label>
+        //                                 <input type="text" class="form-control mb-2" name="${ele}"
+        //                                     placeholder="Enter Zip"></div></div>`;
+        //             });
+        //             console.log(html);
+        //             $('#fields').html(html);
+        //         }
+        //     });
+        // }
     </script>
 
 

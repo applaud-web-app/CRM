@@ -106,6 +106,53 @@
                     </div>
                 </div>
 
+                <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="widget-stat card">
+                        <div class="card-body">
+                            <div class="media ai-icon">
+                                <span class="me-3 bgl-primary text-primary">
+                                    <!-- <i class="ti-user"></i> -->
+                                    <svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30"
+                                        height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-user">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </span>
+                                <div class="media-body">
+                                    <p class="mb-1">Rejected Leads</p>
+                                    <h4 class="mb-0">{{ $leadcount['rejected'] }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @role('Superadmin')
+                <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="widget-stat card">
+                        <div class="card-body">
+                            <div class="media ai-icon">
+                                <span class="me-3 bgl-primary text-primary">
+                                    <!-- <i class="ti-user"></i> -->
+                                    <svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30"
+                                        height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-user">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </span>
+                                <div class="media-body">
+                                    <p class="mb-1">Total Employees</p>
+                                    <h4 class="mb-0">{{ $employees }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endrole
             </div>
 
             <div class="row">
@@ -125,11 +172,34 @@
                     <div class="card">
                         <div class="card-header border-1 flex-wrap pb-0">
                             <div class="mb-sm-0 mb-2">
-                                <h4 class="fs-20">Exployee's Overview</h4>
+                                <h4 class="fs-20">Exployee's Today Overview</h4>
                             </div>
                         </div>
                         <div class="card-body">
                             <div id="leads"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Monthly Leads</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="barreport"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- //enquiry chart data --}}
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Monthly Enquiries</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="linereport"></canvas>
                         </div>
                     </div>
                 </div>
@@ -336,4 +406,117 @@
         var chart = new ApexCharts(document.querySelector("#leads"), options);
         chart.render();
     </script>
+
+<script>
+    //bar chart
+    const barChart_1 = document.getElementById("barreport").getContext('2d');
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const monthdata = {};
+    @foreach ($leadsData as $data)
+        var month = "{{ date('F', strtotime($data->month)) }}";
+        if (monthdata.hasOwnProperty(month)) {
+            monthdata[month] += {{ $data->count }};
+        } else {
+            monthdata[month] = {{ $data->count }};
+        }
+    @endforeach
+
+    console.log(monthdata);
+    const leadlabels = [];
+    const leaddata = [];
+    months.forEach(month => {
+        leadlabels.push(month);
+        leaddata.push(monthdata[month] || 0); 
+    });
+    new Chart(barChart_1, {
+            type: 'bar',
+            data: {
+                defaultFontFamily: 'Poppins',
+                labels: months,
+                datasets: [
+                    {
+                        label: "Leads",
+                        data: leaddata,
+                        borderColor: 'rgba(253, 104, 62, 1)',
+                        borderWidth: "0",
+                        backgroundColor: 'rgba(253, 104, 62, 1)'
+                    }
+                ]
+            },
+            options: {
+                legend: false, 
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        barPercentage: 0.5
+                    }]
+                }
+            }
+        });
+    // bar chart ends here
+
+
+
+
+    // basic line chart
+    const lineChart_1 = document.getElementById("linereport").getContext('2d');
+    lineChart_1.height = 100;
+    const allMonths = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const monthcount = {};
+    @foreach ($enquirydata as $data)
+        monthcount["{{ date('F', strtotime($data->month)) }}"] = {{ $data->count }};
+    @endforeach
+
+    const labels = [];
+    const data = [];
+    allMonths.forEach(month => {
+        labels.push(month);
+        data.push(monthcount[month] || 0); 
+    });
+    new Chart(lineChart_1, {
+        type: 'line',
+        data: {
+            defaultFontFamily: 'Poppins',
+            labels: allMonths,
+            datasets: [{
+                label: "Enquiries Generated",
+                data: data,
+                borderColor: 'rgba(253, 104, 62, 1)',
+                borderWidth: "2",
+                backgroundColor: 'transparent',
+                pointBackgroundColor: 'rgba(253, 104, 62, 1)'
+            }]
+        },
+        options: {
+            legend: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        stepSize: 5,
+                        padding: 10
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        padding: 5
+                    }
+                }]
+            }
+        }
+    });
+    // line chart ends here
+
+</script>
 @endpush
