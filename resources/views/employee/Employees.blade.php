@@ -28,6 +28,7 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Code</th>
+                                        <th>Username</th>
                                         <th>Name</th>
                                         <th>Role</th>
                                         <th>Mobile</th>
@@ -79,16 +80,19 @@
                     data:'emp_code',
                     name:'emp_code'
                 },
-                
+                {
+                    data:'username',
+                    name:'username'
+                },
                 {
                     data: 'profile_img',
                     name: 'profile_img',
                     render: function(data, type, row, meta) {
                         if (type === 'display') {
                             if (data && data.trim() !== '') {
-                                return '<img src="{{url("/")}}/uploads/users/' + data + '" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
+                                return '<img src="{{url("/")}}/uploads/users/' + data + '" class="rounded-circle" style="width:30px;height:30px;"> '+'<span class="h6" style="color:#969ba0">'+row.first_name+'</span>';
                             } else {
-                                return '<img src="assets/images/user.jpg" class="rounded-circle" style="width:50px;height:50px;">' + " " + row.first_name;
+                                return '<img src="assets/images/user.jpg" class="rounded-circle" style="width:30px;height:30px;">' + " " + row.first_name;
                             }
                         } else {
                             return row.first_name + ' ' + row.last_name;

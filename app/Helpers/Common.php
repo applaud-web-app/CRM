@@ -224,5 +224,13 @@ class Common
         ];
     }
 
-
+    public static function userImage()
+    {
+        $userId = Auth::id();
+        // $image=Role::where('id',$userId)->select("profile_img")->first();
+        $image=User::where('id', $userId) 
+            ->pluck('profile_img')
+            ->first();
+        return $image;
+    }
   }

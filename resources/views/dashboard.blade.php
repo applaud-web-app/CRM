@@ -129,6 +129,7 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <div id="leads"></div>
                         </div>
                     </div>
                 </div>
@@ -237,7 +238,9 @@
           type: 'pie',
             sparkline: {
             enabled: true
-            }
+            },
+            width: '100%', // Adjust the width of the chart
+            height: 400,
         },
         stroke: {
           width:1
@@ -250,12 +253,15 @@
         fill: {
           opacity: 1
         },
-        
+        legend: {
+            show: true,
+            position:'bottom'
+        },
         responsive: [{
           breakpoint: 480,
           options: {
             chart: {
-              width: 200
+              width: 100
             },
           }
         }]
@@ -264,5 +270,70 @@
         var chart = new ApexCharts(document.querySelector("#enquiry"), options);
         chart.render();
     }
+    </script>
+
+    <script>
+       
+       var options = {
+          series: [{
+          name: 'Today Leads',
+          data: @php
+              echo $totalLeadsJson;
+          @endphp
+        }, {
+          name: 'Approved Leads',
+          data: @php
+              echo $totalApprovedLeadsJson;
+          @endphp
+        }, {
+          name: 'Rejected Leads',
+          data: @php
+              echo $totalRejectedLeadsJson;
+          @endphp
+        }],
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '20%',
+            endingShape: 'rounded'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: @php
+              echo $usernamesJson;
+          @endphp,
+        },
+        yaxis: {
+          title: {
+            text: 'Leads'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return  val + " Leads"
+            }
+          }
+        }
+        };
+
+
+        var chart = new ApexCharts(document.querySelector("#leads"), options);
+        chart.render();
     </script>
 @endpush

@@ -126,7 +126,12 @@
                             <li class="nav-item dropdown  header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button"
                                     data-bs-toggle="dropdown">
-                                    <img src="{{asset('assets/images/user.jpg')}}" width="56" alt="" />
+                                    @if (isset(Auth::user()->profile_img))
+                                        <img src="{{asset('uploads/users/'.Auth::user()->profile_img)}}" alt="">
+                                    @else
+                                        <img src="{{asset('assets/images/user.jpg')}}" alt="">
+                                    @endif
+
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <a href="{{route('accountSetting')}}" class="dropdown-item ai-icon">

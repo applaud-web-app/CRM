@@ -157,10 +157,10 @@ class ApplicantsController extends Controller
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
-            $leads = Leads::where("is_deleted", 1)
+            $leads = Leads::where("is_deleted", 0)
                 ->where("proccess_status", "approved")
                 ->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-            $count_total = Leads::where('is_deleted', 1)->where('proccess_status', "approved")->count();
+            $count_total = Leads::where('is_deleted', 0)->where('proccess_status', "approved")->count();
             return DataTables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('email', function ($contact) {
@@ -183,9 +183,7 @@ class ApplicantsController extends Controller
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
-                          <a class="dropdown-item" href="' . route('applicantdata', $row->id) . '"><i class="far fa-eye"></i> View Lead</a>  
-                    
-                          <a class="dropdown-item" href="'.route('approved',$row->id).'"><i class="fas fa-check"></i> Accept Lead</a>
+                          <a class="dropdown-item" href="' . route('applicantdata', $row->id) . '"><i class="far fa-eye"></i> View Lead</a> 
                           <a class="dropdown-item" href="' . route('rejectapproval', $row->id) . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
                        
                        
@@ -238,10 +236,13 @@ class ApplicantsController extends Controller
         $user_id= Auth::id();
         $username=Auth::user()->username;
         $lead= Leads::where('id',$id)->select("name","assigned_to")->first();
-        $check=Leads::where("id", $id)->update(['notes'=>$request->notes]);
+        $check=Leads::where("id", $id)->update([
+            'notes'=>$request->notes,
+            'proccess_status'=>'rejected'
+        ]);
         if($check)
         {
-            $note=$username." requested some documents from ".$lead->name;
+            $note=$username." requested some documents from ".$lead->name. '.Lead was sent back due to missing documents';
             if(Auth::user()->hasRole('Superadmin')) 
             {
                 Activity::create([
@@ -265,7 +266,7 @@ class ApplicantsController extends Controller
                 ]);
             }
             $common->sendNotification($user_id,$lead->assigned_to,$note);
-            return redirect()->back()->with('success','Request for document sent');
+            return redirect()->route('leads')->with('success','Request is missing some documents.');
         }
         else
             return redirect()->back()->with('error','Error occured');
