@@ -223,13 +223,6 @@ class ApplicantsController extends Controller
             return redirect()->back()->with("error","No such user Exists");
     }
 
-    public function postAddApplicant(Request $request)
-    {
-        $data=$request->except("_token");
-        $document=$request->document;
-        dd($document,$data);
-    }
-
     public function sendRequest(Request $request,$id)
     {
         $common=new Common();
@@ -271,4 +264,13 @@ class ApplicantsController extends Controller
         else
             return redirect()->back()->with('error','Error occured');
     }
+
+    
+    public function postAddApplicant(Request $request)
+    {
+        $data=$request->except("_token");
+        dd($data);
+    }
+
+
 }

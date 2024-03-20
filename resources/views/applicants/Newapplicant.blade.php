@@ -154,7 +154,7 @@
                             </div>
 
                             <div class="row" id="fields"></div>
-                            
+                            <div class="row" id="defaultfields"></div>
                         </div>
                     </div>
                 </div>
@@ -222,6 +222,7 @@
     //get immigration lists
     function getImmigrationLists(selectElement)
     {
+        createfield();
         var immigration_type=selectElement.value;
         $.ajax({
             url: "{{ route('loadimmigrationtype') }}",
@@ -233,7 +234,7 @@
             datatype: JSON,
             success: function(response) {
                 let html = `<label class="form-label" for="">Type of Immigration</label>
-                <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control">
+                <select id="type_of_immigration" onchange="getfieldcount(this,'${immigration_type}')" name="type_of_immigration" class="form-control">
                     <option value="">Select</option>`;
                 response.forEach(function(ele) {
                     html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
@@ -248,11 +249,11 @@
     function getfieldcount(selectElement,immigrationType){
         var fieldlist=selectElement.value;
         $.ajax({
-            url: "{{ route('loadimmigrationtype') }}",
+            url: "{{ route('documentnames') }}",
             type: "POST",
             data: {
-                fields: fieldlist,
-                field_type:immigrationType,
+                field_type:fieldlist,
+                type_immigrant:immigrationType,
                 _token: "{{ csrf_token() }}",
             },
             datatype: JSON,
@@ -263,8 +264,7 @@
                                 <label class="" for="${ele}">${ele}</label>
                                 <div class="input-group">
                                     <div class="form-file">
-                                        <input type="file" name="${ele}" id="passport"
-                                            accept="image/*" class="form-file-input form-control">
+                                        <input type="file" name="visa[${ele}]" id="passport" class="form-file-input form-control">
                                     </div>
                                 </div>
                             </div>`;
@@ -285,6 +285,22 @@
         });
     }
 
+    function createfield()
+    {
+        let html=``;
+        for(i=0;i<2;i++){
+                        html += `<div class="col-lg-6 col-md-6 col-6 mb-3">
+                                    <label class="" for="dasds">Fields</label>
+                                    <div class="input-group">
+                                        <div class="form-file">
+                                            <input type="file" name="visa" id="passport" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }
+                    $('#defaultfields').html(html);
+                    
+    }
 </script>
 <script>
     $("form").each(function() {
