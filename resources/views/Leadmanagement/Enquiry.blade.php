@@ -410,8 +410,8 @@
                         name: 'created_at'
                     },
                     {
-                        data: 'type_of_immigration',
-                        name: 'type_of_immigration'
+                        data: 'source',
+                        name: 'source'
                     },
                     {
                         data: 'action',

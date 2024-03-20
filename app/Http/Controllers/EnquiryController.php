@@ -17,6 +17,7 @@ use Excel;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Common;
 use App\Models\DocumentCategory;
+use App\Imports\LeadsImports;
 
 class EnquiryController extends Controller
 {
@@ -116,8 +117,12 @@ class EnquiryController extends Controller
             'excel_file' => 'required|mimes:xls,xlsx'
         ]);
 
-        Excel::import(new BulkEnquiry, request()->file('excel_file'));
-        return redirect()->back()->with('success', 'Excel Uploaded Successfully 📤');
+        try {
+            Excel::import(new BulkEnquiry, request()->file('excel_file'));
+            return redirect()->back()->with('success', 'Excel Uploaded Successfully 📤');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
 
@@ -264,7 +269,7 @@ class EnquiryController extends Controller
     public function loadCreateLead(Request $request)
     {
         $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
-        $countries = DB::table('countries')->get();;
+        $countries = DB::table('countries')->get();
         return view('Leadmanagement.Createlead', compact('users', 'countries'));
     }
 
@@ -355,7 +360,7 @@ class EnquiryController extends Controller
             $allDocumentname = Documents::where('leads_id', $id)->pluck('document_name')->toArray();
 
             if (count($allDocumentname) == count($leadDocumentname)) {
-                $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing']);
+                $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
                 if ($check) {
                     $note="Lead with name " . $lead->name . " was sent for approval";
                     if(Auth::user()->hasRole('Superadmin')) 
@@ -531,6 +536,20 @@ class EnquiryController extends Controller
             return redirect()->back()->with('success','Deleted Successfully');
         }
         return redirect()->back()->with('error','Something Went Wrong');
+    }
+
+    public function bulkUploadsLeads(Request $request){
+
+        $request->validate([
+            'excel_file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            Excel::import(new LeadsImports, request()->file('excel_file'));
+            return redirect()->back()->with('success', 'Excel Uploaded Successfully 📤');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error',$th->getMessage());
+        }
     }
 
 

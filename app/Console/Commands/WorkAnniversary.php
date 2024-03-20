@@ -28,9 +28,7 @@ class WorkAnniversary extends Command
      */
     public function handle()
     {
-       $employee = User::withoutRole('Superadmin')->whereDate('created_at','!=',Carbon::today())->whereMonth('created_at', '=', Carbon::now()->month)->whereDay('created_at', '=', Carbon::now()->day)->get();
-
-       dd($employee);
+       $employee = User::withoutRole('Superadmin')->whereDate('joining_date','!=',Carbon::today())->whereMonth('joining_date', '=', Carbon::now()->month)->whereDay('joining_date', '=', Carbon::now()->day)->get();
        if(count($employee)){
         foreach ($employee as $value) {
             $userEmail = $value->email;

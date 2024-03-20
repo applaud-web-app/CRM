@@ -7,26 +7,46 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Models\Enquiry;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
-class BulkEnquiry implements ToModel, WithHeadingRow 
+class BulkEnquiry implements ToCollection, WithHeadingRow 
 {
 
     /**
     * @param Collection $collection
     */
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
+
+        // Check Excel Is Empty Or Not
+        if($rows->isEmpty()){
+            throw new Exception("Error! The Excel Uploaded Does Not Contain Any Data");
+        }
+
+        // Remove Empty Rows
+        $filterRows = $rows->filter(function($row){
+            return collect($row)->filter(function($cell){
+                return !empty($cell);
+            })->count() > 0;
+        });
+
         try {
-             Enquiry::create([
-                'name' => $row['name'],
-                'mobile' => $row['mobile_number'],
-                'email' => $row['email_address'],
-                'interested' => $row['interested_in'],
-                'type_of_immigration' => $row['type_od_visa'],
-                'source' => $row['sources'],
-            ]);
+            foreach ($filterRows as $row) 
+            {
+                DB::beginTransaction();
+                Enquiry::create([
+                    'name' => $row['name'] ?? NULL,
+                    'mobile' => $row['mobile_number'] ?? NULL,
+                    'email' => $row['email_address'] ?? NULL,
+                    'interested' => $row['interested_in'] ?? NULL,
+                    'type_of_immigration' => $row['type_od_visa'] ?? NULL,
+                    'source' => $row['sources'] ?? NULL,
+                ]);
+                DB::commit();
+            }             
         } catch (\Throwable $th) {
-            //throw $th;
+            throw new Exception("Error! Please fill all the required fields");
         }
        
     }
