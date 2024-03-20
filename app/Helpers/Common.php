@@ -213,10 +213,10 @@ class Common
         $userId = Auth::id();
         if(Auth::user()->hasRole('Superadmin')){
             $unReadNotification = Activity::where('admin_read',0)->count();
-            $topNotification = Activity::latest()->take(5)->get();
+            $topNotification = Activity::with('sender')->latest()->take(5)->get();
         }else{
             $unReadNotification = Activity::where('reciver_read',0)->Where('receiver_id',$userId)->count();
-            $topNotification = Activity::Where('receiver_id',$userId)->latest()->take(5)->get();
+            $topNotification = Activity::with('sender')->Where('receiver_id',$userId)->latest()->take(5)->get();
         }
         return [
             'unreadMessage'=>$unReadNotification,

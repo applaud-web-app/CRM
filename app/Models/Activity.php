@@ -26,4 +26,8 @@ class Activity extends Model
     {
         return $this->hasOne(User::class,'id',"receiver_id")->select('id','device_token'); 
     } 
+
+    public function sender(){
+        return $this->hasOne(User::class,'id',"sender_id"); 
+    }
 }

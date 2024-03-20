@@ -33,7 +33,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Enquiry</p>
-                                    <h4 class="mb-0">{{ $data['enquiry'] > 10 ? $data['enquiry'] : '0' . $data['enquiry'] }}</h4>
+                                    <h4 class="mb-0">{{ $data['enquiry'] >= 10 ? $data['enquiry'] : '0' . $data['enquiry'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Leads</p>
-                                    <h4 class="mb-0">{{ $data['leads'] > 10 ? $data['leads'] : '0' . $data['leads'] }}</h4>
+                                    <h4 class="mb-0">{{ $data['leads'] >= 10 ? $data['leads'] : '0' . $data['leads'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Approved Leads</p>
-                                    <h4 class="mb-0">{{ $data['approved'] > 10 ? $data['approved'] : '0' . $data['approved'] }}</h4>
+                                    <h4 class="mb-0">{{ $data['approved'] >= 10 ? $data['approved'] : '0' . $data['approved'] }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                                 </span>
                                 <div class="media-body">
                                     <p class="mb-1">Pending Leads</p>
-                                    <h4 class="mb-0">{{ $data['pending'] > 10 ? $data['pending'] : '0' . $data['pending'] }}</h4>
+                                    <h4 class="mb-0">{{ $data['pending'] >= 10 ? $data['pending'] : '0' . $data['pending'] }}</h4>
                                 </div>
                             </div>
                         </div>
