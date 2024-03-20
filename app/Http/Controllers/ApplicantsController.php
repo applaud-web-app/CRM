@@ -11,6 +11,7 @@ use App\Models\Leads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\DocumentCategory;
 
 class ApplicantsController extends Controller
 {
@@ -50,7 +51,6 @@ class ApplicantsController extends Controller
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
                           <a class="dropdown-item" href="' . route('viewapplicant', $row->id) . '"><i class="far fa-eye"></i> View Lead</a>  
-                    
                           <a class="dropdown-item" href="'.route('approved',$row->id).'"><i class="fas fa-check"></i> Accept Lead</a>
                           <a class="dropdown-item" href="' . route('rejectapproval', $row->id) . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
                        </div>
@@ -64,7 +64,7 @@ class ApplicantsController extends Controller
         } else {
             return view("applicants.Pendingapplicants");
         }
-    }
+    }    
 
     public function viewApplicantData(Request $request, $id)
     {
@@ -183,10 +183,8 @@ class ApplicantsController extends Controller
                     </button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="order-dropdown-0">
                        <div class="py-2">
-                          <a class="dropdown-item" href="' . route('applicantdata', $row->id) . '"><i class="far fa-eye"></i> View Lead</a> 
-                          <a class="dropdown-item" href="' . route('rejectapproval', $row->id) . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
-                       
-                       
+                        <a class="dropdown-item" href="' . route('applicantdata', $row->id) . '"><i class="far fa-eye"></i> View Applicant</a>
+                        <a class="dropdown-item" href="' . route('editapplicant', $row->id) . '"><i class="far fa-edit"></i> Edit Applicant</a>
                        </div>
                     </div>
                  </div>';
@@ -269,8 +267,69 @@ class ApplicantsController extends Controller
     public function postAddApplicant(Request $request)
     {
         $data=$request->except("_token");
-        dd($data);
-    }
+        $userId = Auth::id();
+        $code = "#".rand();
+        $addNewApplicant = new Leads;
+        $addNewApplicant->address = $request->address;
+        $addNewApplicant->country = $request->country;
+        $addNewApplicant->state = $request->state;
+        $addNewApplicant->city = $request->city;
+        $addNewApplicant->zipcode = $request->zipcode;
+        $addNewApplicant->interested = $request->interested;
+        $addNewApplicant->type_of_immigration = $request->type_of_immigration;
+        $addNewApplicant->assigned_by = $userId;
+        $addNewApplicant->assigned_to = NULL;
+        if ($request->has('profile_img')) {
+            $file = $request->profile_img;
+            $imageName =  "EMP-".rand().".".$file->extension();
+            $file->move(public_path('uploads/applicants/') , $imageName);  
+            $addNewApplicant->profile_img  = $imageName; 
+        }
+        $addNewApplicant->name = $request->name;
+        $addNewApplicant->email = $request->email;
+        $addNewApplicant->mobile = $request->mobile;
+        $addNewApplicant->code = $code;
+        $addNewApplicant->age = $request->age;
+        $addNewApplicant->price = $request->price;
+        $addNewApplicant->dob = $request->dob;
+        $addNewApplicant->marital_status = $request->marital_status;
+        $addNewApplicant->description = $request->description;
+        $addNewApplicant->address = $request->address;
+        $addNewApplicant->description = $request->description;
+        $addNewApplicant->description = $request->description;
+        $addNewApplicant->save();
 
+        if($request->has('document')){
+            $documents = $request->document;
+            foreach ($documents as $key => $value) {
+                $doc = DocumentCategory::where('id',$key)->first();
+                if($doc){
+                    $uploadDoc = new Documents;
+                    $uploadDoc->user_id = $userId;
+                    $uploadDoc->leads_id = $addNewApplicant->id;
+                    $uploadDoc->document_id = $doc->id;
+                    $uploadDoc->document_name = $doc->name;
+                    $uploadDoc->document_type = $doc->type;
+
+                    // Uploads Document
+                    if($value != NULL){
+                        $file = $value;
+                        $imageName =  "EMP-".rand().".".$file->extension();
+                        $file->move(public_path('uploads/docs/') , $imageName);  
+                        $uploadDoc->document  = $imageName; 
+                    }
+
+                    $uploadDoc->status = 1;
+                    $uploadDoc->save();
+                }
+            }
+        }
+
+        return redirect()->back()->with('success','Added Successfully');
+    }
+                      
+    public function editApplicant($id){
+        return view();
+    }
 
 }

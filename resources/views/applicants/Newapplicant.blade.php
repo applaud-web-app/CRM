@@ -259,28 +259,41 @@
             datatype: JSON,
             success: function(response) {
                 let html=``;
-                response.forEach(function(ele) {
-                    html += `<div class="col-lg-12 col-md-12 col-12 mb-3">
-                                <label class="" for="${ele}">${ele}</label>
-                                <div class="input-group">
-                                    <div class="form-file">
-                                        <input type="file" name="visa[${ele}]" id="passport" class="form-file-input form-control">
-                                    </div>
-                                </div>
-                            </div>`;
+                console.log(response);
+                // response.forEach(function(ele) {
+                //     html += `<div class="col-lg-6 col-md-6 col-12 mb-3">
+                //                 <label class="" for="${ele}">${ele}</label>
+                //                 <div class="input-group">
+                //                     <div class="form-file">
+                //                         <input type="file" name="document[${ele}]" class="form-file-input form-control">
+                //                     </div>
+                //                 </div>
+                //             </div>`;
+                // });
+
+                $.each(response, function(key, value) {
+                    console.log("Key: " + key + ", Value: " + value);
+                    html += `<div class="col-lg-6 col-md-6 col-12 mb-3">
+                        <label class="" for="${value}">${value}</label>
+                        <div class="input-group">
+                            <div class="form-file">
+                                <input type="file" name="document[${key}]" class="form-file-input form-control">
+                            </div>
+                        </div>
+                    </div>`;
                 });
                 $('#fields').html(html);
-                response.forEach(function(ele) {
-                $("form").validate().settings.rules[ele] = {
-                    required: true
-                };
-                $("form").validate().settings.messages[ele] = {
-                    required: "Please upload the document for " + ele + "."
-                };
-            });
+                // response.forEach(function(ele) {
+                // $("form").validate().settings.rules[ele] = {
+                //     required: true
+                // };
+                // $("form").validate().settings.messages[ele] = {
+                //     required: "Please upload the document for " + ele + "."
+                // };
+            // });
 
             // Trigger validation for the form after adding dynamic fields
-            $("form").valid();
+            // $("form").valid();
             }
         });
     }

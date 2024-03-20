@@ -556,7 +556,7 @@ class EnquiryController extends Controller
     {
         $sbcategory=$request->field_type;
         $type=$request->type_immigrant;
-        $data=DB::table('document_category')->where('subcategory',$sbcategory)->where('type',$type)->pluck('name')->toArray();
+        $data=DB::table('document_category')->where('subcategory',$sbcategory)->where('type',$type)->pluck('name','id')->toArray();
         return $data;
        
     }
