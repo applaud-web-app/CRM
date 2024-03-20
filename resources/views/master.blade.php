@@ -107,7 +107,7 @@
                                                     <li>
                                                         <div class="timeline-panel">
                                                             <div class="media me-2 media-info">
-                                                                {{$item->done_by}}
+                                                                <img width="30px"height="35px" src="{{asset('/uploads/users/'.$item->sender->profile_img.'')}}" alt="{{$item->done_by}}">
                                                             </div>
                                                             <div class="media-body">
                                                                 <h6 class="mb-1">{{substr($item->activity,0,25)}}...</h6>
