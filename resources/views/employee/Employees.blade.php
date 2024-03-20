@@ -32,7 +32,7 @@
                                         <th>Role</th>
                                         <th>Mobile</th>
                                         <th>Email</th>
-                                        <th>Score</th>
+                                        {{-- <th>Score</th> --}}
                                         <th>Joining Date</th>
                                         <th>Action</th>
                                     </tr>
@@ -97,7 +97,7 @@
                 },
                 {
                     data: 'role',
-                    name: 'role'
+                    name: 'roles.name'
                 },
                 {
                     data: 'phone',
@@ -107,10 +107,10 @@
                     data: 'email',
                     name: 'email'
                 },
-                {
-                    data: 'score',
-                    name: 'score'
-                },
+                // {
+                //     data: 'score',
+                //     name: 'score'
+                // },
                 {
                     data: 'created_at',
                     name: 'created_at'
