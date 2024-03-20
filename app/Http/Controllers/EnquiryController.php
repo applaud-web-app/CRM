@@ -552,5 +552,13 @@ class EnquiryController extends Controller
         }
     }
 
+    public function documentNames(Request $request)
+    {
+        $sbcategory=$request->field_type;
+        $type=$request->type_immigrant;
+        $data=DB::table('document_category')->where('subcategory',$sbcategory)->where('type',$type)->pluck('name')->toArray();
+        return $data;
+       
+    }
 
 }

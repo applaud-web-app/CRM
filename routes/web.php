@@ -101,6 +101,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/editfollowup',[EnquiryController::class,'editFollowUp'])->name('editfollowup');
     Route::get('/delete-category/{id}',[EnquiryController::class,'deleteDocumentCategory'])->name('delete-category');
     Route::post('/leads/bulk-uploads',[EnquiryController::class,'bulkUploadsLeads'])->name('bulkUploadsLeads');
+    Route::post('/documentnames',[EnquiryController::class,'documentNames'])->name('documentnames');
+
     //Activities
     Route::get('/activities',[ActivityController::class,'getActivities'])->name('activities');
 

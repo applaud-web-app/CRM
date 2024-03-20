@@ -24,7 +24,7 @@
                                 @foreach ($activitiesondate as $activity)
                                     <div class="latest">
                                         <div class="d-flex align-items-center flex-wrap mb-3">
-                                            <span class="me-3">{{ $activity->created_at->format('d-M-y') }}</span>
+                                            <span class="me-3">{{ $activity->created_at->format('H:i A') }}</span>
                                             <div class="enaergy">
                                                 <span class="bg-primary"><i class="fas fa-bolt"></i></span>
                                             </div>

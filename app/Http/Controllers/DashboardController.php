@@ -109,10 +109,7 @@ class DashboardController extends Controller
                 $totalLeadsJson = json_encode([$userLeads->total_leads]); 
                 $totalApprovedLeadsJson = json_encode([$userLeads->total_approved_leads]); 
                 $totalRejectedLeadsJson = json_encode([$userLeads->total_rejected_leads]); 
-                // dd($usernamesJson,
-                // $totalLeadsJson,
-                // $totalApprovedLeadsJson,
-                // $totalRejectedLeadsJson);
+
             $data = ([
                 'todayenquiry' => $todayenquiry,
                 'todayleads' => $todayleads,
