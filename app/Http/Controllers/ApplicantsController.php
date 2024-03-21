@@ -266,18 +266,14 @@ class ApplicantsController extends Controller
     
     public function postAddApplicant(Request $request)
     {
+        // $request->validate([
+        //     ''
+        // ]);
+
         $data=$request->except("_token");
         $userId = Auth::id();
         $code = "#".rand();
         $addNewApplicant = new Leads;
-        $addNewApplicant->address = $request->address;
-        $addNewApplicant->country = $request->country;
-        $addNewApplicant->state = $request->state;
-        $addNewApplicant->city = $request->city;
-        $addNewApplicant->zipcode = $request->zipcode;
-        $addNewApplicant->interested = $request->interested;
-        $addNewApplicant->type_of_immigration = $request->type_of_immigration;
-        $addNewApplicant->assigned_by = $userId;
         $addNewApplicant->assigned_to = NULL;
         if ($request->has('profile_img')) {
             $file = $request->profile_img;
@@ -295,10 +291,19 @@ class ApplicantsController extends Controller
         $addNewApplicant->marital_status = $request->marital_status;
         $addNewApplicant->description = $request->description;
         $addNewApplicant->address = $request->address;
-        $addNewApplicant->description = $request->description;
-        $addNewApplicant->description = $request->description;
+        $addNewApplicant->country = $request->country;
+        $addNewApplicant->state = $request->state;
+        $addNewApplicant->city = $request->city;
+        $addNewApplicant->zipcode = $request->zipcode;
+        $addNewApplicant->proccess_status = "approved";
+        $addNewApplicant->source = $request->source;
+        $addNewApplicant->assigned_by = $userId;
+        $addNewApplicant->interested = $request->interested;
+        $addNewApplicant->type_of_immigration = $request->type_of_immigration;
+        $addNewApplicant->contacted_date = $request->contacted_date;
+        $addNewApplicant->close_date = $request->close_date;
         $addNewApplicant->save();
-
+        
         if($request->has('document')){
             $documents = $request->document;
             foreach ($documents as $key => $value) {
@@ -314,7 +319,7 @@ class ApplicantsController extends Controller
                     // Uploads Document
                     if($value != NULL){
                         $file = $value;
-                        $imageName =  "EMP-".rand().".".$file->extension();
+                        $imageName =  "DOCS-".rand().".".$file->extension();
                         $file->move(public_path('uploads/docs/') , $imageName);  
                         $uploadDoc->document  = $imageName; 
                     }

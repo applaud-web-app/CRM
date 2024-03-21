@@ -123,7 +123,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/work-anniversary',[EmailController::class,'WorkAnniversary'])->name('WorkAnniversary');
 
     //Report Controller
-    Route::get('allreports',[ReportController::class,'allReports'])->name('allreports');
-    Route::get('leadreports',[ReportController::class,'leadReports'])->name('leadreports');
+    // Route::get('allreports',[ReportController::class,'allReports'])->name('allreports');
+    // Route::get('leadreports',[ReportController::class,'leadReports'])->name('leadreports');
 });
 
