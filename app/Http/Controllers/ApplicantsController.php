@@ -270,14 +270,6 @@ class ApplicantsController extends Controller
         $userId = Auth::id();
         $code = "#".rand();
         $addNewApplicant = new Leads;
-        $addNewApplicant->address = $request->address;
-        $addNewApplicant->country = $request->country;
-        $addNewApplicant->state = $request->state;
-        $addNewApplicant->city = $request->city;
-        $addNewApplicant->zipcode = $request->zipcode;
-        $addNewApplicant->interested = $request->interested;
-        $addNewApplicant->type_of_immigration = $request->type_of_immigration;
-        $addNewApplicant->assigned_by = $userId;
         $addNewApplicant->assigned_to = NULL;
         $addNewApplicant->name = $request->name;
         $addNewApplicant->email = $request->email;
@@ -296,7 +288,7 @@ class ApplicantsController extends Controller
             $addNewApplicant->profile_img  = $imageName; 
         }
         $addNewApplicant->save();
-
+        
         if($request->has('document')){
             $documents = $request->document;
             // if ($request->has('profile_img')) {
@@ -319,7 +311,7 @@ class ApplicantsController extends Controller
                     // Uploads Document
                     if($value != NULL){
                         $file = $value;
-                        $imageName =  "EMP-".rand().".".$file->extension();
+                        $imageName =  "DOCS-".rand().".".$file->extension();
                         $file->move(public_path('uploads/docs/') , $imageName);  
                         $uploadDoc->document  = $imageName; 
                     }
