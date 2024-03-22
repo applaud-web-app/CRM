@@ -258,4 +258,15 @@
             });
         });
     </script>
+
+<script>
+    $(document).on('click', '.delete-leads', function(e) {
+        e.preventDefault();
+        var deleteUrl = $(this).attr('href');
+        var confirmDelete = confirm("Are you sure you want to delete this Lead?");
+        if (confirmDelete) {
+            window.location.href = deleteUrl;
+        }
+    });
+</script>
 @endpush

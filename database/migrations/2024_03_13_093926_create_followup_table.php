@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('serial_id',50);
             $table->dateTime('next_followup')->nullable();
             $table->string('added_by')->nullable();
+            $table->tinyInteger('reminder24hr')->default(0);
+            $table->tinyInteger('reminder1hr')->default(0);
             $table->timestamps();
         });
     }

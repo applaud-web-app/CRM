@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DocumentCategory;
+use App\Models\User;
 
 class ApplicantsController extends Controller
 {
@@ -266,7 +267,6 @@ class ApplicantsController extends Controller
     
     public function postAddApplicant(Request $request)
     {
-        $data=$request->except("_token");
         $userId = Auth::id();
         $code = "#".rand();
         $addNewApplicant = new Leads;
@@ -279,12 +279,6 @@ class ApplicantsController extends Controller
         $addNewApplicant->type_of_immigration = $request->type_of_immigration;
         $addNewApplicant->assigned_by = $userId;
         $addNewApplicant->assigned_to = NULL;
-        if ($request->has('profile_img')) {
-            $file = $request->profile_img;
-            $imageName =  "EMP-".rand().".".$file->extension();
-            $file->move(public_path('uploads/applicants/') , $imageName);  
-            $addNewApplicant->profile_img  = $imageName; 
-        }
         $addNewApplicant->name = $request->name;
         $addNewApplicant->email = $request->email;
         $addNewApplicant->mobile = $request->mobile;
@@ -294,13 +288,24 @@ class ApplicantsController extends Controller
         $addNewApplicant->dob = $request->dob;
         $addNewApplicant->marital_status = $request->marital_status;
         $addNewApplicant->description = $request->description;
-        $addNewApplicant->address = $request->address;
-        $addNewApplicant->description = $request->description;
-        $addNewApplicant->description = $request->description;
+        $addNewApplicant->proccess_status='approved';
+        if ($request->has('profile_img')) {
+            $file = $request->profile_img;
+            $imageName =  "EMP-".rand().".".$file->extension();
+            $file->move(public_path('uploads/applicants/') , $imageName);  
+            $addNewApplicant->profile_img  = $imageName; 
+        }
         $addNewApplicant->save();
 
         if($request->has('document')){
             $documents = $request->document;
+            // if ($request->has('profile_img')) {
+            //     $file = $request->profile_img;
+            //     // dd($file);
+            //     $imageName =  "EMP-".rand().".".$file->extension();
+            //     $file->move(public_path('uploads/applicants/') , $imageName);  
+            //     $addNewApplicant->profile_img  = $imageName; 
+            // }
             foreach ($documents as $key => $value) {
                 $doc = DocumentCategory::where('id',$key)->first();
                 if($doc){
@@ -318,18 +323,92 @@ class ApplicantsController extends Controller
                         $file->move(public_path('uploads/docs/') , $imageName);  
                         $uploadDoc->document  = $imageName; 
                     }
-
                     $uploadDoc->status = 1;
                     $uploadDoc->save();
                 }
             }
         }
 
-        return redirect()->back()->with('success','Added Successfully');
+        return redirect()->route('allapplicants')->with('success','Added Successfully');
     }
                       
     public function editApplicant($id){
-        return view();
+       $user = Leads::where('id',$id)->first();
+       $countries =DB::table('countries')->get();
+       $states = DB::table('states')->where('country_id', $user->country)->get();
+       $cities = DB::table('cities')->where('state_id', $user->state)->get();
+       $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
+       $documentCategory = DocumentCategory::where('type',$user->interested)->where('subcategory',$user->type_of_immigration)->with('docs')->get();
+       return view('applicants.editapplicant',compact('user','countries','states','cities','users','documentCategory'));
     }
 
+    public function postEditApplicant(Request $request,$id)
+    {
+        // dd($request->all());
+        $userId = Auth::id();
+        $data=$request->except('_token','profile_img','Adhaar_Card','document');
+        if ($request->has('profile_img')) {
+            $file = $request->profile_img;
+            $imageName =  "EMP-".rand().".".$file->extension();
+            $existingImage = Leads::where('id',$id)->select('profile_img')->first();
+            if ($existingImage->profile_img!=NULL || $existingImage->profile_img!='') 
+            {
+                if(file_exists(public_path('uploads/applicants/'.$existingImage->profile_img)))
+                {   
+                    unlink(public_path('uploads/applicants/'.$existingImage->profile_img));
+                }
+            }
+            $file->move(public_path('uploads/applicants/') , $imageName); 
+            $data['profile_img']=$imageName;            
+        }
+
+        $data=Leads::where('id',$id)->update($data);
+         
+        if($request->has('document')){
+            $documents = $request->document;
+            foreach ($documents as $key => $value) {
+                $getExistingRecord = Documents::Where('document_id',$key)->where('leads_id',$id)->first();
+                if($getExistingRecord){
+
+                    //Delete old Docs
+                    if ($getExistingRecord->document!=NULL || $getExistingRecord->document!='') 
+                    {
+                        if(file_exists(public_path('uploads/docs/'.$getExistingRecord->document)))
+                        {   
+                            unlink(public_path('uploads/docs/'.$getExistingRecord->document));
+                        }
+                    }
+
+                    // Uploads Document
+                    if($value != NULL){
+                        $file = $value;
+                        $imageName =  "EMP-".rand().".".$file->extension();
+                        $file->move(public_path('uploads/docs/') , $imageName);  
+                        $getExistingRecord->document  = $imageName; 
+                    }
+                    $getExistingRecord->save();
+                }else{
+
+                    $doc = DocumentCategory::where('id',$key)->first();
+                    $uploadDoc = new Documents;
+                    $uploadDoc->user_id = $userId;
+                    $uploadDoc->leads_id = $id;
+                    $uploadDoc->document_id = $doc->id;
+                    $uploadDoc->document_name = $doc->name;
+                    $uploadDoc->document_type = $doc->type;
+
+                    // Uploads Document
+                    if($value != NULL){
+                        $file = $value;
+                        $imageName =  "EMP-".rand().".".$file->extension();
+                        $file->move(public_path('uploads/docs/') , $imageName);  
+                        $uploadDoc->document  = $imageName; 
+                    }
+                    $uploadDoc->status = 1;
+                    $uploadDoc->save();
+                }
+            }
+        }
+        return redirect()->route('allapplicants')->with('success','Data updated');
+    }
 }

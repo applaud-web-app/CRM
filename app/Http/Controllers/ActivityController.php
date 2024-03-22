@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Common;
 use Illuminate\Http\Request;
 use App\Models\Activity;
+use App\Models\Followup;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
@@ -26,6 +29,7 @@ class ActivityController extends Controller
             });
             $readAllRecivedNotify = Activity::Where('receiver_id',$userId)->where('reciver_read',0)->update(['reciver_read' => 1]);
         }
+        
         return view("activity.Allactivities", compact("activities"));
     }
 

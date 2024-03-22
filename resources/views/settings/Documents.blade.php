@@ -39,7 +39,7 @@
                                             <td>{{$document->type}}</td>
                                             <td>{{$document->subcategory}}</td>
                                             <td>
-                                                <a href="{{route('delete-category',$document->id)}}" class="btn btn-danger btn-sm">Delete</a>
+                                                <a href="{{route('delete-category',$document->id)}}" class="btn btn-danger btn-sm delete">Delete</a>
                                             </td>
                                         </tr>
                                         <?php $i++ ?>
@@ -188,5 +188,16 @@
             dynamicFieldsContainer.appendChild(fieldContainer);
         }
     });
+
+    //delete confirmation
+    $(document).on('click', '.delete', function(e) {
+        e.preventDefault();
+        var deleteUrl = $(this).attr('href');
+        var confirmDelete = confirm("Are you sure you want to delete this Lead?");
+        if (confirmDelete) {
+            window.location.href = deleteUrl;
+        }
+    });
 </script>
+
 @endpush

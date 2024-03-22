@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Activity;
+use App\Models\Followup;
 use App\Models\User;
 use Google\Client;
 use Illuminate\Support\Facades\Auth;
@@ -232,5 +233,60 @@ class Common
             ->pluck('profile_img')
             ->first();
         return $image;
+    }
+
+
+    public function followupReminder($user)
+    {
+
+        $accessToken = $this->getAccessToken();
+        if (!$accessToken) {
+            die('Failed to obtain access token');
+        }
+
+        $tokensAndNotes = User::join('followup', 'users.username', '=', 'followup.added_by')
+        ->select('users.device_token', 'followup.notes','followup.next_followup')
+        ->get();
+        $image = asset('assets/images/logo.jpg');
+        $url = 'https://fcm.googleapis.com/v1/projects/laravelpushnotification-78b76/messages:send';
+        
+        foreach ($tokensAndNotes as $token) {
+            $data = [
+                "message" => [
+                    "token" => $token->device_token,
+                    "webpush" => [
+                        "notification" => [
+                            "title" =>"Follow Up Reminder for ".$token->next_followup,
+                            "body" => $token->notes,
+                            "image" => $image,
+                        ],
+                    ]
+                ]
+            ];
+
+            $notify_data = json_encode($data);
+            $headers = [
+                'Authorization: Bearer ' . $accessToken,
+                'Content-Type: application/json',
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $notify_data);
+            $result = curl_exec($ch);
+
+            if ($result === false) {
+                die('curl failed' . curl_error($ch));
+            } else {
+                print_r(json_decode($result, true));
+            }
+            curl_close($ch);
+        }
+
     }
   }

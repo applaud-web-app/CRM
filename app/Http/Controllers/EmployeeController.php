@@ -42,7 +42,7 @@ class EmployeeController extends Controller
                     $action = '<td>
                     <div class="d-flex">
                         <a href="' . route('editemployees', $row->id) . '" class="btn btn-primary  btn-xs sharp me-1"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="' . route('deleteemployees', $row->id) . '" class="btn btn-danger  btn-xs sharp"><i class="fa fa-trash"></i></a>
+                        <a href="' . route('deleteemployees', $row->id) . '" class="btn btn-danger  btn-xs sharp delete"><i class="fa fa-trash"></i></a>
                     </div>												
                 </td>';
                     return $action;

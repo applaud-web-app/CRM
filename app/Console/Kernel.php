@@ -14,7 +14,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('employeebirthdayNotification:every_day')->dailyAt('7:00')->sendOutputTo('command1_output.log');
         $schedule->command('applicantbirthdayNotification:every_day')->dailyAt('7:00')->sendOutputTo('command2_output.log');
-        $schedule->command('workAnniversary:every_day')->everyMinute()->sendOutputTo('command3_output.log');
+        $schedule->command('workAnniversary:every_day')->dailyAt('7:00')->sendOutputTo('command3_output.log');
+        $schedule->command('follow-up:every_day')->dailyAt('7:00')->sendOutputTo('command4_output.log');
+        $schedule->command('follow-up:before_an_hour')->everyMinute()->sendOutputTo('command5_output.log');
     }
 
     /**

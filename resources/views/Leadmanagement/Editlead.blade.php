@@ -20,7 +20,7 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="name">Name</label>
+                                        <label for="name">Name<span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="name"
                                             @isset($data->name)
                                     value="{{ $data->name }}"
@@ -28,19 +28,10 @@
                                             placeholder="Enter Name">
                                     </div>
                                 </div>
+
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="lcode">Code</label>
-                                        <input type="text" class="form-control" name="code"
-                                            @isset($data->code)
-                                    value="{{ $data->code }}"
-                                    @endisset
-                                            placeholder="Enter Lead Code">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="age">Candidate Age</label>
+                                        <label for="age">Candidate Age<span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="age"
                                             @isset($data->age)
                                     value="{{ $data->age }}"
@@ -50,7 +41,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="Leadvalue">Lead Value(₹)</label>
+                                        <label for="Leadvalue">Lead Value(₹)<span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="price"
                                             @isset($data->price)
                                     value="{{ $data->price }}"
@@ -60,7 +51,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="emailaddress">Email Address</label>
+                                        <label for="emailaddress">Email Address<span class="text-danger">*</span></label>
                                         <input type="email" class="form-control" name="email"
                                             @isset($data->email)
                                     value="{{ $data->email }}"
@@ -70,7 +61,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="emailaddress">Mobile number</label>
+                                        <label for="emailaddress">Mobile number<span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="mobile"
                                             @isset($data->mobile)
                                     value="{{ $data->mobile }}"
@@ -80,7 +71,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="dob">Date of Birth</label>
+                                        <label for="dob">Date of Birth<span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="dob"
                                             @isset($data->dob)
                                     value="{{ \Carbon\Carbon::parse($data->dob)->format('Y-m-d') }}"
@@ -139,7 +130,7 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="address">Address</label>
+                                        <label for="address">Address<span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="address"
                                             @isset($data->address)
                                         value="{{ $data->address }}"
@@ -249,7 +240,7 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="source">Sources</label>
+                                        <label for="source">Sources<span class="text-danger">*</span></label>
                                         <select name="source" class="form-control">
                                             <option value="">--Choose Option---</option>
                                             <option value="Google" @if ($data->source == 'Google') selected @endif>
@@ -268,7 +259,7 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="assigned_to">Assigned To</label>
+                                        <label for="assigned_to">Assigned To<span class="text-danger">*</span></label>
                                         <select name="assigned_to" class="form-control">
                                             @isset($users)
                                                 @foreach ($users as $user)
@@ -316,7 +307,7 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
                                     <div class="form-group">
-                                        <label class="form-label" for="interested">Interested</label>
+                                        <label class="form-label" for="interested">Interested<span class="text-danger">*</span></label>
                                         @php
                                         $getInterestType = array_keys(\Common::immigration());
                                     @endphp
@@ -337,7 +328,116 @@
                                 <div class="row" id="fields"></div>
                         </div>
                     </div>
+                    <div class="card h-auto" id="VISA" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">VISA</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Adhaar Card</label>
+                                        <input type="input" class="form-control" 
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
 
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file"  id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Application Number</label>
+                                        <input type="text" class="form-control" 
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- IETS --}}
+                    <div class="card h-auto" id="IETS" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">IETS</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Graduation Degree</label>
+                                        <input type="input" class="form-control" 
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file"  id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Marksheet</label>
+                                        <input type="text" class="form-control" 
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- PTE --}}
+                    <div class="card h-auto" id="PTE" style="display: none">
+                        <div class="card-header">
+                            <h4 class="card-title">PTE</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Adhaar Card</label>
+                                        <input type="input" class="form-control" 
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                    <label class="" for="Applicants_image">Pan Card</label>
+                                    <div class="input-group">
+                                        <div class="form-group">
+                                            <input type="file"  id="Applicants_image"
+                                                accept="image/*" class="form-file-input form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="contacted_date">Application Number</label>
+                                        <input type="text" class="form-control" 
+                                            placeholder="Enter date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
 
                 </div>
@@ -475,6 +575,7 @@
         function getImmigrationLists(selectElement,preselectedValue)
         {
             var immigration_type=selectElement.value;
+            console.log(immigration_type);
             if (previousCardId) {
                 document.getElementById(previousCardId).style.display = 'none';
             }

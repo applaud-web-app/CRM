@@ -116,6 +116,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/applicantdata/{id}',[ApplicantsController::class,'applicantDetails'])->name('applicantdata');
     Route::post('/postaddapplicant',[ApplicantsController::class,'postAddApplicant'])->name('postaddapplicant');
     Route::post('/sendrequest/{id}',[ApplicantsController::class,'sendRequest'])->name('sendrequest');
+    Route::get('/editapplicant/{id}',[ApplicantsController::class,'editApplicant'])->name('editapplicant');
+    Route::post('/posteditapplicant/{id}',[ApplicantsController::class,'postEditApplicant'])->name('posteditapplicant');
 
     //email
     Route::get('/emailtemplates',[EmailController::class,'loadEmailTemplates'])->name('emailtemplates');

@@ -27,7 +27,7 @@ class Leads extends Model
     }
 
     public function documents(){
-        return $this->hasMany(DocumentCategory::class,"type","interested");
+           return  $this->hasMany(DocumentCategory::class, 'type', 'interested');
     }
 
     // public function uploads(){

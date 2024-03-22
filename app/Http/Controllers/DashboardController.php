@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Enquiry;
 use App\Models\Leads;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
@@ -23,6 +24,7 @@ class DashboardController extends Controller
             $todayleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->count();
             $todayapprovedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('proccess_status', 'approved')->count();
             $todayrejectedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('proccess_status', 'rejected')->count();
+            $todaypendingleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('proccess_status', 'proccessing')->count();
             // total enquiry count
             $enquiry = Enquiry::where('is_deleted', 0)->count();
             $leads = Leads::where('is_deleted', 0)->count();
@@ -92,7 +94,7 @@ class DashboardController extends Controller
                 'todayleads' => $todayleads,
                 'todayapprovedleads' => $todayapprovedleads,
                 'todayrejectedleads' => $todayrejectedleads,
-
+                'todaypendingleads' =>$todaypendingleads,
                 'pending' => $pendingLeads,
                 'approved' => $approvedLeads,
                 'leads' => $leads,
@@ -101,6 +103,11 @@ class DashboardController extends Controller
 
             $employees=User::withoutRole("Superadmin")->count();
 
+            //leads approved
+            $role='Superadmin';
+            $leadsapproved=$this->getapprovedleads("Superadmin");
+            $leadsrejected=$this->getrejectedleads($role);
+            $leadspending=$this->getpendingleads($role);
         } else {
             // per day enquiry data according to user
             $currentDate = now()->toDateString();
@@ -108,7 +115,8 @@ class DashboardController extends Controller
             $todayleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->count();
             $todayapprovedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'approved')->count();
             $todayrejectedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'rejected')->count();
-
+            $todaypendingleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'proccessing')->count();
+            
             //total enquiry data according to user
             $enquiry = Enquiry::where('assigned_by', $userId)->where('is_deleted', 0)->count();
             $leads = Leads::where('assigned_by', $userId)->where('is_deleted', 0)->count();
@@ -168,6 +176,7 @@ class DashboardController extends Controller
                 'todayleads' => $todayleads,
                 'todayapprovedleads' => $todayapprovedleads,
                 'todayrejectedleads' => $todayrejectedleads,
+                'todaypendingleads' =>$todaypendingleads,
                 'pending' => $pendingLeads,
                 'approved' => $approvedLeads,
                 'leads' => $leads,
@@ -175,9 +184,80 @@ class DashboardController extends Controller
             ]);
 
             $employees=0;
+            $role='';
+            $leadsapproved=$this->getapprovedleads($role);
+            $leadsrejected=$this->getrejectedleads($role);
+            $leadspending=$this->getpendingleads($role);
 
         }
-        return view('dashboard', compact('data','leadcount','chartdata','enquirydata', 'leadsData', 'usernamesJson', 'totalLeadsJson', 'totalApprovedLeadsJson', 'totalRejectedLeadsJson','employees'));
+        return view('dashboard', compact('data','leadcount','chartdata','enquirydata', 'leadsData', 'usernamesJson', 'totalLeadsJson', 'totalApprovedLeadsJson', 'totalRejectedLeadsJson','employees',
+        'leadsapproved','leadsrejected','leadspending'));
     }
+
+
+    public function getapprovedleads($role)
+    {   $userId = Auth::id();
+        if(($role=='Superadmin'))
+        {
+            $data=Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('proccess_status','approved')
+            ->groupBy('month')
+            ->orderBy('month')->get();
+            $jsondata=json_encode($data);
+            return $jsondata;
+        }
+        else if($role=='')
+        {
+            $data=Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('proccess_status','approved')->where('assigned_by',$userId)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()->toArray();
+            $jsondata=json_encode($data);
+            return $jsondata;
+        }
+    }
+
+    public function getrejectedleads($role)
+    {
+        $userId = Auth::id();
+        if(($role=='Superadmin'))
+        {
+            $data=Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('proccess_status','rejected')
+            ->groupBy('month')
+            ->orderBy('month')->get();
+            $jsondata=json_encode($data);
+            return $jsondata;
+        }
+        else if($role=='')
+        {
+            $data=Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('proccess_status','rejected')->where('assigned_by',$userId)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()->toArray();
+            $jsondata=json_encode($data);
+            return $jsondata;
+        }
+    }
+
+        public function getpendingleads($role)
+        {
+            $userId = Auth::id();
+            if(($role=='Superadmin'))
+            {
+                $data=Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('proccess_status','proccessing')
+                ->groupBy('month')
+                ->orderBy('month')->get();
+                $jsondata=json_encode($data);
+                return $jsondata;
+            }
+            else if($role=='')
+            {
+                $data=Leads::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')->where('proccess_status','proccessing')->where('assigned_by',$userId)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get()->toArray();
+                $jsondata=json_encode($data);
+                return $jsondata;
+            }
+        }
 
 }

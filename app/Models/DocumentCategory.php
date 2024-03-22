@@ -9,4 +9,8 @@ class DocumentCategory extends Model
 {
     use HasFactory;
     protected $table = "document_category";
+
+    public function docs(){
+       return $this->belongsTo(Documents::class,'id','document_id');
+    }
 }

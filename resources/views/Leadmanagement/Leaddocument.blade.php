@@ -46,11 +46,11 @@
                                     </thead>
                                     <tbody>
                                         @php $i=1; @endphp
-                                        @foreach ($data->documents as $item)
+                                        @foreach ($data as $item)
                                             <tr>
                                                 <td>{{++$loop->index}}</td>
-                                                <td>{{ucfirst($item->name)}}</td>
-                                                <td>{{$item->type}}</td>
+                                                <td>{{ucfirst($item->documents)}}</td>
+                                                <td>{{$item->Type}}</td>
                                                 <td>
                                                     @if (in_array($item->id,array_keys($uplodedDocs)))
                                                     <span class="badge badge-success">Uploaded</span>
@@ -61,7 +61,7 @@
                                                 <td>
                                                     @if (in_array($item->id,array_keys($uplodedDocs)))
                                                         <a href="{{ asset('uploads/docs/'.$uplodedDocs[$item->id]) }}" target="_blank" class="btn btn-secondary btn-sm">View</a>
-                                                        <a href="{{route('deletedocs',[$data->id,$item->id])}}" class="btn btn-danger btn-sm delete-doc">Delete</a>
+                                                        <a href="{{route('deletedocs',[$id,$item->id])}}" class="btn btn-danger btn-sm delete-doc">Delete</a>
                                                     @endif
 
                                                     
@@ -70,8 +70,8 @@
                                                         <a href="javascript:void(0)" data-bs-toggle="modal"
                                                         data-bs-target="#documentModal"
                                                         class="btn btn-primary btn-sm upload-files"
-                                                        data-name="{{ $item->name }}"
-                                                        data-type="{{ $item->type }}"
+                                                        data-name="{{ $item->documents }}"
+                                                        data-type="{{ $item->Type }}"
                                                         data-doc_id="{{$item->id}}"><i
                                                             class="fas fa-plus"></i>Upload</a>
                                                     @endif  
@@ -84,7 +84,7 @@
                             </div>
                             <div class="card-footer text-end">
                                 <div>
-                                   <a href="{{route('applyapproval',$data->id)}}" class="btn btn-secondary  "><i class="far fa-check-circle me-2"></i>Send For Approval</a>
+                                   <a href="{{route('applyapproval',$id)}}" class="btn btn-secondary  "><i class="far fa-check-circle me-2"></i>Send For Approval</a>
                                 </div>
                              </div>
                         </div>

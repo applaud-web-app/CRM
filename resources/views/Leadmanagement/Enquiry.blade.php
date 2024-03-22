@@ -98,27 +98,27 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="title">Name</label>
+                                    <label class="form-label" for="title">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter Name ">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="mobile">Mobile Number</label>
+                                    <label class="form-label" for="mobile">Mobile Number <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="mobile"
                                         placeholder="Enter Mobile Number ">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="title">Email Address</label>
+                                    <label class="form-label" for="title">Email Address <span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" name="email" placeholder="Enter email ">
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="interested">Interested</label>
+                                    <label class="form-label" for="interested">Interested <span class="text-danger">*</span></label>
                                     @php
                                         $getInterestType = array_keys(\Common::immigration());
                                     @endphp
@@ -140,7 +140,7 @@
 
                             <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="date">Sources</label>
+                                    <label class="form-label" for="date">Sources<span class="text-danger">*</span></label>
                                     <select name="source" id="" class="form-control">
                                         <option value="Google">Google</option>
                                         <option value="Facebook">Facebook</option>
@@ -180,27 +180,27 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="title">Name</label>
+                                    <label class="form-label" for="title">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter Name ">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="mobile">Mobile Number</label>
+                                    <label class="form-label" for="mobile">Mobile Number<span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="mobile"
                                         placeholder="Enter Mobile Number ">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="title">Email Address</label>
+                                    <label class="form-label" for="title">Email Address<span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" name="email"
                                         placeholder="Enter email ">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="editinterested">Interested</label>
+                                    <label class="form-label" for="editinterested">Interested<span class="text-danger">*</span></label>
                                     @php $getInterestType = array_keys(\Common::immigration());@endphp
                                     <select name="interested" data-type="" id="editinterested" onchange="geteditImmigrationLists(this)" class="form-control">
                                         <option value="">Select Option</option>
@@ -217,7 +217,7 @@
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label" for="date">Sources</label>
+                                    <label class="form-label" for="date">Sources<span class="text-danger">*</span></label>
                                     <select name="source" id="" class="form-control">
                                         <option value="Google">Google</option>
                                         <option value="Facebook">Facebook</option>
@@ -306,14 +306,13 @@
                 datatype: JSON,
                 success: function(response) {
                     console.log(response);
-                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    let html = `<label class="form-label" for="">Type of Immigration<span class="text-danger">*</span></label>
                     <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
                         html += `<option value="${ele.toUpperCase()}">${ele.toUpperCase()}</option>`;
                     });
                     html += `</select>`
-                    console.log(html);
                     $('#interestType').html(html);
                 }
             });
@@ -332,14 +331,13 @@
                 datatype: JSON,
                 success: function(response) {
                     console.log(immigration_type);
-                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    let html = `<label class="form-label" for="">Type of Immigration<span class="text-danger">*</span></label>
                     <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
                         html += `<option value="${ele.toUpperCase()}" ${type == ele.toUpperCase() ? 'selected' : ''}>${ele.toUpperCase()}</option>`;
                     });
                     html += `</select>`
-                    console.log(html);
                     $('#editinterestType').html(html);
                 }
             });
@@ -448,5 +446,14 @@
                 document.getElementById("uploadExcel").submit();
             }
         });
+
+        $(document).on('click', '.delete', function(e) {
+        e.preventDefault();
+        var deleteUrl = $(this).attr('href');
+        var confirmDelete = confirm("Are you sure you want to delete this Lead?");
+        if (confirmDelete) {
+            window.location.href = deleteUrl;
+        }
+    });
     </script>
 @endpush

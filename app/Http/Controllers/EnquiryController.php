@@ -22,13 +22,23 @@ use App\Imports\LeadsImports;
 class EnquiryController extends Controller
 {
     public function loadenquiry(Request $request)
-    {
-
+    {   
+        $userid=Auth::id();
         if ($request->ajax()) {
+        // if(Auth::user()->hasRole('Superadmin'))
+        // {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
             $enquiries = Enquiry::where('status', 1)->where('is_deleted',0)->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-            $count_total = Enquiry::where('status', 1)->where('is_deleted',0)->count();
+            $count_total = Enquiry::where('status', 1)->where('is_deleted',0)->count();  
+        // }
+        // else
+        // {
+        //     $start = ($request->start) ? $request->start : 0;
+        //     $pageSize = ($request->length) ? $request->length : 50;
+        //     $enquiries = Enquiry::where('status', 1)->where('assigned_by',$userid)->where('is_deleted',0)->orderBy('id', 'DESC')->skip($start)->take($pageSize);
+        //     $count_total = Enquiry::where('status', 1)->where('assigned_by',$userid)->where('is_deleted',0)->count();
+        // }
             return Datatables::of($enquiries)
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($enquiry) {
@@ -60,7 +70,7 @@ class EnquiryController extends Controller
                           data-immigration="' . $row->type_of_immigration . '"
                           data-id="' . $row->id . '"
                           class="btn btn-primary mb-3"><i class="far fa-edit edit-btn "></i> Edit</a>
-                          <a class="dropdown-item" href="' . route('deleteenquiry', $row->id) . '"><i class="fas fa-trash-alt"></i> Delete</a>
+                          <a class="dropdown-item delete" href="' . route('deleteenquiry', $row->id) . '"><i class="fas fa-trash-alt"></i> Delete</a>
                          
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item text-secondary" href="' . route('convertenquiry', $row->id) . '"><i class="far fa-check-square"></i> Convert To Lead</a>
@@ -181,7 +191,8 @@ class EnquiryController extends Controller
 
 
     public function loadLeads(Request $request)
-    {
+    {   
+        $userid=Auth::id();
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
@@ -211,8 +222,7 @@ class EnquiryController extends Controller
                        <div class="py-2">
                             <a class="dropdown-item" href="' . route('viewLeaddata', $row->id) . '"><i class="far fa-eye"></i> View</a> 
                             <a class="dropdown-item" href="' . route('editaddedlead', $row->id) . '"><i class="far fa-edit"></i> Edit</a>
-                            <a class="dropdown-item" href="' . route('leaddelete', $row->id) . '"><i class="fas fa-trash-alt"></i> Delete</a>
-                       
+                            <a class="dropdown-item delete-leads" href="' . route('leaddelete', $row->id) .'"><i class="fas fa-trash-alt"></i> Delete</a>
                        
                           <div class="dropdown-divider"></div>
                              <a class="dropdown-item text-success" href="' . route('applyapproval', $row->id) . '"><i class="fas fa-paper-plane"></i> Send For Approval</a>
@@ -231,6 +241,7 @@ class EnquiryController extends Controller
                 ->make(true);
         }
         return view('Leadmanagement.Leads');
+        
     }
 
     public function leadDelete($id)
@@ -349,25 +360,27 @@ class EnquiryController extends Controller
         return $data;
     }
 
-    public function applyApproval(Request $request, $id)
-    {
+    public function applyApproval($id){
         $common=new Common();
         $userid = Auth::id();
         $username = Auth::user()->username;
-        $lead = Leads::with('documents')->where('id', $id)->first();
-        if ($lead) {
-            $leadDocumentname = $lead->documents->pluck('name')->toArray();
-            $allDocumentname = Documents::where('leads_id', $id)->pluck('document_name')->toArray();
+        $leads = Leads::where('id',$id)->first();
+        $documents = Documents::where('leads_id',$id)->orderBy('id','DESC')->get()->pluck('document_id')->toArray();
+        $category_documents = DocumentCategory::where('type',$leads->interested)->where('subcategory',$leads->type_of_immigration)->orderBy('id','DESC')->get()->pluck('id')->toArray();
 
-            if (count($allDocumentname) == count($leadDocumentname)) {
-                $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
-                if ($check) {
-                    $note="Lead with name " . $lead->name . " was sent for approval";
+        $diff = array_diff($category_documents,$documents);
+
+        // dd($diff,$category_documents,$documents);
+        if(!count($diff) > 0){
+            $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
+            if ($check) 
+            {
+                $note="Lead with name " . $leads->name . " was sent for approval";
                     if(Auth::user()->hasRole('Superadmin')) 
                     {
                         Activity::create([
                             "sender_id" => $userid,
-                            "receiver_id" => $lead->assigned_to,
+                            "receiver_id" => $leads->assigned_to,
                             "activity" => $note,
                             "done_by" => $username,
                             "admin_read"=>1,
@@ -378,24 +391,74 @@ class EnquiryController extends Controller
                     {
                         Activity::create([
                             "sender_id" => $userid,
-                            "receiver_id" => $lead->assigned_to,
+                            "receiver_id" => $leads->assigned_to,
                             "activity" => $note,
                             "done_by" => $username,
                             "admin_read"=>0,
                             "date" => date('y-m-d')
                         ]);
                     }
-                    $common->sendNotification($userid,$lead->assigned_to, $note);
+                    $common->sendNotification($userid,$leads->assigned_to, $note);
                     return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
-                } else
-                    return redirect()->back()->with("error", "Something went wrong!");
-            } else
-                return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
+            }
+            else
+            {
+                return redirect()->back()->with("error", "Something went wrong!");
+            }
+        }                      
+        else
+        {
+            return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
         }
-
-
-
     }
+
+    // public function applyApproval(Request $request, $id)
+    // {
+    //     $common=new Common();
+    //     $userid = Auth::id();
+    //     $username = Auth::user()->username;
+    //     $lead = Leads::select('document_category.id as id','leads.name as Name','leads.assigned_to as assignedto','document_category.type as Type', 'document_category.name as documents')->where('leads.id',$id)->join('document_category',function($q){
+    //         $q->on('document_category.subcategory','leads.type_of_immigration')->on('document_category.type','leads.interested');
+    //     })->get();
+        
+    //     if ($lead) {
+    //         $leadDocumentname = $lead->pluck('documents')->toArray();
+    //         $allDocumentname = Documents::where('leads_id', $id)->pluck('document_name')->toArray();
+
+    //         if (count($allDocumentname) >= count($leadDocumentname)) {
+    //             $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
+    //             if ($check) {
+    //                 $note="Lead with name " . $lead->Name . " was sent for approval";
+    //                 if(Auth::user()->hasRole('Superadmin')) 
+    //                 {
+    //                     Activity::create([
+    //                         "sender_id" => $userid,
+    //                         "receiver_id" => $lead->assignedto,
+    //                         "activity" => $note,
+    //                         "done_by" => $username,
+    //                         "admin_read"=>1,
+    //                         "date" => date('y-m-d')
+    //                     ]);
+    //                 }
+    //                 else
+    //                 {
+    //                     Activity::create([
+    //                         "sender_id" => $userid,
+    //                         "receiver_id" => $lead->assignedto,
+    //                         "activity" => $note,
+    //                         "done_by" => $username,
+    //                         "admin_read"=>0,
+    //                         "date" => date('y-m-d')
+    //                     ]);
+    //                 }
+    //                 $common->sendNotification($userid,$lead->assignedto, $note);
+    //                 return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
+    //             } else
+    //                 return redirect()->back()->with("error", "Something went wrong!");
+    //         } else
+    //             return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
+    //     }
+    // }
 
     public function viewLeadData(Request $request, $id)
     {
@@ -410,7 +473,10 @@ class EnquiryController extends Controller
 
     public function addLeadDocument(Request $request, $id)
     {
-        $data = Leads::with('documents')->where('id', $id)->first();
+        
+        $data = Leads::select('document_category.id as id','document_category.type as Type', 'document_category.name as documents')->where('leads.id',$id)->join('document_category',function($q){
+            $q->on('document_category.subcategory','leads.type_of_immigration')->on('document_category.type','leads.interested');
+        })->get();
         $uplodedDocs = Documents::where('leads_id', $id)->pluck('document', 'document_id')->toArray();
         return view("Leadmanagement.Leaddocument", compact("id", "data", "uplodedDocs"));
     }
