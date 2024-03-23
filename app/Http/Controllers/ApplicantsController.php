@@ -13,13 +13,11 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DocumentCategory;
 use App\Models\User;
+use App\Models\ExployeeScore;
+use Spatie\Permission\Models\Role;
 
 class ApplicantsController extends Controller
 {
-    // public function showAppliance(Request $request)
-    // {
-
-    // }
     public function pendingApplicants(Request $request)
     {
         if ($request->ajax()) {
@@ -84,12 +82,16 @@ class ApplicantsController extends Controller
     public function rejectApproval($id)
     {   $common=new Common();
         $user_id= Auth::id();
+        
+       
+
         $username=Auth::user()->username;
         $lead=Leads::where('id',$id)->first();
         $approval = Leads::where("id", $id)->update(["proccess_status" => 'rejected']);
         if($approval)
-        {       
+        {   
             $note="Lead with name ".$lead->name." was rejected by ".$username;
+            $common->deductPoints($lead,$note);
             if(Auth::user()->hasRole('Superadmin')) 
             {
                 Activity::create([
@@ -127,6 +129,7 @@ class ApplicantsController extends Controller
         if($approved)
         {   
             $note="Lead with name ".$lead->name." was approved by ".$username;
+            $common->addleadpoint($lead,$note);
             if(Auth::user()->hasRole('Superadmin')) 
             {
                 Activity::create([
@@ -164,6 +167,13 @@ class ApplicantsController extends Controller
             $count_total = Leads::where('is_deleted', 0)->where('proccess_status', "approved")->count();
             return DataTables::of($leads)
                 ->addIndexColumn()
+                ->editColumn('name',function($name){
+                    $data=([
+                        'image'=>$name->profile_img,
+                        'name'=>$name->name
+                    ]);
+                    return $data;
+                })
                 ->editColumn('email', function ($contact) {
                     return $contact->email.' '.$contact->mobile;
                 })
@@ -281,23 +291,18 @@ class ApplicantsController extends Controller
         $addNewApplicant->marital_status = $request->marital_status;
         $addNewApplicant->description = $request->description;
         $addNewApplicant->proccess_status='approved';
+        $addNewApplicant->address=$request->address;
         if ($request->has('profile_img')) {
             $file = $request->profile_img;
             $imageName =  "EMP-".rand().".".$file->extension();
             $file->move(public_path('uploads/applicants/') , $imageName);  
             $addNewApplicant->profile_img  = $imageName; 
         }
+        // dd($addNewApplicant);
         $addNewApplicant->save();
         
         if($request->has('document')){
             $documents = $request->document;
-            // if ($request->has('profile_img')) {
-            //     $file = $request->profile_img;
-            //     // dd($file);
-            //     $imageName =  "EMP-".rand().".".$file->extension();
-            //     $file->move(public_path('uploads/applicants/') , $imageName);  
-            //     $addNewApplicant->profile_img  = $imageName; 
-            // }
             foreach ($documents as $key => $value) {
                 $doc = DocumentCategory::where('id',$key)->first();
                 if($doc){

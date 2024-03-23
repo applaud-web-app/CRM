@@ -9,4 +9,5 @@ class ExployeeScore extends Model
 {
     use HasFactory;
     protected $table = "employee_score";
+    protected $fillable=['point','emp_id','reason','target'];
 }

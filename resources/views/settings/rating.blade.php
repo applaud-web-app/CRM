@@ -136,22 +136,6 @@
                     required: "minimum rating is required",
                     min: "minimum rating cannot be less than 0"
                 }
-            },
-
-
-
-            errorPlacement: function(error, element) {
-                element.addClass('is-invalid');
-                error.insertAfter(element);
-            },
-            highlight: function(element) {
-                $(element).addClass('nonvalid')
-                    .closest('.form-group').removeClass('error');
-            },
-            success: function(element) {
-                //element.addClass('valid')
-                //.closest('.form-group').removeClass('error');
-                element.remove('error');
             }
         });
     </script>

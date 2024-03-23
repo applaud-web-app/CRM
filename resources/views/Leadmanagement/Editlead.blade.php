@@ -274,24 +274,18 @@
                                     <div class="form-group">
                                         <label for="contacted_date">Contacted Date</label>
                                         <input type="date" class="form-control" name="contacted_date"
-                                            @isset($data->dob)
-                                    value="{{ \Carbon\Carbon::parse($data->contacted_date)->format('Y-m-d') }}"
-                                    @else
-                                        value="{{ date('Y-m-d') }}" 
-                                    @endisset
-                                            placeholder="Enter date">
+                                            
+                                    value="@isset($data->contacted_date){{ \Carbon\Carbon::parse($data->contacted_date)->format('Y-m-d') }}@endisset" 
+                                    placeholder="Select date">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="close_date">Close Date</label>
                                         <input type="date" class="form-control" name="close_date"
-                                            @isset($data->close_date)
-                                    value="{{ \Carbon\Carbon::parse($data->close_date)->format('Y-m-d') }}"
-                                    @else
-                                    value="{{ date('d-M-y') }}" 
-                                    @endisset
-                                            placeholder="Enter date">
+                                            
+                                    value="@isset($data->close_date){{ \Carbon\Carbon::parse($data->close_date)->format('Y-m-d') }}@endisset"
+                                    placeholder="Select date">
                                     </div>
                                 </div>
 
@@ -328,118 +322,117 @@
                                 <div class="row" id="fields"></div>
                         </div>
                     </div>
-                    <div class="card h-auto" id="VISA" style="display: none">
-                        <div class="card-header">
-                            <h4 class="card-title">VISA</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                </div>
+
+                <div class="card h-auto" id="VISA" style="display: none">
+                    <div class="card-header">
+                        <h4 class="card-title">VISA</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="contacted_date">Adhaar Card</label>
+                                    <input type="input" class="form-control" 
+                                        placeholder="Enter date">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                <label class="" for="Applicants_image">Pan Card</label>
+                                <div class="input-group">
                                     <div class="form-group">
-                                        <label for="contacted_date">Adhaar Card</label>
-                                        <input type="input" class="form-control" 
-                                            placeholder="Enter date">
+                                        <input type="file"  id="Applicants_image"
+                                            accept="image/*" class="form-file-input form-control">
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-lg-4 col-md-6 col-6 mb-3">
-                                    <label class="" for="Applicants_image">Pan Card</label>
-                                    <div class="input-group">
-                                        <div class="form-group">
-                                            <input type="file"  id="Applicants_image"
-                                                accept="image/*" class="form-file-input form-control">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="contacted_date">Application Number</label>
-                                        <input type="text" class="form-control" 
-                                            placeholder="Enter date">
-                                    </div>
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="contacted_date">Application Number</label>
+                                    <input type="text" class="form-control" 
+                                        placeholder="Enter date">
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
 
-                    {{-- IETS --}}
-                    <div class="card h-auto" id="IETS" style="display: none">
-                        <div class="card-header">
-                            <h4 class="card-title">IETS</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                {{-- IETS --}}
+                <div class="card h-auto" id="IETS" style="display: none">
+                    <div class="card-header">
+                        <h4 class="card-title">IETS</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="contacted_date">Graduation Degree</label>
+                                    <input type="input" class="form-control" 
+                                        placeholder="Enter date">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                <label class="" for="Applicants_image">Pan Card</label>
+                                <div class="input-group">
                                     <div class="form-group">
-                                        <label for="contacted_date">Graduation Degree</label>
-                                        <input type="input" class="form-control" 
-                                            placeholder="Enter date">
+                                        <input type="file"  id="Applicants_image"
+                                            accept="image/*" class="form-file-input form-control">
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-lg-4 col-md-6 col-6 mb-3">
-                                    <label class="" for="Applicants_image">Pan Card</label>
-                                    <div class="input-group">
-                                        <div class="form-group">
-                                            <input type="file"  id="Applicants_image"
-                                                accept="image/*" class="form-file-input form-control">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="contacted_date">Marksheet</label>
-                                        <input type="text" class="form-control" 
-                                            placeholder="Enter date">
-                                    </div>
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="contacted_date">Marksheet</label>
+                                    <input type="text" class="form-control" 
+                                        placeholder="Enter date">
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
 
-                    {{-- PTE --}}
-                    <div class="card h-auto" id="PTE" style="display: none">
-                        <div class="card-header">
-                            <h4 class="card-title">PTE</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                {{-- PTE --}}
+                <div class="card h-auto" id="PTE" style="display: none">
+                    <div class="card-header">
+                        <h4 class="card-title">PTE</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="contacted_date">Adhaar Card</label>
+                                    <input type="input" class="form-control" 
+                                        placeholder="Enter date">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-6 mb-3">
+                                <label class="" for="Applicants_image">Pan Card</label>
+                                <div class="input-group">
                                     <div class="form-group">
-                                        <label for="contacted_date">Adhaar Card</label>
-                                        <input type="input" class="form-control" 
-                                            placeholder="Enter date">
+                                        <input type="file"  id="Applicants_image"
+                                            accept="image/*" class="form-file-input form-control">
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-lg-4 col-md-6 col-6 mb-3">
-                                    <label class="" for="Applicants_image">Pan Card</label>
-                                    <div class="input-group">
-                                        <div class="form-group">
-                                            <input type="file"  id="Applicants_image"
-                                                accept="image/*" class="form-file-input form-control">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6 col-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="contacted_date">Application Number</label>
-                                        <input type="text" class="form-control" 
-                                            placeholder="Enter date">
-                                    </div>
+                            <div class="col-lg-4 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="contacted_date">Application Number</label>
+                                    <input type="text" class="form-control" 
+                                        placeholder="Enter date">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-
                 </div>
 
 

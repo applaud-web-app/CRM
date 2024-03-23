@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\Common;
 use App\Models\DocumentCategory;
 use App\Imports\LeadsImports;
+use Spatie\Permission\Models\Role;
 
 class EnquiryController extends Controller
 {
@@ -368,14 +369,14 @@ class EnquiryController extends Controller
         $documents = Documents::where('leads_id',$id)->orderBy('id','DESC')->get()->pluck('document_id')->toArray();
         $category_documents = DocumentCategory::where('type',$leads->interested)->where('subcategory',$leads->type_of_immigration)->orderBy('id','DESC')->get()->pluck('id')->toArray();
 
-        $diff = array_diff($category_documents,$documents);
-
-        // dd($diff,$category_documents,$documents);
+        $diff = array_diff($category_documents,$documents); // dd($diff,$category_documents,$documents);
         if(!count($diff) > 0){
             $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
             if ($check) 
-            {
+            {   
                 $note="Lead with name " . $leads->name . " was sent for approval";
+                //enquiry points add
+                $common->addenquiryPoints($leads,$note);
                     if(Auth::user()->hasRole('Superadmin')) 
                     {
                         Activity::create([

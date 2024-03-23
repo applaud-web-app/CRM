@@ -413,23 +413,22 @@
                         <label class="" for="${value}">${value}</label>
                         <div class="input-group">
                             <div class="form-file">
-                                <input type="file" name="document[${key}]" class="form-file-input form-control">
+                                <input type="file" name="document[${key}]" class="form-file-input form-control" required>
                             </div>
                         </div>
                     </div>`;
                 });
-                $('#fields').html(html);
-                // response.forEach(function(ele) {
-                // $("form").validate().settings.rules[ele] = {
-                //     required: true
-                // };
-                // $("form").validate().settings.messages[ele] = {
-                //     required: "Please upload the document for " + ele + "."
-                // };
-            // });
-
-            // Trigger validation for the form after adding dynamic fields
-            // $("form").valid();
+                
+                $.each(function(ele) {
+                $("form").validate().settings.rules[ele] = {
+                    required: true
+                };
+                $("form").validate().settings.messages[ele] = {
+                    required: "Please upload the document for " + ele + "."
+                };
+            });
+            $('#fields').html(html);
+            $("form").valid();
             }
         });
     }
@@ -458,7 +457,9 @@
                 name: {
                     required: true
                 },
-                
+                age:{
+                    required:true
+                },
                 dob: {
                     required: true
                 },
@@ -497,6 +498,9 @@
                     required:true
                 },
                 type_of_immigration:{
+                    required:true
+                },
+                document:{
                     required:true
                 },
             },

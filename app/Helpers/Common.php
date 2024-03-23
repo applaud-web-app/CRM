@@ -8,6 +8,7 @@ use App\Models\User;
 use Google\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\ExployeeScore;
 use Spatie\Permission\Models\Role;
 
 class Common
@@ -289,4 +290,44 @@ class Common
         }
 
     }
+
+    public function addenquiryPoints($leadsdata,$reason)
+    {
+        $userId = Auth::id();
+        $roletarget=Role::where('id',$userId)->select('target')->first();
+        $percent=(1/$roletarget->target)*100;
+        $points = ExployeeScore::create([
+            "point" => DB::raw('ROUND(IFNULL(point, 0) +'. $percent.',3)'),
+            "reason"=>$reason,
+            "emp_id"=>$leadsdata->assigned_by,
+            "target"=>$roletarget->target
+        ]);
+    }
+
+    public function addleadpoint($leadsdata,$reason)
+    {
+        $userId = Auth::id();
+        $roletarget=Role::where('id',$userId)->select('target')->first();
+        $percent=(1/$roletarget->target)*100;
+        $points = ExployeeScore::create([
+            "point" => DB::raw('ROUND(IFNULL(point, 0) +'. $percent.',3)'),
+            "reason"=>$reason,
+            "emp_id"=>$leadsdata->assigned_to,
+            "target"=>$roletarget->target
+        ]);
+    }
+    public function deductleadPoints($leadsdata,$reason)
+    {
+        $userId = Auth::id();
+        $roletarget=Role::where('id',$userId)->select('target')->first();
+        $percent=(1/$roletarget->target)*100;
+        $points = ExployeeScore::create([
+            "point" => DB::raw('ROUND(IFNULL(point, 0) -'. $percent.',3)'),
+            "reason"=>$reason,
+            "emp_id"=>$leadsdata->assigned_to,
+            "target"=>$roletarget->target
+        ]);
+    }
+
+
   }

@@ -150,7 +150,7 @@
                         <input type="text" name="id" hidden>
                         <div class="form-group mb-3">
                             <label class="form-label" for="date">Next Follow Up</label>
-                            <input type="datetime-local" class="form-control" name="next_followup" placeholder="Enter date ">
+                            <input type="datetime-local" min="{{ date('Y-m-d\TH:i') }}" class="form-control" name="next_followup" placeholder="Enter date ">
                         </div>
 
 
