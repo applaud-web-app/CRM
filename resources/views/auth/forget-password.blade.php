@@ -8,14 +8,14 @@
 	<meta name="author" content="" />
 	<meta name="robots" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Government School Managemnt" />
-	<meta property="og:title" content="Government School Managemnt" />
-	<meta property="og:description" content="Government School Managemnt" />
+	<meta name="description" content="Government School Management" />
+	<meta property="og:title" content="Government School Management" />
+	<meta property="og:description" content="Government School Management" />
 	<meta property="og:image" content="social-image.png" />
 	<meta name="format-detection" content="telephone=no">
 	
 	<!-- PAGE TITLE HERE -->
-	<title>Government School Managemnt</title>
+	<title>Government School Management</title>
 	
 	<!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}" />
@@ -63,7 +63,7 @@
                             </div>
                                 <div class="card-footer">
                                     <div class=" bottom-footer text-center">
-                                    <p>Copyright © Designed &amp; Developed by <a href="https://applaudwebmedia.com/" target="_blank">Applaud Web Media</a> {{date('y')}}</p>
+                                    {{-- <p>Copyright © Designed &amp; Developed by <a href="https://applaudwebmedia.com/" target="_blank">Applaud Web Media</a> {{date('y')}}</p> --}}
                                 </div>
                             </div>	   
                         </div>
