@@ -8,14 +8,14 @@
 	<meta name="author" content="" />
 	<meta name="robots" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Government School Management" />
-	<meta property="og:title" content="Government School Management" />
-	<meta property="og:description" content="Government School Management" />
+	<meta name="description" content="CRM" />
+	<meta property="og:title" content="CRM" />
+	<meta property="og:description" content="CRM" />
 	<meta property="og:image" content="social-image.png" />
 	<meta name="format-detection" content="telephone=no">
 	
 	<!-- PAGE TITLE HERE -->
-	<title>Government School Management</title>
+	<title>CRM</title>
 	
 	<!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}" />
