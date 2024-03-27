@@ -51,10 +51,12 @@
                                   <div class="col-xl-6 col-md-6">
                                      <ul class="list-style-1">
                                         <li><label class="custom-label w-50 mb-0">Email :</label>{{$data->email}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Date Of Birth :</label>{{date('Y-m-d', strtotime($data->dob))}}
+                                        <li><label class="custom-label w-50 mb-0">Date Of Birth :</label>{{$data->dob}}
                                         </li>
                                         <li><label class="custom-label w-50 mb-0">Marital Status :</label>{{$data->marital_status}}</li>
                                         <li><label class="custom-label w-50 mb-0">Zip code :</label>{{$data->zipcode}}</li>
+                                        <li><label class="custom-label w-50 mb-0">Contacted Date :</label>{{$data->contacted_date}}</li>
+                                        <li><label class="custom-label w-50 mb-0">Close Date :</label>{{$data->close_date}}</li>
                                      </ul>
                                   </div>
                                </div>

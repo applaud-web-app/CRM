@@ -53,8 +53,6 @@
                                 </div>
                             @endif
                             @endisset
-                           
-
                             <div class="row mb-3">
                                 <div class="col-xl-6">
                                     <ul class="list-style-1">
@@ -68,10 +66,23 @@
                                             <p class="mb-0"> {{ $data->email }}</p>
                                         </li>
                                         <li><label class="form-label mb-0 custom-label">Age:</label>
-                                            <p class="mb-0"> {{ $data->age }}</p>
+                                            <p class="mb-0"> {{ $data->age }} years</p>
                                         </li>
                                         <li><label class="form-label mb-0 custom-label">Price:</label>
-                                            <p class="mb-0"> {{ $data->price }}</p>
+                                            <p class="mb-0">₹{{ $data->price }}</p>
+                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">Type:</label>
+                                            <p class="mb-0"> {{ $data->lead_type }}</p>
+                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">Source:</label>
+                                            <p class="mb-0">{{ $data->source }}</p>
+                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">Contacted Date:</label>
+                                            <p class="mb-0"> {{ $data->contacted_date}}</p>
+                                        </li>
+                                        
+                                        <li><label class="form-label mb-0 custom-label">Close Date:</label>
+                                            <p class="mb-0">{{ $data->close_date }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -91,6 +102,15 @@
                                         </li>
                                         <li><label class="form-label mb-0 custom-label">Country :</label>
                                             <p class="mb-0"> {{ $data->country_name }}</p>
+                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">State:</label>
+                                            <p class="mb-0"> {{ $data->state_name }}</p>
+                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">City:</label>
+                                            <p class="mb-0">{{ $data->city_name }}</p>
+                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">Interested:</label>
+                                            <p class="mb-0">{{ $data->interested }}</p>
                                         </li>
                                     </ul>
                                 </div>

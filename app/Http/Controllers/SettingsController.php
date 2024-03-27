@@ -20,6 +20,46 @@ class SettingsController extends Controller
     public function updategeneralsetting(Request $request)
     {
         $data = $request->except('_token');
+        $sitedata=GeneralSetting::select('site_logo','site_image')->first()->toArray();
+        if($request->has('site_logo')){
+            $logo="LOGO-".rand().".".$request->site_logo->extension();
+            $destinationPath = public_path('assets/images/');
+            $filePath = $destinationPath . $sitedata['site_logo'];
+            if($sitedata["site_logo"]!=NULL || $sitedata['site_logo']!="")
+            {
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                    $request->site_logo->move($destinationPath, $logo);
+                    $data['site_logo']=$logo;
+                }
+                else if(!file_exists($filePath))
+                {
+                    $request->site_logo->move($destinationPath, $logo);
+                    $data['site_logo']=$logo;  
+                }
+            }
+            $data['site_logo']=$logo;
+        }
+
+        if($request->has('site_image')){
+            $imagename= "SITE-".rand().".".$request->site_image->extension();
+            $destinationPath = public_path('assets/images/');
+            $filePath = $destinationPath . $sitedata['site_image'];
+            if($sitedata["site_image"]!=NULL || $sitedata['site_image']!="")
+            {
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                    $request->site_image->move($destinationPath, $imagename);
+                    $data['site_image']=$imagename;
+                }
+                else if(!file_exists($filePath))
+                {
+                    $request->site_image->move($destinationPath, $imagename);
+                    $data['site_image']=$imagename;  
+                }
+            }
+            $data['site_image']=$imagename;
+        }
         $check = GeneralSetting::where('id',1)->update($data);
         if ($check) {
             return redirect("/generalsetting")->with("success", "Settings updated successfully ");

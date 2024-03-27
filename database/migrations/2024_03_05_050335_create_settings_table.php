@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('site_name')->nullable();
             $table->mediumText('site_title')->nullable();
             $table->mediumText('company')->nullable();
+            $table->mediumText('site_logo')->nullable();
+            $table->mediumText('site_image')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();

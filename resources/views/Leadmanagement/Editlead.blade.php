@@ -101,10 +101,7 @@
                                 <div class="col-lg-12 col-md-12 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="address">Description</label>
-                                        <textarea name="description" class="form-control" id="" placeholder="Enter Drescription" style="height:100px;">
-                                        @isset($data->description)
-                                        {{ $data->description }}
-                                        @endisset
+                                        <textarea name="description" class="form-control" id="" placeholder="Enter Drescription" style="height:100px;">@isset($data->description){{ $data->description }}@endisset
                                         </textarea>
                                     </div>
                                 </div>
@@ -204,8 +201,8 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="type">Type</label>
-                                        <select name="lead_type" class="form-control">
+                                        <label for="type">Type<span class="text-danger">*</span></label>
+                                        <select name="lead_type" class="form-control" required>
                                             <option value="Hot leads" @if ($data->lead_type == 'Hot leads') selected @endif>
                                                 Hot Lead</option>
                                             <option value="Warm leads" @if ($data->lead_type == 'Warm leads') selected @endif>
@@ -217,8 +214,8 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select name="status" class="form-control">
+                                        <label for="status">Status <span class="text-danger">*</span></label>
+                                        <select name="status" class="form-control" required>
                                             <option value="Generated" @if ($data->status == 'Generated') selected @endif>
                                                 Generated</option>
                                             <option value="Qualified" @if ($data->status == 'Qualified') selected @endif>
@@ -272,7 +269,7 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="contacted_date">Contacted Date</label>
+                                        <label for="contacted_date">Contacted Date<span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="contacted_date"
                                             
                                     value="@isset($data->contacted_date){{ \Carbon\Carbon::parse($data->contacted_date)->format('Y-m-d') }}@endisset" 

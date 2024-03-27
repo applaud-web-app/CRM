@@ -464,7 +464,7 @@
         $(document).on('click', '.delete', function(e) {
         e.preventDefault();
         var deleteUrl = $(this).attr('href');
-        var confirmDelete = confirm("Are you sure you want to delete this Lead?");
+        var confirmDelete = confirm("Are you sure you want to delete this Enquiry?");
         if (confirmDelete) {
             window.location.href = deleteUrl;
         }

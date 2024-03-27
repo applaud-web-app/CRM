@@ -151,7 +151,7 @@ class ApplicantsController extends Controller
                 ]);
             }
             $common->sendNotification($user_id,$lead->assigned_to,$note);
-            return redirect()->route("leads")->with("success","Lead approved");
+            return redirect()->route("allapplicants")->with("success","Lead approved");
         }
     }
 
@@ -266,7 +266,7 @@ class ApplicantsController extends Controller
                 ]);
             }
             $common->sendNotification($user_id,$lead->assigned_to,$note);
-            return redirect()->route('leads')->with('success','Request is missing some documents.');
+            return redirect()->route('leads')->with('success','Lead Request Rejected Successfully.');
         }
         else
             return redirect()->back()->with('error','Error occured');

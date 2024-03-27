@@ -10,9 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="" />
     <!-- PAGE TITLE HERE -->
-    <title>CRM Lead Management System</title>
+    @php
+        $common=new Common();
+        $data=$common->sitedata();
+    @endphp
+    <title>@isset($data['site_title']){{$data['site_title']}}@endisset</title>
     <!-- FAVICONS ICON -->
-    <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}" />
+    <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/'.$data['site_image'])}}" />
     {{-- <link rel="stylesheet" href="{{asset('assets/vendor/chartist/css/chartist.min.css')}}">
     <link href="{{asset('assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/vendor/jqueryui/css/jquery-ui.min.css')}}">
@@ -22,7 +26,6 @@
     <link href="{{asset('assets/vendor/dropzone/dist/dropzone.css')}}" rel="stylesheet"> --}}
 
     @stack('style')
-
     <!-- Style css -->
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/main.css')}}" rel="stylesheet">
@@ -55,8 +58,8 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-            <a href="index.php" class="brand-logo main-logo">
-                <img src="{{asset('assets/images/logo.jpg')}}" alt="" class="img-fluid">
+            <a href="" class="brand-logo main-logo">
+                <img src="{{asset('assets/images/'.$data['site_logo'].'')}}" alt="" class="img-fluid">
             </a>
             <div class="nav-control">
                 <div class="hamburger">

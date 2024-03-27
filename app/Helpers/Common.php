@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Activity;
 use App\Models\Followup;
+use App\Models\GeneralSetting;
 use App\Models\User;
 use Google\Client;
 use Illuminate\Support\Facades\Auth;
@@ -329,5 +330,9 @@ class Common
         ]);
     }
 
-
+    public function sitedata()
+    {
+        $data=GeneralSetting::first()->toArray();
+        return $data;
+    }
   }

@@ -4,7 +4,8 @@
         <!-- row -->
         <div class="container-fluid">
             <div class=" d-flex flex-wrap align-items-center text-head">
-                <h2 class="mb-3 me-auto">{{ $data->name }}</h2>
+                <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
+                <h2 class="mb-3 me-auto">Convert To Lead</h2>
             </div>
             <form class="row" method="POST" action="{{ route('leadgenerate', $data->id) }}">@csrf
                 <div class="col-lg-12">
@@ -261,7 +262,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="contacted_date">Application Number</label>
-                                        <input type="text" class="form-control" name="contacted_date"
+                                        <input type="text" class="form-control" name=""
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -272,9 +273,9 @@
 
 
                     {{-- IETS --}}
-                    <div class="card h-auto" id="IETS" style="display: none">
+                    <div class="card h-auto" id="IELTS" style="display: none">
                         <div class="card-header">
-                            <h4 class="card-title">IETS</h4>
+                            <h4 class="card-title">IELTS</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -299,7 +300,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="contacted_date">Marksheet</label>
-                                        <input type="text" class="form-control" name="contacted_date"
+                                        <input type="text" class="form-control" name=""
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -337,7 +338,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="contacted_date">Application Number</label>
-                                        <input type="text" class="form-control" name="contacted_date"
+                                        <input type="text" class="form-control" name=""
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -493,8 +494,15 @@
                 },
                 datatype: JSON,
                 success: function(response) {
-                    console.log(immigration_type);
-                    let html = `<label class="form-label" for="">Type of Immigration <span class="text-danger">*</span></label>
+                    let label = "";
+                    if (immigration_type === "IELTS") {
+                        label = "Type of IELTS";
+                    } else if (immigration_type === "PTE") {
+                        label = "Type of PTE";
+                    } else {
+                        label = "Type of immigration";
+                    }
+                    let html = `<label class="form-label" for="">${label}<span class="text-danger">*</span></label>
                     <select id="type_of_immigration" onchange="getfieldcount(this, '${immigration_type}')" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {

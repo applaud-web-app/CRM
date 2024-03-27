@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="Leadvalue">Lead Value(₹)</label>
+                                        <label for="Leadvalue">Lead Value(₹)<span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="price" placeholder="Enter Value">
                                     </div>
                                 </div>
@@ -133,8 +133,8 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="type">Type </label>
-                                        <select name="lead_type" class="form-control">
+                                        <label for="type">Type <span class="text-danger">*</span></label>
+                                        <select name="lead_type" class="form-control" required>
                                             <option value="Hot leads">Hot leads</option>
                                             <option value="Cold leads">Cold leads</option>
                                             <option value="Warm leads">Warm leads</option>
@@ -143,8 +143,8 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select name="status" class="form-control">
+                                        <label for="status">Status<span class="text-danger">*</span></label>
+                                        <select name="status" class="form-control" required>
                                             <option value="Generated">Generated</option>
                                             <option value="Qualified">Qualified</option>
                                             <option value="Initial">Initial Contact</option>
@@ -183,8 +183,8 @@
 
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="contacted_date">Contacted Date</label>
-                                        <input type="datetime-local" class="form-control" name="contacted_date"
+                                        <label for="contacted_date">Contacted Date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="contacted_date"
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -262,7 +262,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="contacted_date">Application Number</label>
-                                        <input type="text" class="form-control" name="contacted_date"
+                                        <input type="text" class="form-control" name=""
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -281,7 +281,7 @@
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="contacted_date">Graduation Degree</label>
+                                        <label for="">Graduation Degree</label>
                                         <input type="input" class="form-control" name="Adhaar Card"
                                             placeholder="Enter date">
                                     </div>
@@ -300,7 +300,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="contacted_date">Marksheet</label>
-                                        <input type="text" class="form-control" name="contacted_date"
+                                        <input type="text" class="form-control" name=""
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -338,7 +338,7 @@
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
                                         <label for="contacted_date">Application Number</label>
-                                        <input type="text" class="form-control" name="contacted_date"
+                                        <input type="text" class="form-control" name=""
                                             placeholder="Enter date">
                                     </div>
                                 </div>
@@ -348,11 +348,12 @@
 
 
                 </div>
-        </div>
+                
         <div class="col-lg-12 ">
             <button type="submit" class="btn btn-primary  mb-2"><i class="far fa-check-square pe-2"></i>Submit</button>
             <button type="button" class="btn btn-dark  mb-2"><i class="far fa-window-close pe-2"></i>Cancel
             </button>
+        </div>
         </div>
         </form>
         </div>
@@ -402,7 +403,14 @@
                     },
                     type_of_immigration: {
                         required: true
+                    },
+                    price:{
+                        required:true
+                    },
+                    contacted_date:{
+                        required:true
                     }
+                    
                 },
                 messages: {
                     name: "Please enter your name.",

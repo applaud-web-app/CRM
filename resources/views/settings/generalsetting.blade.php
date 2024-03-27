@@ -10,7 +10,7 @@
         </div>
         <div class="row">
             <div class="col-xl-12">
-                <form class="card" id='generalform' action="{{ route('generalupdate') }}" method="POST">@csrf
+                <form class="card" id='generalform' action="{{ route('generalupdate') }}" enctype="multipart/form-data" method="POST">@csrf
 
                     <div class="card-body">
                         <div class="mb-3">
@@ -53,6 +53,30 @@
                                 <label for="address">Address<span class="text-danger">*</span></label>
                                 <textarea name="address" id="address" class="form-control" placeholder="Enter Full Address" style="height: 100px;">@isset($data->address){{$data->address}}@endisset</textarea>
                             </div>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label class="" for="profile_image">Site Logo <code>Img type must be : JPG, JPEG & PNG</code></label><br>
+                               @isset($data->site_logo)
+                                  <img src="{{asset('assets/images/'.$data->site_logo.'')}}" alt="@isset($data->company){{$data->company}}@endisset" height="100px">
+                               @endisset
+                               <div class="input-group">
+                                  <div class="form-file">
+                                     <input type="file" name="site_logo" id="profile_image" accept="image/*" class="form-file-input form-control">
+                                  </div>
+                               </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="" for="profile_image">Site Image <code>Img type must be : JPG, JPEG & PNG</code></label><br>
+                               @isset($data->site_image)
+                                  <img src="{{asset('assets/images/'.$data->site_image.'')}}" alt="@isset($data->company){{$data->company}}@endisset" height="100px">
+                               @endisset
+                               <div class="input-group">
+                                  <div class="form-file">
+                                     <input type="file" name="site_image" id="profile_image" accept="image/*" class="form-file-input form-control">
+                                  </div>
+                               </div>
                         </div>
 
                     </div>
