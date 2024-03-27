@@ -67,15 +67,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label class="form-label" for="rating">Rating Name </label>
+                        <label class="form-label" for="rating">Rating Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="rating_name" placeholder="Enter Rating">
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label" for="minimum">Minimum </label>
+                        <label class="form-label" for="minimum">Minimum <span class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="minimum" placeholder="Enter Minimum">
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label" for="maximum">Maximum </label>
+                        <label class="form-label" for="maximum">Maximum <span class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="maximum" placeholder="Enter Maximum">
                     </div>
 

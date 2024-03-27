@@ -21,8 +21,8 @@ class DashboardController extends Controller
             //per day enquiry data
             $currentDate = now()->toDateString();
             $todayenquiry = Enquiry::whereDate('created_at', $currentDate)->where('is_deleted', 0)->count();
-            $todayleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->count();
-            $todayapprovedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('proccess_status', 'approved')->count();
+            $todayleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('lead_mode','converted')->count();
+            $todayapprovedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('lead_mode','converted')->where('proccess_status', 'approved')->count();
             $todayrejectedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('proccess_status', 'rejected')->count();
             $todaypendingleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('proccess_status', 'proccessing')->count();
             // total enquiry count
@@ -112,8 +112,8 @@ class DashboardController extends Controller
             // per day enquiry data according to user
             $currentDate = now()->toDateString();
             $todayenquiry = Enquiry::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->count();
-            $todayleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->count();
-            $todayapprovedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'approved')->count();
+            $todayleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('lead_mode','converted')->where('assigned_by', $userId)->count();
+            $todayapprovedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('lead_mode','converted')->where('assigned_by', $userId)->where('proccess_status', 'approved')->count();
             $todayrejectedleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'rejected')->count();
             $todaypendingleads = Leads::whereDate('created_at', $currentDate)->where('is_deleted', 0)->where('assigned_by', $userId)->where('proccess_status', 'proccessing')->count();
             

@@ -36,28 +36,74 @@
  
                                <div class="row">
                                   <div class="col-xl-6 col-md-6">
-                                     <ul class="list-style-1">
-                                        <li><label class="custom-label w-50 mb-0">Full Name :</label>{{$data->name}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Source :</label>{{$data->source}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Age :</label>{{$data->age}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Mobile.NO</label>{{$data->mobile}}</li>
-                                        
-                                        <li><label class="custom-label w-50 mb-0">Country :</label>{{$data->country_name}}</li>
-                                        <li><label class="custom-label w-50 mb-0">State :</label>{{$data->state_name}}</li>
-                                        <li><label class="custom-label w-50 mb-0">City :</label>{{$data->city_name}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Address :</label>{{$data->address}}</li>
-                                     </ul>
+                                    <ul class="list-style-1">
+                                       <li><label class="form-label mb-0 custom-label">Name :</label>
+                                           <p class="mb-0"> {{ $data->name }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Mobile:</label>
+                                           <p class="mb-0"> {{ $data->mobile }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Email:</label>
+                                           <p class="mb-0"> {{ $data->email }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Age:</label>
+                                           <p class="mb-0"> {{ $data->age }} years</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Price:</label>
+                                           <p class="mb-0">₹{{ $data->price }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Type:</label>
+                                           <p class="mb-0"> {{ $data->lead_type }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Source:</label>
+                                           <p class="mb-0">{{ $data->source }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Contacted Date:</label>
+                                           <p class="mb-0">{{ isset($data->contacted_date) ? $data->contacted_date : '--' }}</p>
+                                       </li>
+                                       
+                                       <li><label class="form-label mb-0 custom-label">Close Date:</label>
+                                           <p class="mb-0">{{ isset($data->close_date) ? $data->close_date : '--' }}</p>
+                                       </li>
+                                   </ul>
                                   </div>
                                   <div class="col-xl-6 col-md-6">
-                                     <ul class="list-style-1">
-                                        <li><label class="custom-label w-50 mb-0">Email :</label>{{$data->email}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Date Of Birth :</label>{{$data->dob}}
-                                        </li>
-                                        <li><label class="custom-label w-50 mb-0">Marital Status :</label>{{$data->marital_status}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Zip code :</label>{{$data->zipcode}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Contacted Date :</label>{{$data->contacted_date}}</li>
-                                        <li><label class="custom-label w-50 mb-0">Close Date :</label>{{$data->close_date}}</li>
-                                     </ul>
+                                    <ul class="list-style-1">
+                                       <li><label class="form-label mb-0 custom-label">D.O.B:</label><p class="mb-0"> {{$data->dob }}</p></li>
+                                       <li><label class="form-label mb-0 custom-label">Marital_status:</label>
+                                           <p class="mb-0"> {{ isset($data->marital_status) ? $data->marital_status : '--' }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Source:</label>
+                                           <p class="mb-0"> {{ $data->source }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Address:</label>
+                                           <p class="mb-0"> {{ $data->address }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Country :</label>
+                                           <p class="mb-0"> {{ isset($data->country_name) ? $data->country_name : '--' }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">State:</label>
+                                           <p class="mb-0"> {{ isset($data->state_name) ? $data->state_name : '--' }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">City:</label>
+                                           <p class="mb-0">{{ isset($data->city_name) ? $data->city_name : '--' }}</p>
+                                       </li>
+                                       <li><label class="form-label mb-0 custom-label">Interested:</label>
+                                           <p class="mb-0">{{ $data->interested }}</p>
+                                       </li>
+                                       <li>
+                                           <label class="form-label mb-0 custom-label">Type
+                                               @if($data->interested == 'IELTS')
+                                                   Of IELTS
+                                               @elseif ($data->interested == 'VISA')
+                                                   Of Immigration
+                                               @elseif($data->interested == 'PTE')
+                                                   Of PTE
+                                               @endif
+                                           </label>
+                                           <p class="mb-0">{{ $data->type_of_immigration }}</p>
+                                       </li>
+                                   </ul>
                                   </div>
                                </div>
                             </div>
@@ -114,7 +160,7 @@
                 </div>
                 <div class="card-footer text-end">
                          
-                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#requestModal" class="btn btn-secondary me-2 mb-1"><i class="far fa-edit me-1"></i>Reject</a>
+                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#requestModal" class="btn btn-danger me-2 mb-1"><i class="far fa-edit me-1"></i>Reject</a>
                                  <a href="{{route('approved',$data->id)}}" class="btn btn-primary me-2 mb-1"><i class="far fa-check-circle me-1"></i>Accept</a>
                              
                      </div>
@@ -128,13 +174,12 @@
        <div class="modal-content">
            <form method="POST" action="{{route('sendrequest',$data->id)}}">@csrf
                <div class="modal-header">
-                   <h4 class="modal-title">Add Notes</h4>
+                   <h4 class="modal-title">Add Notes<span class="text-danger">*</span></h4>
                    <button type="button" class="btn-close" data-bs-dismiss="modal">
                    </button>
                </div>
                <div class="modal-body">
                        <div class="form-group">
-                      
                            <textarea  class="form-control" name="notes"  placeholder="Enter Notes" style="height:100px;"></textarea>
                        </div>
                </div>

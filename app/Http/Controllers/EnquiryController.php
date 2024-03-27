@@ -202,7 +202,7 @@ class EnquiryController extends Controller
             return Datatables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('contacted_date', function ($dateformat) {
-                    return $dateformat->contacted_date ? $dateformat->contacted_date->format('d-M-y') : '';
+                    return date('d-M, Y', strtotime($dateformat->contacted_date));
                 })
                 ->addColumn('action', function ($row) {
 
@@ -294,6 +294,7 @@ class EnquiryController extends Controller
         $data["lead_mode"] = "added";
         $data["assigned_by"] = $id;
         $data["code"] = $leadCode;
+        dd($data);
         $check = Leads::create($data);
         if ($check) {
             $note="New Lead added manually by ".$username;

@@ -18,14 +18,14 @@
                         <div class="card-body">
 
                             <div class="form-group mb-3">
-                                <label for="publickey">Public Key</label>
+                                <label for="publickey">Public Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->google_api_key){{$data->google_api_key}} @endisset"
                                 
                                 name="google_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="publickey">Secret Key</label>
+                                <label for="publickey">Secret Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->google_api_secret){{$data->google_api_secret}} @endisset" name="google_api_secret" placeholder="Enter Api Key">
 
                             </div>
@@ -49,12 +49,12 @@
                         <div class="card-body">
 
                             <div class="form-group mb-3">
-                                <label for="publickey">Public Key</label>
+                                <label for="publickey">Public Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->fb_api_key){{$data->fb_api_key}} @endisset" name="fb_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="publickey">Secret Key</label>
+                                <label for="publickey">Secret Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->fb_api_secret){{$data->fb_api_secret}} @endisset" name="fb_api_secret" placeholder="Enter Api Key">
 
                             </div>
@@ -78,12 +78,12 @@
                         <div class="card-body">
 
                             <div class="form-group mb-3">
-                                <label for="publickey">Public Key</label>
+                                <label for="publickey">Public Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->justdial_api_key){{$data->justdial_api_key}} @endisset" name="justdial_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="publickey">Secret Key</label>
+                                <label for="publickey">Secret Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->justdial_api_secret){{$data->justdial_api_secret}} @endisset" name="justdial_api_secret" placeholder="Enter Api Key">
 
                             </div>
@@ -107,12 +107,12 @@
                         <div class="card-body">
 
                             <div class="form-group mb-3">
-                                <label for="publickey">Public Key</label>
+                                <label for="publickey">Public Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->instagram_api_key){{$data->instagram_api_key}} @endisset" name="instagram_api_key" placeholder="Enter Api Key">
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="publickey">Secret Key</label>
+                                <label for="publickey">Secret Key<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@isset($data->instagram_api_secret){{$data->instagram_api_secret}} @endisset" name="instagram_api_secret" placeholder="Enter Api Key">
 
                             </div>

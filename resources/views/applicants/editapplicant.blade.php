@@ -38,7 +38,7 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="phonenumber">Applicant Age<span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" name="age" value="@isset($user->age){{$user->age}} @endisset"
+                                    <input type="tel" class="form-control" name="age" value="@isset($user->age){{$user->age}}@endisset"
                                         placeholder="Enter mobile number">
                                 </div>
                             </div>
@@ -46,7 +46,7 @@
                             <div class="col-lg-4 col-md-6 col-12 mb-3">
                                 <div class="form-group">
                                     <label for="Leadvalue">Value(₹)</label>
-                                    <input type="number" class="form-control" name="price" value="@isset($user->price){{$user->price}} @endisset" placeholder="Enter Value">
+                                    <input type="number" class="form-control" name="price" value="@isset($user->price){{$user->price}}@endisset" placeholder="Enter Value">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12 mb-3">

@@ -88,9 +88,7 @@
                                 </div>
                                 <div class="col-xl-6">
                                     <ul class="list-style-1">
-                                        <li><label class="form-label mb-0 custom-label">D.O.B:</label>
-                                            <p class="mb-0"> {{ date('Y-M-d', strtotime($data->dob)) }}</p>
-                                        </li>
+                                        <li><label class="form-label mb-0 custom-label">D.O.B:</label><p class="mb-0"> {{$data->dob }}</p></li>
                                         <li><label class="form-label mb-0 custom-label">Marital_status:</label>
                                             <p class="mb-0"> {{ $data->marital_status }}</p>
                                         </li>
@@ -111,6 +109,18 @@
                                         </li>
                                         <li><label class="form-label mb-0 custom-label">Interested:</label>
                                             <p class="mb-0">{{ $data->interested }}</p>
+                                        </li>
+                                        <li>
+                                            <label class="form-label mb-0 custom-label">Type
+                                                @if($data->interested == 'IELTS')
+                                                    Of IELTS
+                                                @elseif ($data->interested == 'VISA')
+                                                    Of Immigration
+                                                @elseif($data->interested == 'PTE')
+                                                    Of PTE
+                                                @endif
+                                            </label>
+                                            <p class="mb-0">{{ $data->type_of_immigration }}</p>
                                         </li>
                                     </ul>
                                 </div>

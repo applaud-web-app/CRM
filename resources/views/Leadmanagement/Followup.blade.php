@@ -67,7 +67,7 @@
                                                     <span>{{$item->notes}}</span>
                                                 </td>
 
-                                                <td class="wspace-no"><span>{{$item->next_followup}}</span></td>
+                                                <td class="wspace-no"><span>{{\Carbon\Carbon::parse($item->next_followup)->format('M d, Y h:i A')}}</span></td>
                                                 <td class="wspace-no">{{$item->added_by}}</td>
 
                                                 <td>
@@ -80,7 +80,7 @@
                                                                 class="far fa-pencil"></i></a>
                                                         
                                                                 <a href="{{route('deletefollowup',$item->id)}}"
-                                                            class="btn btn-danger  btn-sm ms-2 "><i
+                                                            class="btn btn-danger delete-followup btn-sm ms-2 "><i
                                                                 class="far fa-trash-alt"></i></a>
                                                     </div>
                                                 </td>
@@ -114,11 +114,11 @@
                     <div class="modal-body">
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="title">Follow Up Note</label>
+                            <label class="form-label" for="title">Follow Up Note<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="notes" placeholder="Enter title ">
                         </div>
                         <div class="form-group mb-3">
-                            <label class="form-label" for="date">Next Follow Up</label>
+                            <label class="form-label" for="date">Next Follow Up<span class="text-danger">*</span></label>
                             <input type="datetime-local" min="{{ date('Y-m-d\TH:i') }}" class="form-control" name="next_followup" placeholder="Enter date ">
                         </div>
 
@@ -147,12 +147,12 @@
                     <div class="modal-body">
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="title">Follow Up Note</label>
+                            <label class="form-label" for="title">Follow Up Note<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="notes" placeholder="Enter title ">
                         </div>
                         <input type="text" name="id" hidden>
                         <div class="form-group mb-3">
-                            <label class="form-label" for="date">Next Follow Up</label>
+                            <label class="form-label" for="date">Next Follow Up<span class="text-danger">*</span></label>
                             <input type="datetime-local" min="{{ date('Y-m-d\TH:i') }}" class="form-control" name="next_followup" placeholder="Enter date ">
                         </div>
 
@@ -199,5 +199,15 @@
             $('#editfollow input[name="next_followup"]').val(date);
             $('#editfollow input[name="id"]').val(id);
         });       
+</script>
+<script>
+    $(document).on('click', '.delete-followup', function(e) {
+        e.preventDefault();
+        var deleteUrl = $(this).attr('href');
+        var confirmDelete = confirm("Are you sure you want to delete this followup date?");
+        if (confirmDelete) {
+            window.location.href = deleteUrl;
+        }
+    });
 </script>
 @endpush

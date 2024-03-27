@@ -78,7 +78,11 @@
                         name: 'name',
                         render: function(data, type, row, meta) {
                         if (type === 'display' && data) {
-                             return '<img src="uploads/applicants/' + data.image + '" class="img-thumbnail rounded-circle me-1" style="width:50px;">' + " " + data.name;
+                            if (data.image !== null) {
+                                return '<img src="uploads/applicants/' + data.image + '" class="img-thumbnail rounded-circle me-1" style="width:50px;">' + " " + data.name;
+                            } else {
+                                return '<img src="assets/images/user.jpg" class="img-thumbnail rounded-circle me-1" style="width:50px;">' + " " + data.name;
+                            }
                         } else {
                             return data.name;
                         }

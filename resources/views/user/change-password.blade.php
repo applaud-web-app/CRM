@@ -16,12 +16,12 @@
                         @csrf
                         <div class="card-body">
                             <div class="form-group mb-3">
-                                <label for="new_password">Create New Password</label>
+                                <label for="new_password">Create New Password<span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" name="new_password" id="new_password" placeholder="Enter New Password">
                                 <i class="toggle-password far fa-fw fa-eye-slash"></i>
                             </div>
                             <div class="form-group">
-                                <label for="confirm_password">Confirm New Password</label>
+                                <label for="confirm_password">Confirm New Password<span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Enter Confirm Password">
                                 <i class="toggle-password far fa-fw fa-eye-slash"></i>
                             </div>

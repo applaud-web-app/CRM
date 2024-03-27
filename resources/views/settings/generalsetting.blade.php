@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="" for="profile_image">Site Image <code>Img type must be : JPG, JPEG & PNG</code></label><br>
+                            <label class="" for="profile_image">Fav Icon <code>Img type must be : JPG, JPEG & PNG</code></label><br>
                                @isset($data->site_image)
                                   <img src="{{asset('assets/images/'.$data->site_image.'')}}" alt="@isset($data->company){{$data->company}}@endisset" height="100px">
                                @endisset

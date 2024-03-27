@@ -30,7 +30,7 @@ class ApplicantsController extends Controller
             return DataTables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('contacted_date', function ($dateformat) {
-                    return $dateformat->contacted_date ? $dateformat->contacted_date->format('d-M-y') : '';
+                    return date('d-M, Y', strtotime($dateformat->contacted_date));
                 })
                 ->addColumn('action', function ($row) {
 
@@ -289,6 +289,13 @@ class ApplicantsController extends Controller
         $addNewApplicant->marital_status = $request->marital_status;
         $addNewApplicant->description = $request->description;
         $addNewApplicant->proccess_status='approved';
+        $addNewApplicant->interested=$request->interested;
+        $addNewApplicant->type_of_immigration=$request->type_of_immigration;
+        $addNewApplicant->country=$request->country;
+        $addNewApplicant->state=$request->state;
+        $addNewApplicant->city=$request->city;
+        $addNewApplicant->lead_type=$request->lead_type;
+        $addNewApplicant->source=$request->source;
         $addNewApplicant->address=$request->address;
         if ($request->has('profile_img')) {
             $file = $request->profile_img;
@@ -296,7 +303,6 @@ class ApplicantsController extends Controller
             $file->move(public_path('uploads/applicants/') , $imageName);  
             $addNewApplicant->profile_img  = $imageName; 
         }
-        // dd($addNewApplicant);
         $addNewApplicant->save();
         
         if($request->has('document')){

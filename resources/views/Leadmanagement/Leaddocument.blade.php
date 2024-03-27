@@ -108,7 +108,7 @@
                         <div class="modal-body">
 
                             <div class="form-group mb-3">
-                                <label class="form-label" for="document" >Document Name</label>
+                                <label class="form-label" for="document" >Document Name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" disabled id="document_name_input" name="document_name"
                                     placeholder="Enter name ">
                                     <input type="hidden" id="document_name_hidden" name="document_name_hidden">
@@ -116,11 +116,11 @@
                             <input type="text" hidden name="document_type">
                             <input type="text" name="document_id" hidden>
                             <div class="form-group">
-                                <label class="" for="documentimage">Document Image</label>
+                                <label class="" for="documentimage">Document Image<span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <div class="form-file">
+                                    <div class="form-file d-flex flex-column align-items-start">
                                         <input type="file" name="document" id="document" accept="image/*"
-                                            class="form-file-input form-control">
+                                            class="form-control">
                                     </div>
                                 </div>
                             </div>

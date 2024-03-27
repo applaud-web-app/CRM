@@ -11,9 +11,6 @@ class Leads extends Model
 {
     use HasFactory;
     protected $table="leads";
-    protected $casts = [
-        'contacted_date' => 'datetime',
-    ];
     protected $fillable = [
         "name","mobile","email","code","age","price","dob",
         "marital_status","description","address","country",

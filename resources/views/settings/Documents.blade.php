@@ -71,7 +71,7 @@
                        <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label" for="interested">Interested</label>
+                                <label class="form-label" for="interested">Interested<span class="text-danger">*</span></label>
                                 @php
                                     $getInterestType = array_keys(\Common::immigration());
                                 @endphp
@@ -91,7 +91,7 @@
                         </div>
                         
                         <div class="col-lg-12 col-md-12 col-12 mb-3 d-none" id="documentNum">
-                            <label class="form-label" for="document_type">No. Of Document</label>
+                            <label class="form-label" for="document_type">No. Of Document<span class="text-danger">*</span></label>
                             <input type="number" class="form-control" name="field_count" min="1" max="10" placeholder="Enter Number of Document" id="fieldnum" required>
                         </div>
 
@@ -129,8 +129,15 @@
                 },
                 datatype: JSON,
                 success: function(response) {
-                    console.log(response);
-                    let html = `<label class="form-label" for="">Type of Immigration</label>
+                    let label = "";
+                    if (immigration_type === "IELTS") {
+                        label = "Type of IELTS";
+                    } else if (immigration_type === "PTE") {
+                        label = "Type of PTE";
+                    } else {
+                        label = "Type of immigration";
+                    }
+                    let html = `<label class="form-label" for="">${label}<span class="text-danger">*</span></label>
                     <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
@@ -179,7 +186,7 @@
             
             
             var fieldContainer = document.createElement('div');
-            fieldContainer.setAttribute('class', 'd-flex align-items-center mb-3');
+            fieldContainer.setAttribute('class', 'mt-3');
             fieldContainer.appendChild(documentNameInput);
             // fieldContainer.appendChild(fieldTypeSelect);
             

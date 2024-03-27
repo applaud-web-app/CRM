@@ -144,6 +144,38 @@
 
                 <div class="card h-auto">
                     <div class="card-header">
+                        <h4 class="card-title">Source Information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="type">Type <span class="text-danger">*</span></label>
+                                    <select name="lead_type" class="form-control" required>
+                                        <option value="Hot leads">Hot leads</option>
+                                        <option value="Cold leads">Cold leads</option>
+                                        <option value="Warm leads">Warm leads</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="source">Sources <span class="text-danger">*</span></label>
+                                    <select name="source" class="form-control">
+                                        <option value="Google">Google</option>
+                                        <option value="Facebook">Facebook</option>
+                                        <option value="Instagram">Instagram</option>
+                                        <option value="Landing Page">Landing Page</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card h-auto">
+                    <div class="card-header">
                         <h4 class="card-title">Interested</h4>
                     </div>
                     <div class="card-body" >

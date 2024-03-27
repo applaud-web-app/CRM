@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-12 mb-3">
                                     <div class="form-group">
-                                        <label for="blood_group">Blood Group</label> <span class="text-danger">*</span>
+                                        <label for="blood_group">Blood Group</label></span>
                                         <input type="text" class="form-control" name="blood_group"
                                             value="{{ $data->blood_group }}" placeholder="Enter Blood Group">
                                     </div>
@@ -182,10 +182,6 @@
                     emp_code: {
                         required: true
                     },
-                    //  password: {
-                    //      required: true,
-                    //      minlength: 10
-                    //  },
                     department: {
                         required: true
                     },
