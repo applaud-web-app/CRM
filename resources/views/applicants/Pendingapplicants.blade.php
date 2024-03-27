@@ -7,6 +7,7 @@
     <!-- row -->
     <div class="container-fluid">
     <div class="d-flex flex-wrap align-items-center text-head">
+      <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
        <h2 class="mb-3 me-auto">Pending Applicants</h2>
        <div>
           <ol class="breadcrumb">
@@ -72,6 +73,35 @@
           </div>
        </div>
     </div>
+
+
+
+    {{-- reject reason modal --}}
+    <div class="modal fade show" id="requestModal"  aria-modal="true" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <form method="POST" action="#" id="rejectmodal">@csrf
+                  <div class="modal-header">
+                      <h4 class="modal-title">Add Notes</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal">
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                          <div class="form-group">
+                         
+                              <textarea  class="form-control" name="notes"  placeholder="Enter Notes" style="height:100px;"></textarea>
+                          </div>
+                  </div>
+                  <div class="modal-footer">
+                    
+                      <button type="submit" class="btn btn-primary"><i class="far fa-check-square"></i> Submit</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+   </div>
+
+
  </section>
 
 
@@ -141,5 +171,15 @@
             ],
         });
     });
+</script>
+
+<script>
+   $(document).ready(function() {
+       $(document).on('click', '.reject-lead', function() {
+           var id = $(this).data('leadid');
+           var newUrl = "{{ route('sendrequest', ':id') }}".replace(':id', id);
+        $('#rejectmodal').attr('action', newUrl);
+       });
+   });
 </script>
  @endpush

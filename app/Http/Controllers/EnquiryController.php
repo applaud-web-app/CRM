@@ -198,7 +198,7 @@ class EnquiryController extends Controller
             $start = ($request->start) ? $request->start : 0;
             $pageSize = ($request->length) ? $request->length : 50;
             $leads = Leads::where("is_deleted", 0)->whereIn('proccess_status', ['created', 'rejected'])->with('employee')->orderBy('id', 'DESC')->skip($start)->take($pageSize);
-            $count_total = Leads::where('is_deleted', 0)->count();
+            $count_total = Leads::where('is_deleted', 0)->whereIn('proccess_status', ['created', 'rejected'])->count();
             return Datatables::of($leads)
                 ->addIndexColumn()
                 ->editColumn('contacted_date', function ($dateformat) {
@@ -223,8 +223,8 @@ class EnquiryController extends Controller
                        <div class="py-2">
                             <a class="dropdown-item" href="' . route('viewLeaddata', $row->id) . '"><i class="far fa-eye"></i> View</a> 
                             <a class="dropdown-item" href="' . route('editaddedlead', $row->id) . '"><i class="far fa-edit"></i> Edit</a>
+                            <a class="dropdown-item" href="'. route('followup',$row->id).'"><i class="fas fa-phone"></i> Followup</a>
                             <a class="dropdown-item delete-leads" href="' . route('leaddelete', $row->id) .'"><i class="fas fa-trash-alt"></i> Delete</a>
-                       
                           <div class="dropdown-divider"></div>
                              <a class="dropdown-item text-success" href="' . route('applyapproval', $row->id) . '"><i class="fas fa-paper-plane"></i> Send For Approval</a>
                        </div>
@@ -581,6 +581,7 @@ class EnquiryController extends Controller
         if (isset($request->list_type)) {
             $type = strtolower($request->list_type);
             if (isset($list[$type])) {
+                // dd($list[$type]);
                 return $list[$type];
             } else {
                 return json_encode([]);

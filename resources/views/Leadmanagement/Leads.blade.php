@@ -7,6 +7,7 @@
         <!-- row -->
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center text-head">
+                <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
                 <h2 class="mb-3 me-auto">All Leads</h2>
                 <div class="">
                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#bulkUploadModal" class="btn btn-secondary mb-3"><i class="fas fa-upload pe-2"></i>Bulk Upload</a>
@@ -27,8 +28,7 @@
                                 <table class="table display data-table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Code</th>
+                                            <th>S.No</th>
                                             <th>Name</th>
                                             <th>Contact Info</th>
                                             <th>Value</th>
@@ -176,10 +176,6 @@
                         searchable: false
                     },
                     {
-                        data:'code',
-                        name:'code'
-                    },
-                    {
                         data: 'name',
                         name: 'name',
                         width: '100px',
@@ -252,8 +248,8 @@
                         '<option value="Close" ' + (data.status === "Close" ? "selected" : "") +
                         '>Close</option>' +
                         '</select>';
-                    $('td:eq(8)', row).html(leadTypeSelect);
-                    $('td:eq(9)', row).html(statusSelect);
+                    $('td:eq(7)', row).html(leadTypeSelect);
+                    $('td:eq(8)', row).html(statusSelect);
                 },
             });
         });

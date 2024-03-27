@@ -44,7 +44,7 @@ class Common
             'student visa',
             'employee visa',
         ],
-        "iets" => [
+        "ielts" => [
             "academic",
             "general training",
         ],
@@ -316,7 +316,7 @@ class Common
             "target"=>$roletarget->target
         ]);
     }
-    public function deductleadPoints($leadsdata,$reason)
+    public function deductleadPoints($leadsdata,$reason)    
     {
         $userId = Auth::id();
         $roletarget=Role::where('id',$userId)->select('target')->first();

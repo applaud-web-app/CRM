@@ -445,15 +445,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     <script>
         //bar chart
         const barChart_1 = document.getElementById("barreport").getContext('2d');
@@ -566,37 +557,6 @@
         // line chart ends here
     </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <script>
         const leadmonth = {};
         const leadsapproved = @php echo $leadsapproved @endphp;
@@ -667,12 +627,6 @@
         var chart = new ApexCharts(document.querySelector("#checking"), options4);
         chart.render();
     </script>
-
-
-
-
-
-
 
     {{-- Rejected leads chart script --}}
     <script>
@@ -745,7 +699,6 @@
         var chart2 = new ApexCharts(document.querySelector("#rejected"), options5);
         chart2.render();
     </script>
-
 
     <script>
         const pending_leadmonth = {};

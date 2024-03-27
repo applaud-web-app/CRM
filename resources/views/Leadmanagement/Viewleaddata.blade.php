@@ -7,10 +7,11 @@
             <div class="row ">
 
                 <div class="col-lg-12 col-md-12 col-12">
-
-
                     <div class="custom-tab-1 bg-white mb-2 pt-1">
                         <ul class="nav nav-tabs">
+                           <li class="nav-item">
+                            <a class="backbtn nav-link" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
+                           </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link active"><i class="la la-home me-2"></i> Profile
                                     Details</a>
@@ -32,7 +33,7 @@
                     <div class="card h-auto">
                         <div class="card-header d-block">
                             <h4 class="card-title mb-2"></h4>
-
+                            <h4 class="card-title mb-3">Personal Information</h4>
                         </div>
                         <div class="card-body">
                             @isset($data->notes)
@@ -52,8 +53,7 @@
                                 </div>
                             @endif
                             @endisset
-                            <h4 class="card-title mb-3">Personal Information</h4>
-
+                           
 
                             <div class="row mb-3">
                                 <div class="col-xl-6">

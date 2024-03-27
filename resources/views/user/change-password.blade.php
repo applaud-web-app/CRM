@@ -7,6 +7,7 @@
         <!-- row -->
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center text-head">
+                <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
                 <h2 class="mb-3 me-auto">Password Settings</h2>
             </div>
             <div class="row ">

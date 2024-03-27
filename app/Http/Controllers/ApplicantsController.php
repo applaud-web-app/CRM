@@ -51,7 +51,8 @@ class ApplicantsController extends Controller
                        <div class="py-2">
                           <a class="dropdown-item" href="' . route('viewapplicant', $row->id) . '"><i class="far fa-eye"></i> View Lead</a>  
                           <a class="dropdown-item" href="'.route('approved',$row->id).'"><i class="fas fa-check"></i> Accept Lead</a>
-                          <a class="dropdown-item" href="' . route('rejectapproval', $row->id) . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
+                          <a class="dropdown-item reject-lead" data-bs-toggle="modal" data-bs-target="#requestModal"
+                          data-leadid="' . $row->id . '"><i class="fas fa-trash-alt"></i> Reject Lead</a>
                        </div>
                     </div>
                  </div>';
@@ -82,16 +83,13 @@ class ApplicantsController extends Controller
     public function rejectApproval($id)
     {   $common=new Common();
         $user_id= Auth::id();
-        
-       
-
         $username=Auth::user()->username;
         $lead=Leads::where('id',$id)->first();
         $approval = Leads::where("id", $id)->update(["proccess_status" => 'rejected']);
         if($approval)
         {   
             $note="Lead with name ".$lead->name." was rejected by ".$username;
-            $common->deductPoints($lead,$note);
+            $common->deductleadPoints($lead,$note);
             if(Auth::user()->hasRole('Superadmin')) 
             {
                 Activity::create([

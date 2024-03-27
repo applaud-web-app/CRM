@@ -4,8 +4,8 @@
     <!-- row -->
     <div class="container-fluid">
         <div class=" d-flex flex-wrap align-items-center text-head">
+            <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
             <h2 class="mb-3 me-auto">Add Applicants</h2>
-
         </div>
         <form class="row" method="POST" action="{{route('postaddapplicant')}}" enctype="multipart/form-data">@csrf
             <div class="col-lg-12">
@@ -213,10 +213,10 @@
 
 
 
-                {{-- IETS --}}
-                <div class="card h-auto" id="IETS" style="display: none">
+                {{-- IELTS --}}
+                <div class="card h-auto" id="IELTS" style="display: none">
                     <div class="card-header">
-                        <h4 class="card-title">IETS</h4>
+                        <h4 class="card-title">IELTS</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -369,7 +369,15 @@
             },
             datatype: JSON,
             success: function(response) {
-                let html = `<label class="form-label" for="">Type of Immigration</label>
+                let label = "";
+                    if (immigration_type === "IELTS") {
+                        label = "Type of IELTS";
+                    } else if (immigration_type === "PTE") {
+                        label = "Type of PTE";
+                    } else {
+                        label = "Type of immigration";
+                    }
+                    let html = `<label class="form-label" for="">${label}<span class="text-danger">*</span></label>
                 <select id="type_of_immigration" onchange="getfieldcount(this,'${immigration_type}')" name="type_of_immigration" class="form-control">
                     <option value="">Select</option>`;
                 response.forEach(function(ele) {

@@ -15,6 +15,9 @@
                     <div class="custom-tab-1 bg-white mb-2 pt-1">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
+                                <a class="backbtn nav-link" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
+                               </li>
+                            <li class="nav-item">
                                 <a href="{{ route('viewLeaddata', $id) }}" class="nav-link "><i class="la la-home me-2"></i>
                                     Profile
                                     Details</a>
@@ -35,7 +38,7 @@
                     </div>
                     <div class="card h-auto">
                         <div class="card-header">
-                            <h4 class="card-title"></h4>
+                            <h4 class="card-title">Follow Up</h4>
                             <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#dealfollowupModal"
                                 class="btn btn-primary btn-md"><i class="fas fa-plus"></i> Add New</a>
                         </div>

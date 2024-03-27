@@ -9,13 +9,13 @@
     <section class="content-body">
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center text-head">
+                <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
                 <h2 class="mb-3 me-auto">Enquiries</h2>
                 <div class="">
                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#bulkUploadModal"
                         class="btn btn-secondary mb-3"><i class="fas fa-upload pe-2"></i>Bulk Upload</a>
                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#enquiryModal"
                         class="btn btn-primary   mb-3"><i class="fas fa-plus pe-2"></i>Add New</a>
-
                 </div>
             </div>
 
@@ -305,8 +305,15 @@
                 },
                 datatype: JSON,
                 success: function(response) {
-                    console.log(response);
-                    let html = `<label class="form-label" for="">Type of Immigration<span class="text-danger">*</span></label>
+                    let label = "";
+                    if (immigration_type === "IELTS") {
+                        label = "Type of IELTS";
+                    } else if (immigration_type === "PTE") {
+                        label = "Type of PTE";
+                    } else {
+                        label = "Type of immigration";
+                    }
+                    let html = `<label class="form-label" for="">${label}<span class="text-danger">*</span></label>
                     <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {
@@ -330,8 +337,15 @@
                 },
                 datatype: JSON,
                 success: function(response) {
-                    console.log(immigration_type);
-                    let html = `<label class="form-label" for="">Type of Immigration<span class="text-danger">*</span></label>
+                    let label = "";
+                    if (immigration_type === "IELTS") {
+                        label = "Type of IELTS";
+                    } else if (immigration_type === "PTE") {
+                        label = "Type of PTE";
+                    } else {
+                        label = "Type of immigration";
+                    }
+                    let html = `<label class="form-label" for="">${label}<span class="text-danger">*</span></label>
                     <select id="type_of_immigration" name="type_of_immigration" class="form-control" required>
                         <option value="">Select</option>`;
                     response.forEach(function(ele) {

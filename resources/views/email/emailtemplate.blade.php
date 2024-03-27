@@ -4,13 +4,8 @@
     <!-- row -->
     <div class="container-fluid">
         <div class=" d-flex flex-wrap align-items-center text-head">
+            <a class="backbtn mb-3 mx-2" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i></a>
             <h2 class="mb-3 me-auto">Email Templates</h2>
-            <div>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Email Templates</a></li>
-                </ol>
-            </div>
         </div>
         <div class="row ">
             
