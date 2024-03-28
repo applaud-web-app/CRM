@@ -210,15 +210,19 @@
                             <span class="nav-text">Lead Management</span>
                         </a>
                         <ul aria-expanded="false">
-                            @role(['Superadmin','Telecaller'])
+                           @php
+                               
+                           @endphp
+                            @can('view_enquiry')
                             <li><a href="{{ route('enquiry') }}">Enquiry</a></li>
-                            @endrole
+                            @endcan
 
-                            @role(['Superadmin','Counsellor'])
+                            @can('view_leads')
                             <li><a href="{{ route('leads') }}">Leads</a></li>
-                            @endrole
+                            @endcan
                         </ul>
                     </li>
+                    @can('view_applicants')
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-user-shield"></i>
                             <span class="nav-text">Applicants</span>
@@ -230,22 +234,23 @@
 
                         </ul>
                     </li>
-
+                    @endcan
 
 
 
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                            <i class="fas fa-users-cog"></i>
-                            <span class="nav-text">Human Resources</span>
-                        </a>
-                        <ul aria-expanded="false">
+                        <i class="fas fa-users-cog"></i>
+                        <span class="nav-text">Human Resources</span>
+                    </a>
+                    <ul aria-expanded="false">
 
-                            <li><a href="{{ route('viewRoles') }}">Roles</a></li>
+                        <li><a href="{{ route('viewRoles') }}">Roles</a></li>
 
-                            <li><a href="{{ route('viewEmployee') }}">Employees</a></li>
+                        <li><a href="{{ route('viewEmployee') }}">Employees</a></li>
 
-                        </ul>
+                    </ul>
                     </li>
+                    
 
                     <li>
                         <a href="{{ route('activities') }}" class="ai-icon" aria-expanded="false">

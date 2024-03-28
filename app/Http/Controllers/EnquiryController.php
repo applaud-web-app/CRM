@@ -702,12 +702,13 @@ class EnquiryController extends Controller
             return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
         }
 
-
-        $results = Leads::select('leads.proccess_status as processstatus','followup.lead_id')
+        $results = Leads::select('leads.proccess_status','followup.lead_id')
         ->join('followup', 'leads.id', '=', 'followup.lead_id')
         ->where('leads.id', $id)
         ->whereIn('leads.proccess_status', ['created','rejected'])
         ->first();
+        // dd($results);
+
         if($results!=NULL)
         {   
             $data = Followup::where('lead_id', $id)->get();
@@ -715,7 +716,7 @@ class EnquiryController extends Controller
         }
         else if($results==NULL)
         {
-            return redirect()->route('leads')->with("error",'Something Went Wrong');
+            return view('Leadmanagement.Followup', compact('id'));
         }
     }
 

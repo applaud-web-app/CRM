@@ -57,35 +57,41 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
+                                       @if (isset($data))
+                                           @foreach ($data as $item)
+                                                <tr>
 
-                                                <td><span class="wspace-no"
-                                                        class="text-primary">{{ $item->serial_id }}</span></td>
-                                                <td class="wspace-no">
+                                                    <td><span class="wspace-no"
+                                                            class="text-primary">{{ $item->serial_id }}</span></td>
+                                                    <td class="wspace-no">
 
-                                                    <span>{{$item->notes}}</span>
-                                                </td>
+                                                        <span>{{$item->notes}}</span>
+                                                    </td>
 
-                                                <td class="wspace-no"><span>{{\Carbon\Carbon::parse($item->next_followup)->format('M d, Y h:i A')}}</span></td>
-                                                <td class="wspace-no">{{$item->added_by}}</td>
+                                                    <td class="wspace-no"><span>{{\Carbon\Carbon::parse($item->next_followup)->format('M d, Y h:i A')}}</span></td>
+                                                    <td class="wspace-no">{{$item->added_by}}</td>
 
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editfollowupmodal"
-                                                        data-id="{{$item->id}}"
-                                                        data-note="{{$item->notes}}"
-                                                        data-date="{{$item->next_followup}}"
-                                                            class="btn btn-primary btn-sm ms-2 edit-followup"><i
-                                                                class="far fa-pencil"></i></a>
-                                                        
-                                                                <a href="{{route('deletefollowup',$item->id)}}"
-                                                            class="btn btn-danger delete-followup btn-sm ms-2 "><i
-                                                                class="far fa-trash-alt"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editfollowupmodal"
+                                                            data-id="{{$item->id}}"
+                                                            data-note="{{$item->notes}}"
+                                                            data-date="{{$item->next_followup}}"
+                                                                class="btn btn-primary btn-sm ms-2 edit-followup"><i
+                                                                    class="far fa-pencil"></i></a>
+                                                            
+                                                                    <a href="{{route('deletefollowup',$item->id)}}"
+                                                                class="btn btn-danger delete-followup btn-sm ms-2 "><i
+                                                                    class="far fa-trash-alt"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                       @else
+                                           <tr>
+                                            <td colspan="100%">NO DATA</td>
+                                           </tr>
+                                       @endif
                                     </tbody>
                                 </table>
                             </div>
