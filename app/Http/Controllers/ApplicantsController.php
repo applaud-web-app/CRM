@@ -21,15 +21,10 @@ class ApplicantsController extends Controller
     public function pendingApplicants(Request $request)
     {   
          
-        $user = Auth::user();
-        $role = $user->roles->first();
-        $roleName = $role->name;
-        // if($role->hasPermissionTo('add_applicants'))
-        // {
-        //     dd($roleName);
-        // }
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_pending_applicant');
         
-        if($role->hasPermissionTo('view_pending_applicant'))
+        if($checkPermission)
         {
             if ($request->ajax()) {
                 $start = ($request->start) ? $request->start : 0;

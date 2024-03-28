@@ -24,6 +24,12 @@ class EnquiryController extends Controller
 {
     public function loadenquiry(Request $request)
     {   
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_enquiry');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $userid=Auth::id();
         if ($request->ajax()) {
         // if(Auth::user()->hasRole('Superadmin'))
@@ -88,6 +94,13 @@ class EnquiryController extends Controller
 
     public function saveEnquiry(Request $request)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('add_enquiry');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $userid = Auth::id();
         $data = $request->except("_token");
         $data["assigned_by"] = $userid;
@@ -101,6 +114,14 @@ class EnquiryController extends Controller
 
     public function editenquiry(Request $request)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('edit_enquiry');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $data = $request->except("id", "_token");
         $id = $request->id;
         $check = Enquiry::where('id', $id)->where('status',1)->first();
@@ -120,6 +141,14 @@ class EnquiryController extends Controller
 
     public function deleteenquiry(Request $request, $id)
     {   
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('delete_enquiry');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $data=Enquiry::where("id", $id)->where('status',1)->first();
         if($data!=NULL)
         {
@@ -139,6 +168,14 @@ class EnquiryController extends Controller
 
     public function bulkUploadEnquiry(Request $request)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('enquiry_bulk_upload');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $request->validate([
             'excel_file' => 'required|mimes:xls,xlsx'
         ]);
@@ -154,6 +191,14 @@ class EnquiryController extends Controller
 
     public function convertToLead(Request $request, $id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('convert_to_lead');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $data = Enquiry::where('id',$id)->where('status',1)->first();
         if($data!=NULL)
         {
@@ -169,6 +214,7 @@ class EnquiryController extends Controller
 
     public function leadGenerate(Request $request, $id)
     {
+
         $common=new Common();
         $data = $request->except("_token");
         $leadId = '#'.rand();
@@ -214,6 +260,13 @@ class EnquiryController extends Controller
 
     public function loadLeads(Request $request)
     {   
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $userid=Auth::id();
         if ($request->ajax()) {
             $start = ($request->start) ? $request->start : 0;
@@ -268,6 +321,13 @@ class EnquiryController extends Controller
 
     public function leadDelete($id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('delete_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $data=Leads::where("id", $id)->where('proccess_status','created')->where('is_deleted',0)->first();
         if($data!=NULL)
         {
@@ -287,6 +347,8 @@ class EnquiryController extends Controller
 
     public function updateLeadType(Request $request, $id)
     {   
+
+
         $check = Leads::where("id", $id)->update(["lead_type" => $request->leadtype,]);
         if ($check) {
             return "success";
@@ -310,13 +372,27 @@ class EnquiryController extends Controller
 
     public function loadCreateLead(Request $request)
     {
+        
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('add_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
         $countries = DB::table('countries')->get();
         return view('Leadmanagement.Createlead', compact('users', 'countries'));
     }
 
     public function createNewLead(Request $request)
-    {   $common=new Common();
+    {   
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('add_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+        $common=new Common();
         $data = $request->except("_token");
         $id = Auth::id();
         $leadCode = "#".rand();
@@ -359,6 +435,13 @@ class EnquiryController extends Controller
 
     public function editNewAddedLead($id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('edit_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $data = Leads::whereIn('proccess_status',['created','rejected'])->find($id);
         if($data!=NULL){
             $countries = DB::table('countries')->get();
@@ -375,6 +458,7 @@ class EnquiryController extends Controller
 
     public function updateLeadData(Request $request, $id)
     {
+        
         $data = $request->except('_token');
         $check = Leads::where('id', $id)->update($data);
         if ($check) {
@@ -399,6 +483,14 @@ class EnquiryController extends Controller
     }
 
     public function applyApproval($id){
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('leads_approval');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $common=new Common();
         $userid = Auth::id();
         $username = Auth::user()->username;
@@ -507,6 +599,13 @@ class EnquiryController extends Controller
 
     public function viewLeadData(Request $request, $id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $data = Leads::select('leads.*', 'countries.name as country_name', 'states.name as state_name', 'cities.name as city_name')
             ->leftJoin('countries', 'leads.country', '=', 'countries.id')
             ->leftJoin('states', 'leads.state', '=', 'states.id')
@@ -527,7 +626,12 @@ class EnquiryController extends Controller
 
     public function addLeadDocument(Request $request, $id)
     {
-        
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $data = Leads::select('document_category.id as id','document_category.type as Type', 'document_category.name as documents')->where('leads.id',$id)->join('document_category',function($q){
             $q->on('document_category.subcategory','leads.type_of_immigration')->on('document_category.type','leads.interested');
         })->get();
@@ -538,6 +642,7 @@ class EnquiryController extends Controller
 
     public function postAddDocuments(Request $request, $id)
     {
+        
         $data = $request->except('_token');
         $data['user_id'] = Auth::id();
         $data['leads_id'] = $id;
@@ -572,6 +677,13 @@ class EnquiryController extends Controller
 
     public function deleteDocs($leadid, $id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $filename = Documents::where('leads_id', $leadid)->where('document_id', $id)->first();
         if ($filename != NULL) {
             $filePath = public_path('uploads/docs/' . $filename->document);
@@ -586,6 +698,14 @@ class EnquiryController extends Controller
 
     public function followUp($id)
     {   
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $results = Leads::select('leads.proccess_status as processstatus','followup.lead_id')
         ->join('followup', 'leads.id', '=', 'followup.lead_id')
         ->where('leads.id', $id)
@@ -604,6 +724,14 @@ class EnquiryController extends Controller
 
     public function createFollowUp(Request $request, $id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
+
         $data = $request->except("_token");
         $username = Auth::user()->username;
         $data["lead_id"] = $id;
@@ -620,6 +748,13 @@ class EnquiryController extends Controller
 
     public function deleteFollowUp($id)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $check = Followup::where("id", $id)->delete();
         if ($check) {
             return redirect()->back()->with("success", "Follow-up Deleted");
@@ -630,6 +765,13 @@ class EnquiryController extends Controller
 
     public function editfollowup(Request $request)
     {
+
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('view_leads');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
+
         $data = $request->only("id", "next_followup", "notes");
         $check = Followup::where("id", $data['id'])->update($data);
         if ($check) {
@@ -663,6 +805,8 @@ class EnquiryController extends Controller
     }
 
     public function deleteDocumentCategory($id){
+
+        
         $deleteCategrory = DocumentCategory::where('id',$id)->first();
         if($deleteCategrory != NULL){
             $deleteCategrory->delete();
@@ -672,6 +816,13 @@ class EnquiryController extends Controller
     }
 
     public function bulkUploadsLeads(Request $request){
+
+        
+        $common = new Common();
+        $checkPermission = $common->userHasPermission('bulk_leads_upload');
+        if(!$checkPermission){
+            return redirect()->route('dashboard')->with('error','You Do Not Have Required Permission.');
+        }
 
         $request->validate([
             'excel_file' => 'required|mimes:xls,xlsx'
@@ -687,6 +838,7 @@ class EnquiryController extends Controller
 
     public function documentNames(Request $request)
     {
+
         $sbcategory=$request->field_type;
         $type=$request->type_immigrant;
         $data=DB::table('document_category')->where('subcategory',$sbcategory)->where('type',$type)->pluck('name','id')->toArray();

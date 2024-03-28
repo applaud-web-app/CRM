@@ -335,4 +335,13 @@ class Common
         $data=GeneralSetting::first()->toArray();
         return $data;
     }
+
+    public function userHasPermission($permission){
+        $role =  Auth::user()->roles->first();
+        if($role->hasPermissionTo($permission)){
+            return true;
+        }else{
+            return false;
+        }
+    }
   }
