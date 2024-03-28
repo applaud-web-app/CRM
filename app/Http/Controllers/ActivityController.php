@@ -13,9 +13,8 @@ class ActivityController extends Controller
 {
     public function getActivities(Request $request)
     {
-
-        $userRole = \Auth::User()->roles()->first();
-        $userId = \Auth::id();
+        $userRole = Auth::User()->roles()->first();
+        $userId = Auth::id();
         if($userRole->name == "Superadmin"){
             $activities = Activity::orderBy('created_at', 'desc') 
             ->get()->groupBy(function($date) {

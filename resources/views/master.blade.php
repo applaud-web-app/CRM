@@ -11,12 +11,16 @@
     <meta name="description" content="" />
     <!-- PAGE TITLE HERE -->
     @php
-        $common=new Common();
-        $data=$common->sitedata();
+        $common = new Common();
+        $data = $common->sitedata();
     @endphp
-    <title>@isset($data['site_title']){{$data['site_title']}}@endisset</title>
+    <title>
+        @isset($data['site_title'])
+            {{ $data['site_title'] }}
+        @endisset
+    </title>
     <!-- FAVICONS ICON -->
-    <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/'.$data['site_image'])}}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/' . $data['site_image']) }}" />
     {{-- <link rel="stylesheet" href="{{asset('assets/vendor/chartist/css/chartist.min.css')}}">
     <link href="{{asset('assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('assets/vendor/jqueryui/css/jquery-ui.min.css')}}">
@@ -27,10 +31,12 @@
 
     @stack('style')
     <!-- Style css -->
-    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
-    <link href="{{asset('assets/css/main.css')}}" rel="stylesheet">
-    <link href="{{asset('assets/css/responsive.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css"
+        integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -59,7 +65,7 @@
         ***********************************-->
         <div class="nav-header">
             <a href="" class="brand-logo main-logo">
-                <img src="{{asset('assets/images/'.$data['site_logo'].'')}}" alt="" class="img-fluid">
+                <img src="{{ asset('assets/images/' . $data['site_logo'] . '') }}" alt="" class="img-fluid">
             </a>
             <div class="nav-control">
                 <div class="hamburger">
@@ -80,7 +86,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="nav-item">
-                                
+
                             </div>
                         </div>
                         <ul class="navbar-nav header-right">
@@ -95,11 +101,12 @@
                                     </svg>
                                     @php
                                         $notify = \Common::getNotificationCount();
-                                        if ($notify['unreadMessage'] == NULL) {
+                                        if ($notify['unreadMessage'] == null) {
                                             $notify['unreadMessage'] = 0;
                                         }
                                     @endphp
-                                    <span class="badge light text-white bg-primary rounded-circle">{{$notify['unreadMessage']}}</span>
+                                    <span
+                                        class="badge light text-white bg-primary rounded-circle">{{ $notify['unreadMessage'] }}</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3 ps"
@@ -110,11 +117,15 @@
                                                     <li>
                                                         <div class="timeline-panel">
                                                             <div class="media me-2 media-info">
-                                                                <img width="30px"height="35px" src="{{asset('/uploads/users/'.$item->sender->profile_img.'')}}" alt="{{$item->done_by}}">
+                                                                <img width="30px"height="35px"
+                                                                    src="{{ asset('/uploads/users/' . $item->sender->profile_img . '') }}"
+                                                                    alt="{{ $item->done_by }}">
                                                             </div>
                                                             <div class="media-body">
-                                                                <h6 class="mb-1">{{substr($item->activity,0,25)}}...</h6>
-                                                                <small class="d-block">{{$item->created_at->format('d-M-y')}}</small>
+                                                                <h6 class="mb-1">{{ substr($item->activity, 0, 25) }}...
+                                                                </h6>
+                                                                <small
+                                                                    class="d-block">{{ $item->created_at->format('d-M-y') }}</small>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -122,22 +133,22 @@
                                             @endisset
                                         </ul>
                                     </div>
-                                    <a class="all-notification" href="{{route('activities')}}">See all notifications <i
-                                            class="ti-arrow-end"></i></a>
+                                    <a class="all-notification" href="{{ route('activities') }}">See all notifications
+                                        <i class="ti-arrow-end"></i></a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown  header-profile">
-                                <a class="nav-link" href="javascript:void(0);" role="button"
-                                    data-bs-toggle="dropdown">
+                                <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
                                     @if (isset(Auth::user()->profile_img))
-                                        <img src="{{asset('uploads/users/'.Auth::user()->profile_img)}}" alt="">
+                                        <img src="{{ asset('uploads/users/' . Auth::user()->profile_img) }}"
+                                            alt="">
                                     @else
-                                        <img src="{{asset('assets/images/user.jpg')}}" alt="">
+                                        <img src="{{ asset('assets/images/user.jpg') }}" alt="">
                                     @endif
 
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="{{route('accountSetting')}}" class="dropdown-item ai-icon">
+                                    <a href="{{ route('accountSetting') }}" class="dropdown-item ai-icon">
                                         <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary"
                                             width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -147,7 +158,7 @@
                                         </svg>
                                         <span class="ms-2">Profile </span>
                                     </a>
-                                    <a href="{{route('userpassword')}}" class="dropdown-item ai-icon">
+                                    <a href="{{ route('userpassword') }}" class="dropdown-item ai-icon">
                                         <svg id="icon-inbox" xmlns="http://www.w3.org/2000/svg" class="text-success"
                                             width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -159,7 +170,7 @@
                                         </svg>
                                         <span class="ms-2">Update Password </span>
                                     </a>
-                                    <a href="{{route('logout')}}" class="dropdown-item ai-icon">
+                                    <a href="{{ route('logout') }}" class="dropdown-item ai-icon">
                                         <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
                                             width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -187,21 +198,25 @@
         <div class="deznav">
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
-                        <li><a class=" ai-icon" href="{{route('dashboard')}}" aria-expanded="false">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span class="nav-text">Dashboard</span>
-                            </a>
-                        </li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <li>
+                        <a class=" ai-icon" href="{{ route('dashboard') }}" aria-expanded="false">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-chart-bar"></i>
                             <span class="nav-text">Lead Management</span>
                         </a>
                         <ul aria-expanded="false">
-                            <!-- <li><a href="all-leads.php">All Leads</a></li> -->
-                            <!-- <li><a href="create-lead.php">Create Leads</a></li> -->
-                            <li><a href="{{route('enquiry')}}">Enquiry</a></li>
-                            <li><a href="{{route('leads')}}">Leads</a></li>
+                            @role(['Superadmin','Telecaller'])
+                            <li><a href="{{ route('enquiry') }}">Enquiry</a></li>
+                            @endrole
 
+                            @role(['Superadmin','Counsellor'])
+                            <li><a href="{{ route('leads') }}">Leads</a></li>
+                            @endrole
                         </ul>
                     </li>
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -210,30 +225,30 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="{{route('pendingapplicants')}}">Pending Applicants</a></li>
-                            <li><a href="{{route('allapplicants')}}">Applicants</a></li>
+                            <li><a href="{{ route('pendingapplicants') }}">Pending Applicants</a></li>
+                            <li><a href="{{ route('allapplicants') }}">Applicants</a></li>
 
                         </ul>
                     </li>
-                    
 
 
-                  
+
+
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="fas fa-users-cog"></i>
                             <span class="nav-text">Human Resources</span>
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="{{route('viewRoles')}}">Roles</a></li>
+                            <li><a href="{{ route('viewRoles') }}">Roles</a></li>
 
-                            <li><a href="{{route('viewEmployee')}}">Employees</a></li>
+                            <li><a href="{{ route('viewEmployee') }}">Employees</a></li>
 
                         </ul>
                     </li>
-                    
+
                     <li>
-                        <a href="{{route('activities')}}" class="ai-icon" aria-expanded="false">
+                        <a href="{{ route('activities') }}" class="ai-icon" aria-expanded="false">
                             <i class="flaticon-013-checkmark"></i>
                             <span class="nav-text">Activities</span>
                         </a>
@@ -253,7 +268,7 @@
                         </ul>
                     </li> --}}
                     <li>
-                        <a href="{{route('emailtemplates')}}" class="ai-icon" aria-expanded="false">
+                        <a href="{{ route('emailtemplates') }}" class="ai-icon" aria-expanded="false">
                             <i class="fas fa-envelope-open-text"></i>
                             <span class="nav-text">Email Templates</span>
                         </a>
@@ -264,13 +279,13 @@
                         </a>
                         <ul aria-expanded="false">
 
-                            <li><a href="{{route('generalsetting')}}">General Settings</a></li>
-                            <li><a href="{{route('emailsetting')}}">Email Settings</a></li>
-                            <li><a href="{{route('ratings')}}">Rating Settings</a></li>
-                            <li><a href="{{route('documents')}}">Documents Settings</a></li>
-                            <li><a href="{{route('accountSetting')}}">Account Settings</a></li>
-                            <li><a href="{{route('userpassword')}}">Password Settings</a></li>
-                            <li><a href="{{route('apisetting')}}">API Key Settings</a></li>
+                            <li><a href="{{ route('generalsetting') }}">General Settings</a></li>
+                            <li><a href="{{ route('emailsetting') }}">Email Settings</a></li>
+                            <li><a href="{{ route('ratings') }}">Rating Settings</a></li>
+                            <li><a href="{{ route('documents') }}">Documents Settings</a></li>
+                            <li><a href="{{ route('accountSetting') }}">Account Settings</a></li>
+                            <li><a href="{{ route('userpassword') }}">Password Settings</a></li>
+                            <li><a href="{{ route('apisetting') }}">API Key Settings</a></li>
 
                         </ul>
                     </li>
@@ -291,7 +306,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright © {{date('Y')}}</p>
+                <p>Copyright © {{ date('Y') }}</p>
             </div>
         </div>
         <!--**********************************
@@ -305,37 +320,39 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{asset('assets/vendor/global/global.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/global/global.min.js') }}"></script>
     <!-- Chart ChartJS plugin files -->
-    <script src="{{asset('assets/vendor/chart.js/Chart.bundle.min.js')}}"></script>
-    <script src="{{asset('assets/js/plugins-init/chartjs-init.js')}}"></script>
-    <script src="{{asset('assets/vendor/jqueryui/js/jquery-ui.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/chart.js/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins-init/chartjs-init.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jqueryui/js/jquery-ui.min.js') }}"></script>
 
     <!-- Datatable -->
     {{-- <script src="{{asset('assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script> --}}
     {{-- <script src="{{asset('assets/js/plugins-init/datatables.init.js')}}"></script> --}}
     <!-- lightgallery -->
-    <script src="{{asset('assets/vendor/lightgallery/lightgallery.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/lightgallery/lightgallery.min.js') }}"></script>
     <!-- Apex Chart -->
-    <script src="{{asset('assets/vendor/apexchart/apexchart.js')}}"></script>
+    <script src="{{ asset('assets/vendor/apexchart/apexchart.js') }}"></script>
     <!-- Chart piety plugin files -->
-    <script src="{{asset('assets/vendor/peity/jquery.peity.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/peity/jquery.peity.min.js') }}"></script>
     <!-- tinymceeditor  -->
-    <script src="{{asset('assets/vendor/tinymce/tinymce.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
     <!-- select2 -->
-    <script src="{{asset('assets/vendor/select2/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
 
     <!-- Dashboard 1 -->
-    <script src="{{asset('assets/js/dashboard/dashboard-1.js')}}"></script>
-    <script src="{{asset('assets/vendor/draggable/draggable.js')}}"></script>
-    <script src="{{asset('assets/js/custom.min.js')}}"></script>
-    <script src="{{asset('assets/js/deznav-init.js')}}"></script>
-    <script src="{{asset('assets/js/demo.js')}}"></script>
-    <script src="{{asset('assets/js/script.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('assets/js/dashboard/dashboard-1.js') }}"></script>
+    <script src="{{ asset('assets/vendor/draggable/draggable.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.min.js') }}"></script>
+    <script src="{{ asset('assets/js/deznav-init.js') }}"></script>
+    <script src="{{ asset('assets/js/demo.js') }}"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"
+        integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @include('message')
     @stack('scripts')
 </body>
