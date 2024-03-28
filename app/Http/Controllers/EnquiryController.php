@@ -397,7 +397,7 @@ class EnquiryController extends Controller
         $data["lead_mode"] = "added";
         $data["assigned_by"] = $id;
         $data["code"] = $leadCode;
-        dd($data);
+        // dd($data);
         $check = Leads::create($data);
         if ($check) {
             $note="New Lead added manually by ".$username;
