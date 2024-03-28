@@ -250,7 +250,7 @@ class EnquiryController extends Controller
             }
             $common->sendNotification($userid,$data['assigned_to'],$note);
             Enquiry::where('id', $id)->update(['status' => 0]);
-            return redirect()->route("leads")->with("success", "Enquiry Converted into Lead");
+            return redirect()->route("enquiry")->with("success", "Enquiry Converted into Lead");
         } else {
             return redirect()->back()->with("error", "Failed to convert to lead");
         }
@@ -458,7 +458,7 @@ class EnquiryController extends Controller
 
     public function updateLeadData(Request $request, $id)
     {
-        
+
         $data = $request->except('_token');
         $check = Leads::where('id', $id)->update($data);
         if ($check) {
