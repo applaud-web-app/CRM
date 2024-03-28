@@ -347,8 +347,6 @@ class EnquiryController extends Controller
 
     public function updateLeadType(Request $request, $id)
     {   
-
-
         $check = Leads::where("id", $id)->update(["lead_type" => $request->leadtype,]);
         if ($check) {
             return "success";
@@ -372,7 +370,6 @@ class EnquiryController extends Controller
 
     public function loadCreateLead(Request $request)
     {
-        
         $common = new Common();
         $checkPermission = $common->userHasPermission('add_leads');
         if(!$checkPermission){
