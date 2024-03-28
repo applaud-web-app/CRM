@@ -103,23 +103,38 @@ class EnquiryController extends Controller
     {
         $data = $request->except("id", "_token");
         $id = $request->id;
-        $check = Enquiry::where('id', $id)->update($data);
-        if ($check) {
-            return redirect()->route('enquiry')->with('success', 'Enquiry Updated');
-        } else {
-            return redirect()->route('enquiry')->with('error', 'Error Occured');
+        $check = Enquiry::where('id', $id)->where('status',1)->first();
+        if($check!=NULL){
+            $execute = Enquiry::where('id', $id)->where('status',1)->update($data);
+            if ($execute) {
+                return redirect()->route('enquiry')->with('success', 'Enquiry Updated');
+            } else {
+                return redirect()->route('enquiry')->with('error', 'Error Occured');
+            }
         }
-
+        else if($check==NULL)
+        {
+            return redirect()->route('enquiry')->with('error', 'Something Went Wrong');
+        }
     }
 
     public function deleteenquiry(Request $request, $id)
-    {
-        $check = Enquiry::where("id", $id)->update(["is_deleted" => 1]);
-        if ($check) {
-            return redirect()->route("enquiry")->with("success", "Enquiry Deleted");
-        } else {
-            return redirect()->route("enquiry")->with("error", "Error occured while deleting");
+    {   
+        $data=Enquiry::where("id", $id)->where('status',1)->first();
+        if($data!=NULL)
+        {
+            $check = Enquiry::where("id", $id)->where('status',1)->update(["is_deleted" => 1]);
+            if ($check) {
+                return redirect()->route("enquiry")->with("success", "Enquiry Deleted");
+            } else {
+                return redirect()->route("enquiry")->with("error", "Error occured while deleting");
+            }
         }
+        else if($data==NULL)
+        {   
+            return redirect()->route("enquiry")->with("error", "Something Went Wrong");
+        }
+        
     }
 
     public function bulkUploadEnquiry(Request $request)
@@ -139,11 +154,17 @@ class EnquiryController extends Controller
 
     public function convertToLead(Request $request, $id)
     {
-        $data = Enquiry::find($id);
-        $countries = DB::table('countries')->get();
-        $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
-        return view('Leadmanagement.ConvertEnquiry', compact('data', 'users', 'countries'));
-
+        $data = Enquiry::where('id',$id)->where('status',1)->first();
+        if($data!=NULL)
+        {
+            $countries = DB::table('countries')->get();
+            $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
+            return view('Leadmanagement.ConvertEnquiry', compact('data', 'users', 'countries'));
+        }
+        else if($data==NUll)
+        {
+            return redirect()->back()->with('error','Something Went Wrong');
+        }
     }
 
     public function leadGenerate(Request $request, $id)
@@ -247,16 +268,25 @@ class EnquiryController extends Controller
 
     public function leadDelete($id)
     {
-        $check = Leads::where("id", $id)->update(["is_deleted" => 1]);
-        if ($check) {
-            return redirect()->route("leads")->with("success", "Lead Deleted");
-        } else {
-            return redirect()->route("leads")->with("error", "Lead could not be deleted");
+        $data=Leads::where("id", $id)->where('proccess_status','created')->where('is_deleted',0)->first();
+        if($data!=NULL)
+        {
+            $check = Leads::where("id", $id)->update(["is_deleted" => 1]);
+            if ($check) {
+                return redirect()->route("leads")->with("success", "Lead Deleted");
+            } else {
+                return redirect()->route("leads")->with("error", "Lead could not be deleted");
+            }
+        }  
+        else if($data==NULL)
+        {
+            return redirect()->route("leads")->with("error", "Something Went Wrong");
         }
+        
     }
 
     public function updateLeadType(Request $request, $id)
-    {
+    {   
         $check = Leads::where("id", $id)->update(["lead_type" => $request->leadtype,]);
         if ($check) {
             return "success";
@@ -329,12 +359,18 @@ class EnquiryController extends Controller
 
     public function editNewAddedLead($id)
     {
-        $data = Leads::find($id);
-        $countries = DB::table('countries')->get();
-        $states = DB::table('states')->where('country_id', $data->country)->get();
-        $cities = DB::table('cities')->where('state_id', $data->state)->get();
-        $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
-        return view('Leadmanagement.Editlead', compact('data', 'users', 'countries', 'states', 'cities'));
+        $data = Leads::whereIn('proccess_status',['created','rejected'])->find($id);
+        if($data!=NULL){
+            $countries = DB::table('countries')->get();
+            $states = DB::table('states')->where('country_id', $data->country)->get();
+            $cities = DB::table('cities')->where('state_id', $data->state)->get();
+            $users = User::withoutRole('Superadmin')->orderBy('id', 'DESC')->where('status', 1)->get();
+            return view('Leadmanagement.Editlead', compact('data', 'users', 'countries', 'states', 'cities'));
+        }
+        else if($data==NULL)
+        {
+            return redirect()->route('leads')->with('error', 'Something Went Wrong');
+        }
     }
 
     public function updateLeadData(Request $request, $id)
@@ -366,51 +402,58 @@ class EnquiryController extends Controller
         $common=new Common();
         $userid = Auth::id();
         $username = Auth::user()->username;
-        $leads = Leads::where('id',$id)->first();
-        $documents = Documents::where('leads_id',$id)->orderBy('id','DESC')->get()->pluck('document_id')->toArray();
-        $category_documents = DocumentCategory::where('type',$leads->interested)->where('subcategory',$leads->type_of_immigration)->orderBy('id','DESC')->get()->pluck('id')->toArray();
+        $leads = Leads::where('id',$id)->whereIn('proccess_status',['rejected','created'])->first();
+        if($leads!=NULL)
+        {
+            $documents = Documents::where('leads_id',$id)->orderBy('id','DESC')->get()->pluck('document_id')->toArray();
+            $category_documents = DocumentCategory::where('type',$leads->interested)->where('subcategory',$leads->type_of_immigration)->orderBy('id','DESC')->get()->pluck('id')->toArray();
 
-        $diff = array_diff($category_documents,$documents); // dd($diff,$category_documents,$documents);
-        if(!count($diff) > 0){
-            $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
-            if ($check) 
-            {   
-                $note="Lead with name " . $leads->name . " was sent for approval";
-                //enquiry points add
-                $common->addenquiryPoints($leads,$note);
-                    if(Auth::user()->hasRole('Superadmin')) 
-                    {
-                        Activity::create([
-                            "sender_id" => $userid,
-                            "receiver_id" => $leads->assigned_to,
-                            "activity" => $note,
-                            "done_by" => $username,
-                            "admin_read"=>1,
-                            "date" => date('y-m-d')
-                        ]);
-                    }
-                    else
-                    {
-                        Activity::create([
-                            "sender_id" => $userid,
-                            "receiver_id" => $leads->assigned_to,
-                            "activity" => $note,
-                            "done_by" => $username,
-                            "admin_read"=>0,
-                            "date" => date('y-m-d')
-                        ]);
-                    }
-                    $common->sendNotification($userid,$leads->assigned_to, $note);
-                    return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
-            }
+            $diff = array_diff($category_documents,$documents); // dd($diff,$category_documents,$documents);
+            if(!count($diff) > 0){
+                $check = Leads::where('id', $id)->update(['proccess_status' => 'proccessing','notes'=>'']);
+                if ($check) 
+                {   
+                    $note="Lead with name " . $leads->name . " was sent for approval";
+                    //enquiry points add
+                    $common->addenquiryPoints($leads,$note);
+                        if(Auth::user()->hasRole('Superadmin')) 
+                        {
+                            Activity::create([
+                                "sender_id" => $userid,
+                                "receiver_id" => $leads->assigned_to,
+                                "activity" => $note,
+                                "done_by" => $username,
+                                "admin_read"=>1,
+                                "date" => date('y-m-d')
+                            ]);
+                        }
+                        else
+                        {
+                            Activity::create([
+                                "sender_id" => $userid,
+                                "receiver_id" => $leads->assigned_to,
+                                "activity" => $note,
+                                "done_by" => $username,
+                                "admin_read"=>0,
+                                "date" => date('y-m-d')
+                            ]);
+                        }
+                        $common->sendNotification($userid,$leads->assigned_to, $note);
+                        return redirect()->route('pendingapplicants')->with("success", "Lead sent for approval.");
+                }
+                else
+                {
+                    return redirect()->back()->with("error", "Something went wrong!");
+                }
+            }                      
             else
             {
-                return redirect()->back()->with("error", "Something went wrong!");
+                return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
             }
-        }                      
-        else
-        {
-            return redirect()->back()->with("error", "Please Fill all the documents before applying for approval");
+        }
+        else if($leads==NULL)
+        {   
+            return redirect()->back()->with("error", "Something Went Wrong");
         }
     }
 
@@ -469,8 +512,17 @@ class EnquiryController extends Controller
             ->leftJoin('states', 'leads.state', '=', 'states.id')
             ->leftJoin('cities', 'leads.city', '=', 'cities.id')
             ->where('leads.id', $id)
+            ->whereIn('proccess_status',['rejected','created'])
             ->first();
-        return view("Leadmanagement.Viewleaddata", compact("data"));
+        if($data!=NULL)
+        {
+            return view("Leadmanagement.Viewleaddata", compact("data"));
+        }
+        else if($data==NULL)
+        {
+            return redirect()->route('leads')->with('error', 'Something Went Wrong');
+        }
+        
     }
 
     public function addLeadDocument(Request $request, $id)
@@ -533,9 +585,21 @@ class EnquiryController extends Controller
     }
 
     public function followUp($id)
-    {
-        $data = Followup::where('lead_id', $id)->get();
-        return view('Leadmanagement.Followup', compact('id', 'data'));
+    {   
+        $results = Leads::select('leads.proccess_status as processstatus','followup.lead_id')
+        ->join('followup', 'leads.id', '=', 'followup.lead_id')
+        ->where('leads.id', $id)
+        ->whereIn('leads.proccess_status', ['created','rejected'])
+        ->first();
+        if($results!=NULL)
+        {   
+            $data = Followup::where('lead_id', $id)->get();
+            return view('Leadmanagement.Followup', compact('id', 'data'));
+        }
+        else if($results==NULL)
+        {
+            return redirect()->route('leads')->with("error",'Something Went Wrong');
+        }
     }
 
     public function createFollowUp(Request $request, $id)

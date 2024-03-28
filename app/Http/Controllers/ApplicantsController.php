@@ -74,17 +74,26 @@ class ApplicantsController extends Controller
             ->leftJoin('cities', 'leads.city', '=', 'cities.id')
             ->where('leads.id', $id)->where('proccess_status','proccessing')
             ->first();
-        $documents = Documents::where('leads_id', $id)->select('document','document_name')->get();
-        $followupdata = Followup::where('lead_id', $id)->select('serial_id', 'notes', 'next_followup', 'added_by')->get();
-        return view("applicants.Viewdata", compact("data", 'documents', "followupdata"));
+        if($data!=NULL)
+        {
+            $documents = Documents::where('leads_id', $id)->select('document','document_name')->get();
+            $followupdata = Followup::where('lead_id', $id)->select('serial_id', 'notes', 'next_followup', 'added_by')->get();
+            return view("applicants.Viewdata", compact("data", 'documents', "followupdata"));   
+        }
+        else if($data==NULL)
+        {
+            return redirect()->route('pendingapplicants')->with('error','Lead Does Not Exist');
+        }
 
     }
+
 
     public function rejectApproval($id)
     {   $common=new Common();
         $user_id= Auth::id();
         $username=Auth::user()->username;
-        $lead=Leads::where('id',$id)->first();
+        $lead=Leads::where('id',$id)->where('proccess_status','proccessing')->first();
+        dd($lead);
         $approval = Leads::where("id", $id)->update(["proccess_status" => 'rejected']);
         if($approval)
         {   
@@ -117,42 +126,107 @@ class ApplicantsController extends Controller
         }
     }
 
+
+    public function sendRequest(Request $request,$id)
+    {
+        $common=new Common();
+        $user_id= Auth::id();
+        $username=Auth::user()->username;
+        $lead= Leads::where('id',$id)->where('proccess_status','proccessing')->select("name","assigned_to")->first();
+        if($lead!=NULL)
+        {
+            $check=Leads::where("id", $id)->update([
+                'notes'=>$request->notes,
+                'proccess_status'=>'rejected'
+            ]);
+            if($check)
+            {
+                $note=$username." requested some documents from ".$lead->name. '.Lead was sent back due to missing documents';
+                $common->deductleadPoints($lead,$note);
+                if(Auth::user()->hasRole('Superadmin')) 
+                {
+                    Activity::create([
+                        "sender_id"=>$user_id,
+                        "receiver_id"=>$lead->assigned_to,
+                        "activity"=>$note,
+                        "done_by"=>$username,
+                        "admin_read"=>1,
+                        "date" => date('y-m-d')
+                    ]);
+                }
+                else
+                {
+                    Activity::create([
+                        "sender_id"=>$user_id,
+                        "receiver_id"=>$lead->assigned_to,
+                        "activity"=>$note,
+                        "done_by"=>$username,
+                        "admin_read"=>0,
+                        "date" => date('y-m-d')
+                    ]);
+                }
+                $common->sendNotification($user_id,$lead->assigned_to,$note);
+                return redirect()->route('leads')->with('success','Lead Request Rejected Successfully.');
+            }
+            else
+                return redirect()->back()->with('error','Error occured');
+        }
+        else if($lead==NULL)
+        {   
+            return redirect()->route('pendingapplicants')->with('error','Something Went Wrong');
+        }
+        
+    }
+
+
     public function approvedRequest($id)
     {
         $common=new Common();
         $user_id= Auth::id();
         $username=Auth::user()->username;
-        $lead=Leads::where('id',$id)->first();
-        $approved = Leads::where("id", $id)->update(["proccess_status"=> "approved"]);
-        if($approved)
-        {   
-            $note="Lead with name ".$lead->name." was approved by ".$username;
-            $common->addleadpoint($lead,$note);
-            if(Auth::user()->hasRole('Superadmin')) 
-            {
-                Activity::create([
-                    "sender_id"=>$user_id,
-                    "receiver_id"=>$lead->assigned_to,
-                    "activity"=>$note,
-                    "done_by"=>$username,
-                    "admin_read"=>1,
-                    "date" => date('y-m-d')
-                ]);
+        $lead=Leads::where('id',$id)->where('proccess_status','proccessing')->first();
+        if($lead!=NULL)
+        {
+            $approved = Leads::where("id", $id)->update(["proccess_status"=> "approved"]);
+            if($approved)
+            {   
+                $note="Lead with name ".$lead->name." was approved by ".$username;
+                $common->addleadpoint($lead,$note);
+                if(Auth::user()->hasRole('Superadmin')) 
+                {
+                    Activity::create([
+                        "sender_id"=>$user_id,
+                        "receiver_id"=>$lead->assigned_to,
+                        "activity"=>$note,
+                        "done_by"=>$username,
+                        "admin_read"=>1,
+                        "date" => date('y-m-d')
+                    ]);
+                }
+                else
+                {
+                    Activity::create([
+                        "sender_id"=>$user_id,
+                        "receiver_id"=>$lead->assigned_to,
+                        "activity"=>$note,
+                        "done_by"=>$username,
+                        "admin_read"=>0,
+                        "date" => date('y-m-d')
+                    ]);
+                }
+                $common->sendNotification($user_id,$lead->assigned_to,$note);
+                return redirect()->route("allapplicants")->with("success","Lead approved");
             }
             else
-            {
-                Activity::create([
-                    "sender_id"=>$user_id,
-                    "receiver_id"=>$lead->assigned_to,
-                    "activity"=>$note,
-                    "done_by"=>$username,
-                    "admin_read"=>0,
-                    "date" => date('y-m-d')
-                ]);
+            {   
+                return redirect()->route("pendingapplicants")->with("error","Lead was not approved");
             }
-            $common->sendNotification($user_id,$lead->assigned_to,$note);
-            return redirect()->route("allapplicants")->with("success","Lead approved");
         }
+        else if($lead==NULL)
+        {
+            return redirect()->route('pendingapplicants')->with('error','Such Lead Does Not Exist');
+        }
+        
     }
 
     public function allApplicants(Request $request){
@@ -228,48 +302,6 @@ class ApplicantsController extends Controller
         }
         else 
             return redirect()->back()->with("error","No such user Exists");
-    }
-
-    public function sendRequest(Request $request,$id)
-    {
-        $common=new Common();
-        $user_id= Auth::id();
-        $username=Auth::user()->username;
-        $lead= Leads::where('id',$id)->select("name","assigned_to")->first();
-        $check=Leads::where("id", $id)->update([
-            'notes'=>$request->notes,
-            'proccess_status'=>'rejected'
-        ]);
-        if($check)
-        {
-            $note=$username." requested some documents from ".$lead->name. '.Lead was sent back due to missing documents';
-            if(Auth::user()->hasRole('Superadmin')) 
-            {
-                Activity::create([
-                    "sender_id"=>$user_id,
-                    "receiver_id"=>$lead->assigned_to,
-                    "activity"=>$note,
-                    "done_by"=>$username,
-                    "admin_read"=>1,
-                    "date" => date('y-m-d')
-                ]);
-            }
-            else
-            {
-                Activity::create([
-                    "sender_id"=>$user_id,
-                    "receiver_id"=>$lead->assigned_to,
-                    "activity"=>$note,
-                    "done_by"=>$username,
-                    "admin_read"=>0,
-                    "date" => date('y-m-d')
-                ]);
-            }
-            $common->sendNotification($user_id,$lead->assigned_to,$note);
-            return redirect()->route('leads')->with('success','Lead Request Rejected Successfully.');
-        }
-        else
-            return redirect()->back()->with('error','Error occured');
     }
 
     

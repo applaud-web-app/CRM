@@ -30,7 +30,7 @@
                                     <thead>
                                         <th>#</th>
                                         <th>Role</th>
-                                        <th>Permissions</th>
+                                        {{-- <th>Permissions</th> --}}
                                         <th>Monthly Target</th>
                                         <th>Deduction Per Rejection</th>
                                         <th>Action</th>
@@ -41,16 +41,11 @@
                                                 <tr>
                                                     <td>{{ ++$loop->index }}</td>
                                                     <td>{{ $item->name }}</td>
-                                                    <td>
-                                                        @foreach ($item->permissions as $permission)
-                                                        <li class=" badge badge-warning light">{{ $permission->name }}</li>
-                                                        @endforeach
-                                                    </td>
                                                     <td>{{ $item->target }}</td>
                                                     <td>{{ $item->deduction }}%</td>
                                                     <td>
                                                         <div class="d-flex align-items-center">
-                                                        <a href="javascript:void(0);" data-target="{{$item->target}}" data-deduction="{{$item->deduction}}" data-id="{{$item->id}}" data-bs-toggle="modal" data-bs-target="#rolesModal" class="btn btn-primary btn-sm ms-2 editRole"><i class="far fa-pencil"></i></a></div>
+                                                        <a href="javascript:void(0);" data-target="{{$item->target}}" data-deduction="{{$item->deduction}}" data-id="{{$item->id}}" data-permission="{{$item->permissions}}" data-bs-toggle="modal" data-bs-target="#rolesModal" class="btn btn-primary btn-sm ms-2 editRole"><i class="far fa-pencil"></i></a></div>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -68,7 +63,7 @@
           Content body end
     ***********************************-->
     <div class="modal fade" id="rolesModal" tabindex="-1" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="{{route('updateRole')}}" method="POST" autocomplete="off">
                     @csrf
@@ -78,14 +73,35 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="target">Target <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" name="target" id="target" placeholder="Enter target" required>
-                            <input type="hidden" class="form-control" name="role" id="role" value="" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="deduction">Deduction % <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" name="deduction" id="deduction" placeholder="Enter Deduction" required>
+                        <div class="row">
+                            <div class="col-lg-6 form-group mb-3">
+                                <label class="form-label" for="target">Target <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="target" id="target" placeholder="Enter target" required>
+                                <input type="hidden" class="form-control" name="role" id="role" value="" required>
+                            </div>
+                            <div class="col-lg-6 form-group mb-3">
+                                <label class="form-label" for="deduction">Deduction % <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="deduction" id="deduction" placeholder="Enter Deduction" required>
+                            </div>
+                            <div class="col-lg-12 form-group mb-3">
+                                <label class="form-label">Assign Permissions <span class="text-danger">*</span></label>
+                                <div class="col-lg-3 px-1">
+                                    <input class="form-check-input select-all-checkbox" type="checkbox" id="select-all-checkbox">
+                                    <label class="form-check-label" for="select-all-checkbox" style="color: blue">
+                                        Select All
+                                    </label>
+                                </div>
+                                <div class="row checkbox-group px-3">
+                                    @foreach ($permissions as $permission)
+                                        <div class="col-lg-4 form-check">
+                                            <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->id }}" id="permissions" >
+                                            <label class="form-check-label fs-14" for="permission{{ $permission->name }}">
+                                                {{ str_replace('_', ' ', strtoupper($permission->name)) }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -135,10 +151,27 @@
                 $roleId = $(this).data('id');
                 $targetVal = $(this).data('target');
                 $deductionVal = $(this).data('deduction');
+                $permissions =$(this).data('permission');
+                console.log($permissions);
                 $('#role').val($roleId);
                 $('#target').val($targetVal);
                 $('#deduction').val($deductionVal);
+                $('input[type="checkbox"]').prop('checked', false);
+                
+                $permissions.forEach(function(permission){
+                    $('#permissions[value="' + permission.id + '"]').prop('checked', true);
+                });
+
+                var allChecked = $('.checkbox-group input[type="checkbox"]').length === $('#rolesModal input[type="checkbox"]:checked').length;
+                $('#select-all-checkbox').prop('checked', allChecked);
            })
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#select-all-checkbox').click(function() {
+                $('.checkbox-group input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+            });
         });
     </script>
 @endpush

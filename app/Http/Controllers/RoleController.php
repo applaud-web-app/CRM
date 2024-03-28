@@ -13,7 +13,14 @@ class RoleController extends Controller
 
     public function viewRoles(){
         $roles = Role::with('permissions')->get();
-        return view('roles.view',compact('roles'));
+        $role_permissions=[];
+        foreach($roles as $role)
+        {
+            $role_permissions[]=$role->permissions;
+        }
+        $permissions=Permission::select('name','id')->orderBy('id','ASC')->get();
+        // dd($role_permissions);
+        return view('roles.view',compact('roles','permissions','role_permissions'));
     }
     
     public function updateRole(Request $request){
@@ -22,6 +29,26 @@ class RoleController extends Controller
             'target'=>'required',
             'deduction'=>'required',
         ]);
+        if($request->has('permissions'))
+        {
+            $permissions=$request->permissions;
+            foreach($permissions as $permission)
+            {
+                DB::table('role_has_permissions')
+                ->where('role_id', $request->role)
+                ->whereNotIn('permission_id', $request->permissions)
+                ->delete();
+            
+            // Insert or update records for selected checkboxes
+            foreach ($request->permissions as $permission) {
+                DB::table('role_has_permissions')
+                    ->updateOrInsert(
+                        ['permission_id' => $permission, 'role_id' => $request->role],
+                        ['permission_id' => $permission, 'role_id' => $request->role]
+                    );
+            }
+            }
+        }
         $role = Role::find($request->role);
         if($role != NULL){
             $role->target = $request->target;

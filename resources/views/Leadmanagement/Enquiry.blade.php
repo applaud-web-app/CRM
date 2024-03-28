@@ -145,8 +145,8 @@
                                         <option value="Google">Google</option>
                                         <option value="Facebook">Facebook</option>
                                         <option value="Instagram">Instagram</option>
-                                        <option value="Justdial">Justdial</option>
-                                        <option value="Offline">Offline</option>
+                                        <option value="Landing Page">Landing Page</option>
+                                        <option value="Others">Others</option>
                                     </select>
                                 </div>
                             </div>
