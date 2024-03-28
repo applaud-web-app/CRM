@@ -284,6 +284,8 @@
             var deviceToken = '{{ Auth::user()->device_token }}';
             if (!deviceToken) {
                 $('#notificationPermissionModal').modal('show');
+            }else{
+                $('#notificationPermissionModal').modal('hide');
             }
         });
 
